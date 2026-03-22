@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Prompting Playbook | RES AI Knowledge Centre</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #F07E26;
+    --orange-light: #F9B122;
+    --slate: #323A45;
+    --granite: #817D8B;
+    --pebble: #EAE1E4;
+    --polar: #F8F6F6;
+    --ocean: #5C80A8;
+    --sky: #6AB1CD;
+    --glacier: #60A89A;
+    --moss: #76AA75;
+    --sage: #A6BB55;
+    --berry: #BF4E4D;
+    --coral: #DE746F;
+    --lavender: #B26490;
+    --pollen: #E1B94B;
+    --white: #FFFFFF;
+    --gradient-burst: linear-gradient(135deg, #F07E26, #F9B122);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--polar);
+    color: var(--slate);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--gradient-burst);
+    padding: 48px 32px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -40%; right: -10%;
+    width: 500px; height: 500px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    color: var(--white);
+    text-transform: lowercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 5vw, 44px);
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .hero p {
+    color: rgba(255,255,255,0.92);
+    font-size: 16px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* ── TABS ── */
+  .tab-bar {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: var(--white);
+    border-bottom: 2px solid var(--pebble);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 14px 24px;
+    border: none;
+    background: none;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--granite);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--slate); }
+  .tab-btn.active {
+    color: var(--orange);
+    border-bottom-color: var(--orange);
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── SECTION HEADERS ── */
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--slate);
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    color: var(--granite);
+    font-size: 15px;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  /* ── GCSE FRAMEWORK CARDS ── */
+  .gcse-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+  .gcse-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 24px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-top: 4px solid var(--orange);
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .gcse-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+  .gcse-letter {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 48px;
+    color: var(--orange);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .gcse-label {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--slate);
+    margin-bottom: 8px;
+  }
+  .gcse-question {
+    font-size: 14px;
+    color: var(--granite);
+    font-style: italic;
+    margin-bottom: 10px;
+  }
+  .gcse-desc {
+    font-size: 14px;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+
+  /* ── EXAMPLE PROMPT ── */
+  .example-prompt {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 32px;
+  }
+  .example-prompt h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 16px;
+    color: var(--slate);
+  }
+  .prompt-text {
+    background: var(--polar);
+    border-left: 4px solid var(--orange);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .prompt-text .highlight-g { background: rgba(96,168,154,0.2); padding: 2px 4px; border-radius: 3px; }
+  .prompt-text .highlight-c { background: rgba(92,128,168,0.2); padding: 2px 4px; border-radius: 3px; }
+  .prompt-text .highlight-s { background: rgba(178,100,144,0.2); padding: 2px 4px; border-radius: 3px; }
+  .prompt-text .highlight-e { background: rgba(225,185,75,0.2); padding: 2px 4px; border-radius: 3px; }
+
+  .gcse-legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--granite);
+  }
+  .gcse-legend span { display: flex; align-items: center; gap: 6px; }
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+  .legend-dot.g { background: rgba(96,168,154,0.4); }
+  .legend-dot.c { background: rgba(92,128,168,0.4); }
+  .legend-dot.s { background: rgba(178,100,144,0.4); }
+  .legend-dot.e { background: rgba(225,185,75,0.4); }
+
+  /* ── BEFORE/AFTER CARDS ── */
+  .ba-card {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .ba-header {
+    padding: 16px 24px;
+    background: var(--slate);
+    color: var(--white);
+    font-weight: 600;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  .ba-header .scenario-label { font-size: 13px; color: rgba(255,255,255,0.7); }
+  .ba-body { padding: 24px; }
+  .ba-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 640px) { .ba-columns { grid-template-columns: 1fr; } }
+  .ba-col h4 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ba-col h4.before-label { color: var(--berry); }
+  .ba-col h4.after-label { color: var(--moss); }
+  .ba-prompt {
+    background: var(--polar);
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .ba-explain {
+    display: none;
+    padding: 16px 24px 24px;
+    background: rgba(240,126,38,0.04);
+    border-top: 1px solid var(--pebble);
+  }
+  .ba-explain.visible { display: block; }
+  .ba-explain h4 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .ba-explain ul {
+    margin-left: 18px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--slate);
+  }
+  .reveal-btn {
+    background: none;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reveal-btn:hover { background: var(--orange); color: var(--white); }
+
+  /* ── PRACTICE EXERCISES ── */
+  .exercise-card {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .exercise-header {
+    padding: 16px 24px;
+    background: var(--ocean);
+    color: var(--white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .exercise-header h3 { font-size: 16px; font-weight: 600; }
+  .difficulty {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .difficulty.beginner { background: rgba(118,170,117,0.3); color: #3d6e3c; }
+  .difficulty.intermediate { background: rgba(225,185,75,0.3); color: #8a6e1a; }
+  .difficulty.advanced { background: rgba(191,78,77,0.3); color: #8a2e2e; }
+  .exercise-body { padding: 24px; }
+  .exercise-scenario {
+    background: var(--polar);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .exercise-scenario strong { color: var(--slate); }
+  .prompt-input {
+    width: 100%;
+    min-height: 120px;
+    padding: 14px 16px;
+    border: 2px solid var(--pebble);
+    border-radius: 8px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    color: var(--slate);
+    transition: border-color 0.2s;
+  }
+  .prompt-input:focus { outline: none; border-color: var(--orange); }
+  .prompt-input::placeholder { color: var(--granite); }
+
+  .exercise-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--gradient-burst);
+    color: var(--white);
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-secondary {
+    background: none;
+    border: 1px solid var(--granite);
+    color: var(--granite);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--slate); color: var(--slate); }
+
+  /* ── SCORE DISPLAY ── */
+  .score-panel {
+    display: none;
+    margin-top: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .score-panel.visible { display: block; }
+  .score-header {
+    padding: 16px 20px;
+    color: var(--white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .score-header.excellent { background: var(--moss); }
+  .score-header.good { background: var(--ocean); }
+  .score-header.needs-work { background: var(--pollen); color: var(--slate); }
+  .score-header.weak { background: var(--berry); }
+  .score-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+  }
+  .score-label { font-weight: 600; font-size: 16px; }
+  .score-body { padding: 20px; background: var(--white); border: 1px solid var(--pebble); border-top: none; border-radius: 0 0 8px 8px; }
+  .score-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .score-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+  .score-tip {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: rgba(240,126,38,0.06);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+  .score-tip strong { color: var(--orange); }
+
+  /* ── PROMPT BUILDER ── */
+  .builder-container {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 28px;
+    margin-bottom: 28px;
+  }
+  .builder-step {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--pebble);
+  }
+  .builder-step:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .builder-step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .builder-step-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+  .builder-step-num.step-g { background: var(--glacier); }
+  .builder-step-num.step-c { background: var(--ocean); }
+  .builder-step-num.step-s { background: var(--lavender); }
+  .builder-step-num.step-e { background: var(--pollen); color: var(--slate); }
+  .builder-step-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--slate);
+  }
+  .builder-step-help {
+    font-size: 13px;
+    color: var(--granite);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  .builder-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid var(--pebble);
+    border-radius: 8px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--slate);
+    resize: vertical;
+    min-height: 60px;
+    transition: border-color 0.2s;
+  }
+  .builder-input:focus { outline: none; border-color: var(--orange); }
+  .builder-input::placeholder { color: var(--granite); }
+
+  .builder-output {
+    background: var(--polar);
+    border-left: 4px solid var(--orange);
+    padding: 20px;
+    border-radius: 0 8px 8px 0;
+    margin-top: 20px;
+  }
+  .builder-output h4 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--orange);
+    margin-bottom: 10px;
+  }
+  .builder-output-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--slate);
+    white-space: pre-wrap;
+    min-height: 40px;
+  }
+  .builder-output-placeholder {
+    color: var(--granite);
+    font-style: italic;
+  }
+
+  /* ── CLAUDE SECTION ── */
+  .claude-banner {
+    background: linear-gradient(135deg, var(--slate), #454f5e);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .claude-banner-icon { font-size: 32px; }
+  .claude-banner h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .claude-banner p { font-size: 14px; color: rgba(255,255,255,0.8); }
+
+  .technique-card {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .technique-header {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .technique-header:hover { background: var(--polar); }
+  .technique-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--slate);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .technique-arrow {
+    color: var(--granite);
+    transition: transform 0.2s;
+    font-size: 14px;
+  }
+  .technique-arrow.open { transform: rotate(180deg); }
+  .technique-body {
+    display: none;
+    padding: 0 24px 20px;
+  }
+  .technique-body.visible { display: block; }
+  .technique-example {
+    background: var(--polar);
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 10px;
+  }
+  .technique-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--granite);
+    margin-bottom: 4px;
+    margin-top: 12px;
+  }
+
+  /* ── TIPS CALLOUT ── */
+  .tip-box {
+    background: rgba(240,126,38,0.06);
+    border-left: 4px solid var(--orange);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .tip-box strong { color: var(--orange); }
+
+  /* ── COPILOT APP TAGS ── */
+  .app-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .app-tag {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: var(--pebble);
+    color: var(--granite);
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 13px;
+    color: var(--granite);
+    border-top: 1px solid var(--pebble);
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-logo">res</div>
+  <h1>Interactive Prompting Playbook</h1>
+  <p>Master the art of AI prompting. Learn the GCSE framework, practise with real scenarios, and build better prompts step by step.</p>
+</div>
+
+<!-- ── TAB BAR ── -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('learn')">Learn the framework</button>
+  <button class="tab-btn" onclick="switchTab('examples')">Before &amp; after</button>
+  <button class="tab-btn" onclick="switchTab('practice')">Practice exercises</button>
+  <button class="tab-btn" onclick="switchTab('builder')">Prompt builder</button>
+  <button class="tab-btn" onclick="switchTab('claude')">Advanced techniques</button>
+</div>
+
+<div class="main">
+
+<!-- ════════════════════════════════════ -->
+<!--  TAB 1: LEARN THE FRAMEWORK        -->
+<!-- ════════════════════════════════════ -->
+<div id="tab-learn" class="tab-content active">
+  <h2 class="section-title">The GCSE prompting framework</h2>
+  <p class="section-sub">A simple, memorable structure for writing effective prompts. Used across RES for Copilot for M365 and applicable to any AI tool. Think of it as giving your AI colleague a proper brief.</p>
+
+  <div class="gcse-grid">
+    <div class="gcse-card">
+      <div class="gcse-letter">G</div>
+      <div class="gcse-label">Goal</div>
+      <div class="gcse-question">What do you want the AI to do?</div>
+      <div class="gcse-desc">Be specific about the task. Tell the AI exactly what output you need — a summary, a draft, a list, an analysis.</div>
+    </div>
+    <div class="gcse-card">
+      <div class="gcse-letter">C</div>
+      <div class="gcse-label">Context</div>
+      <div class="gcse-question">Why do you need it, and who is involved?</div>
+      <div class="gcse-desc">Give background. Mention the project, the audience, the reason. The more context, the more relevant the response.</div>
+    </div>
+    <div class="gcse-card">
+      <div class="gcse-letter">S</div>
+      <div class="gcse-label">Source</div>
+      <div class="gcse-question">Where should the AI look for information?</div>
+      <div class="gcse-desc">Point to specific files, emails, Teams chats, or web sources. In Copilot, this helps the AI search the right places in your M365 environment.</div>
+    </div>
+    <div class="gcse-card">
+      <div class="gcse-letter">E</div>
+      <div class="gcse-label">Expectations</div>
+      <div class="gcse-question">How should the response look and sound?</div>
+      <div class="gcse-desc">Specify the tone, format, length, or level of detail. Do you want bullet points or prose? Formal or casual? Brief or comprehensive?</div>
+    </div>
+  </div>
+
+  <div class="example-prompt">
+    <h3>Example: the GCSE framework in action</h3>
+    <div class="prompt-text">
+      <span class="highlight-g">Please generate 3-5 bullet points to prepare for a meeting with client X</span>
+      <span class="highlight-c">to discuss their "Phase 3" brand campaign.</span>
+      <span class="highlight-s">Focus on email and Teams chats since June.</span>
+      <span class="highlight-e">Please use only simple language so I can get up to speed quickly.</span>
+    </div>
+    <div class="gcse-legend">
+      <span><span class="legend-dot g"></span> Goal</span>
+      <span><span class="legend-dot c"></span> Context</span>
+      <span><span class="legend-dot s"></span> Source</span>
+      <span><span class="legend-dot e"></span> Expectations</span>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>Tip:</strong> You don't always need all four components. A quick question might only need a Goal. But for important tasks, the more GCSE elements you include, the better your results will be.
+  </div>
+
+  <div class="example-prompt">
+    <h3>Why does this matter?</h3>
+    <p style="font-size:15px; line-height:1.7; margin-bottom:16px;">AI tools work best when they understand what you need. A vague prompt gets a vague answer. Think of it like briefing a colleague — you wouldn't just say "write something about the project." You'd explain what you need, why, and how you want it delivered.</p>
+    <p style="font-size:15px; line-height:1.7;">Copilot enhances your prompt through a process called <strong>grounding</strong> — it searches your M365 environment (emails, Teams, SharePoint, OneDrive) to add relevant context. But the better your initial prompt, the more effectively grounding works.</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ -->
+<!--  TAB 2: BEFORE & AFTER             -->
+<!-- ════════════════════════════════════ -->
+<div id="tab-examples" class="tab-content">
+  <h2 class="section-title">Before &amp; after</h2>
+  <p class="section-sub">See how applying the GCSE framework transforms a weak prompt into an effective one. Click "What changed?" to understand the improvements.</p>
+
+  <div id="ba-container"></div>
+</div>
+
+<!-- ════════════════════════════════════ -->
+<!--  TAB 3: PRACTICE EXERCISES          -->
+<!-- ════════════════════════════════════ -->
+<div id="tab-practice" class="tab-content">
+  <h2 class="section-title">Practice exercises</h2>
+  <p class="section-sub">Write a prompt for each scenario. Your prompt will be scored against the GCSE framework, with specific feedback on what you did well and what you could improve.</p>
+
+  <div id="exercises-container"></div>
+</div>
+
+<!-- ════════════════════════════════════ -->
+<!--  TAB 4: PROMPT BUILDER              -->
+<!-- ════════════════════════════════════ -->
+<div id="tab-builder" class="tab-content">
+  <h2 class="section-title">Prompt builder</h2>
+  <p class="section-sub">Build a prompt step by step. Fill in each GCSE component and watch your complete prompt come together in real time.</p>
+
+  <div class="builder-container">
+    <div class="builder-step">
+      <div class="builder-step-header">
+        <div class="builder-step-num step-g">G</div>
+        <div class="builder-step-title">Goal — what do you want the AI to do?</div>
+      </div>
+      <div class="builder-step-help">Be specific. Start with an action verb: "summarise", "draft", "compare", "list", "create", "analyse".</div>
+      <textarea class="builder-input" id="builder-g" placeholder="e.g. Please generate 3-5 bullet points to prepare for a meeting with client X" oninput="updateBuilder()"></textarea>
+    </div>
+
+    <div class="builder-step">
+      <div class="builder-step-header">
+        <div class="builder-step-num step-c">C</div>
+        <div class="builder-step-title">Context — why do you need it?</div>
+      </div>
+      <div class="builder-step-help">Explain the background: the project, the audience, the purpose. Who is this for and what situation are you in?</div>
+      <textarea class="builder-input" id="builder-c" placeholder="e.g. to discuss their Phase 3 brand campaign at tomorrow's steering committee" oninput="updateBuilder()"></textarea>
+    </div>
+
+    <div class="builder-step">
+      <div class="builder-step-header">
+        <div class="builder-step-num step-s">S</div>
+        <div class="builder-step-title">Source — where should the AI look?</div>
+      </div>
+      <div class="builder-step-help">Point to specific files, emails, chats, or time periods. In Copilot, this guides where it searches in your M365 environment.</div>
+      <textarea class="builder-input" id="builder-s" placeholder="e.g. Focus on email and Teams chats since June" oninput="updateBuilder()"></textarea>
+    </div>
+
+    <div class="builder-step">
+      <div class="builder-step-header">
+        <div class="builder-step-num step-e">E</div>
+        <div class="builder-step-title">Expectations — how should it respond?</div>
+      </div>
+      <div class="builder-step-help">Specify the format, tone, length, or level of detail you want. Should it be formal? Concise? In bullet points?</div>
+      <textarea class="builder-input" id="builder-e" placeholder="e.g. Please use only simple language so I can get up to speed quickly" oninput="updateBuilder()"></textarea>
+    </div>
+
+    <div class="builder-output">
+      <h4>Your complete prompt</h4>
+      <div class="builder-output-text" id="builder-result">
+        <span class="builder-output-placeholder">Start filling in the fields above to see your prompt come together...</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 16px; display: flex; gap: 12px;">
+      <button class="btn-primary" onclick="copyBuilder()">Copy to clipboard</button>
+      <button class="btn-secondary" onclick="clearBuilder()">Clear all</button>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>Tip:</strong> Once you've built your prompt, paste it directly into Copilot. Try toggling between "Work" and "Web" modes in Copilot to see how results differ depending on the data source.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ -->
+<!--  TAB 5: ADVANCED TECHNIQUES          -->
+<!-- ════════════════════════════════════ -->
+<div id="tab-claude" class="tab-content">
+  <div class="claude-banner">
+    <div class="claude-banner-icon">🚀</div>
+    <div>
+      <h3>Advanced prompting techniques</h3>
+      <p>Go beyond GCSE with strategies that unlock deeper, more structured, and more reliable AI output.</p>
+    </div>
+  </div>
+
+  <p class="section-sub">Once you're comfortable with the GCSE framework, these advanced techniques can help you get even more from your AI tools. They work across Copilot, Claude, and other AI assistants.</p>
+
+  <div id="claude-techniques"></div>
+
+  <div class="tip-box">
+    <strong>Tip:</strong> These techniques build on top of GCSE — they don't replace it. A strong GCSE foundation combined with one or two advanced techniques will consistently produce the best results.
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<div class="footer">
+  RES AI Knowledge Centre &middot; Interactive Prompting Playbook &middot; Built for the AI Literacy Programme
+</div>
+
+<script>
+// ═══════════════════════════════════════
+//  TAB SWITCHING
+// ═══════════════════════════════════════
+function switchTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  const tabs = ['learn','examples','practice','builder','claude'];
+  document.querySelectorAll('.tab-btn')[tabs.indexOf(id)].classList.add('active');
+}
+
+// ═══════════════════════════════════════
+//  BEFORE & AFTER DATA
+// ═══════════════════════════════════════
+const beforeAfterData = [
+  {
+    scenario: "Summarising an email thread",
+    app: "Outlook",
+    before: "Summarise this email.",
+    after: "Please summarise the key decisions and action items from this email thread with the procurement team. Present them as bullet points, noting who is responsible for each action.",
+    improvements: [
+      "Added a clear Goal: key decisions and action items (not just a generic summary)",
+      "Added Context: it's about a procurement discussion",
+      "Added Expectations: bullet points with named owners for each action"
+    ]
+  },
+  {
+    scenario: "Preparing for a meeting",
+    app: "Business Chat",
+    before: "What's happening with the solar project?",
+    after: "Please generate a brief status update on the Greenfield Solar project. Focus on emails and Teams messages from the last two weeks between myself and the project team. Highlight any risks or blockers mentioned, and keep the summary under 200 words.",
+    improvements: [
+      "Added a specific Goal: a status update (not just 'what's happening')",
+      "Added Context: named the specific project",
+      "Added Source: emails and Teams messages from the last two weeks",
+      "Added Expectations: highlight risks/blockers, under 200 words"
+    ]
+  },
+  {
+    scenario: "Drafting a presentation",
+    app: "PowerPoint",
+    before: "Make a presentation about data security.",
+    after: "Create a 6-slide presentation on RES data classification policies for a team onboarding session. Use the RES Group Data Handling Guide as the primary source. Keep the language accessible for non-technical staff and include a summary slide with key dos and don'ts.",
+    improvements: [
+      "Added a specific Goal: 6 slides on data classification policies",
+      "Added Context: for team onboarding (defines the audience)",
+      "Added Source: the specific document to reference",
+      "Added Expectations: accessible language, summary slide with dos and don'ts"
+    ]
+  },
+  {
+    scenario: "Analysing spreadsheet data",
+    app: "Excel",
+    before: "Analyse this data.",
+    after: "Please analyse the storage usage trends in the 'Storage Used' tab. Add a column converting bytes to terabytes, then create a time series chart showing storage used vs quota over time. Include trendlines forecasting 360 days forward.",
+    improvements: [
+      "Added a detailed Goal: specific analysis steps (convert, chart, forecast)",
+      "Added Source: pointed to the specific tab",
+      "Added Expectations: time series chart with trendlines and forecast period"
+    ]
+  },
+  {
+    scenario: "Getting project context",
+    app: "Business Chat",
+    before: "Tell me about the Salesforce project.",
+    after: "What were the main updates from Kyle Love at the last steering committee for the Salesforce project? Focus on Teams chats and emails from the past month. Please summarise in 3-4 concise bullet points.",
+    improvements: [
+      "Added a specific Goal: updates from a named person at a specific meeting",
+      "Added Source: Teams chats and emails, with a time window",
+      "Added Expectations: 3-4 concise bullet points"
+    ]
+  },
+  {
+    scenario: "Translating content",
+    app: "Word / Outlook",
+    before: "Translate this into French.",
+    after: "Please translate the introduction section of this document into French. Add a disclaimer at the start of the translation noting that it has been translated using AI and should be reviewed by a native speaker before external distribution.",
+    improvements: [
+      "Added a specific Goal: translate only the introduction section (not the entire document)",
+      "Added Expectations: include an AI translation disclaimer",
+      "Added Context: implies external distribution, so quality matters"
+    ]
+  }
+];
+
+function renderBeforeAfter() {
+  const container = document.getElementById('ba-container');
+  container.innerHTML = beforeAfterData.map((item, i) => `
+    <div class="ba-card">
+      <div class="ba-header" onclick="toggleExplain(${i})">
+        <span>${item.scenario}</span>
+        <span class="scenario-label">${item.app}</span>
+      </div>
+      <div class="ba-body">
+        <div class="ba-columns">
+          <div class="ba-col">
+            <h4 class="before-label">✗ Before</h4>
+            <div class="ba-prompt">${item.before}</div>
+          </div>
+          <div class="ba-col">
+            <h4 class="after-label">✓ After (with GCSE)</h4>
+            <div class="ba-prompt">${item.after}</div>
+          </div>
+        </div>
+        <div style="text-align:center; margin-top:12px;">
+          <button class="reveal-btn" onclick="toggleExplain(${i})" id="reveal-btn-${i}">What changed?</button>
+        </div>
+      </div>
+      <div class="ba-explain" id="explain-${i}">
+        <h4>What improved</h4>
+        <ul>${item.improvements.map(imp => `<li>${imp}</li>`).join('')}</ul>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleExplain(i) {
+  const el = document.getElementById('explain-' + i);
+  const btn = document.getElementById('reveal-btn-' + i);
+  el.classList.toggle('visible');
+  btn.textContent = el.classList.contains('visible') ? 'Hide explanation' : 'What changed?';
+}
+
+// ═══════════════════════════════════════
+//  PRACTICE EXERCISES
+// ═══════════════════════════════════════
+const exercises = [
+  {
+    id: 'ex1',
+    title: 'Catch up on a missed meeting',
+    difficulty: 'beginner',
+    scenario: 'You missed the weekly project sync with the wind farm development team yesterday. You need to quickly understand what was discussed, any decisions made, and what actions were assigned to you.',
+    hints: {
+      g: ['recap', 'summary', 'action items', 'decisions', 'catch up', 'what was discussed'],
+      c: ['meeting', 'project sync', 'wind farm', 'development team', 'missed', 'yesterday'],
+      s: ['teams', 'recording', 'transcript', 'recap', 'notes'],
+      e: ['bullet', 'concise', 'brief', 'action items', 'my name', 'assigned to me']
+    },
+    sampleAnswer: "Please provide a recap of yesterday's wind farm development team project sync. Highlight the key decisions made and any action items assigned to me. Present the summary as concise bullet points so I can get up to speed quickly."
+  },
+  {
+    id: 'ex2',
+    title: 'Draft a team communication',
+    difficulty: 'beginner',
+    scenario: 'You need to inform your team of 12 people that the annual team workshop is scheduled for 15th April. Everyone needs to book their own travel and prepare a 10-minute presentation on their project status over the past six months.',
+    hints: {
+      g: ['draft', 'write', 'inform', 'email', 'communicate', 'team workshop'],
+      c: ['team', 'workshop', '15th April', 'annual', 'travel', 'presentation', '10 minute', 'project status', 'six months'],
+      s: [],
+      e: ['informal', 'short', 'friendly', 'casual', 'concise', 'tone']
+    },
+    sampleAnswer: "Please draft an email informing my team that our annual team workshop is on 15th April. Let them know they need to book their own travel and prepare a 10-minute presentation summarising their project status over the past six months. Keep the tone informal and friendly, and keep the message short."
+  },
+  {
+    id: 'ex3',
+    title: 'Analyse contract terms',
+    difficulty: 'intermediate',
+    scenario: 'You\'re reviewing a software vendor contract (the "ESRI Enterprise Agreement") before a renewal discussion next week. You need to understand the service level commitments and whether RES is entitled to compensation if those levels aren\'t met.',
+    hints: {
+      g: ['service level', 'compensation', 'commitments', 'SLA', 'entitle', 'analyse', 'review', 'what does the contract say'],
+      c: ['ESRI', 'enterprise agreement', 'renewal', 'vendor', 'contract', 'next week'],
+      s: ['ESRI Enterprise Agreement', 'contract', 'document', 'pdf'],
+      e: ['specific clauses', 'summarise', 'highlight', 'relevant sections', 'compensation']
+    },
+    sampleAnswer: "What does the ESRI Enterprise Agreement say about service support commitments? Are we entitled to compensation if the agreed service levels are not met? Please reference the specific clauses and summarise the key terms I should raise in our renewal discussion next week."
+  },
+  {
+    id: 'ex4',
+    title: 'Create a data-driven report',
+    difficulty: 'intermediate',
+    scenario: 'You have a SharePoint storage usage spreadsheet with tabs for "Storage Used" and "Available Storage". You need to present a forecast to your manager showing whether the current trajectory will exceed the storage quota within the next year.',
+    hints: {
+      g: ['chart', 'forecast', 'trend', 'analyse', 'time series', 'create', 'visualise'],
+      c: ['storage', 'quota', 'manager', 'trajectory', 'exceed', 'next year', 'capacity planning'],
+      s: ['Storage Used', 'Available Storage', 'tab', 'spreadsheet', 'SharePoint storage'],
+      e: ['trendline', 'forecast', '360 days', 'chart', 'terabytes', 'visual']
+    },
+    sampleAnswer: "Using the 'Storage Used' and 'Available Storage' tabs, create a time series chart showing storage used vs storage quota over time. Convert storage values to terabytes. Include trendlines for both data sets that forecast forward 360 days, so I can present a clear visual to my manager on whether we'll exceed our quota."
+  },
+  {
+    id: 'ex5',
+    title: 'Build a knowledge agent',
+    difficulty: 'advanced',
+    scenario: 'Your team frequently gets the same questions about the IT Acceptable Use Policy. You want to create a Copilot Agent that can answer these questions automatically, using only the official policy document as its source.',
+    hints: {
+      g: ['create', 'agent', 'answer questions', 'build', 'chatbot', 'Q&A'],
+      c: ['IT Acceptable Use Policy', 'team', 'frequent questions', 'self-service', 'reduce repetitive queries'],
+      s: ['IT acceptable use policy', 'policy document', 'data source', 'only'],
+      e: ['concise', 'bullet points', 'name', 'suggested prompts', 'clear']
+    },
+    sampleAnswer: "Create an agent that can answer questions related to the IT Acceptable Use Policy. Use only the IT Acceptable Use Policy as a data source. Answer questions in concise bullet points. Call this agent the IT AUP Helper. Add suggested prompts to help users get started, such as 'Can I use gen AI tools at work?' and 'What are the rules about personal social media?'"
+  }
+];
+
+function renderExercises() {
+  const container = document.getElementById('exercises-container');
+  container.innerHTML = exercises.map(ex => `
+    <div class="exercise-card">
+      <div class="exercise-header">
+        <h3>${ex.title}</h3>
+        <span class="difficulty ${ex.difficulty}">${ex.difficulty}</span>
+      </div>
+      <div class="exercise-body">
+        <div class="exercise-scenario"><strong>Scenario:</strong> ${ex.scenario}</div>
+        <textarea class="prompt-input" id="input-${ex.id}" placeholder="Write your prompt here... Try to include as many GCSE elements as you can."></textarea>
+        <div class="exercise-actions">
+          <div style="display:flex; gap:10px;">
+            <button class="btn-primary" onclick="scoreExercise('${ex.id}')">Score my prompt</button>
+            <button class="btn-secondary" onclick="showSample('${ex.id}')">Show sample answer</button>
+          </div>
+        </div>
+        <div class="score-panel" id="score-${ex.id}"></div>
+        <div class="ba-explain" id="sample-${ex.id}">
+          <h4>Sample prompt</h4>
+          <div class="ba-prompt" style="margin-top:8px;">${ex.sampleAnswer}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function scoreExercise(id) {
+  const ex = exercises.find(e => e.id === id);
+  const input = document.getElementById('input-' + id).value.trim().toLowerCase();
+  if (!input) return;
+
+  const results = { g: false, c: false, s: false, e: false };
+  const feedback = [];
+
+  // Score each GCSE component
+  const gMatches = ex.hints.g.filter(h => input.includes(h.toLowerCase()));
+  if (gMatches.length > 0) {
+    results.g = true;
+    feedback.push({ icon: '✓', text: `<strong>Goal:</strong> You clearly stated what you want — nice work.` });
+  } else {
+    feedback.push({ icon: '✗', text: `<strong>Goal:</strong> Try being more specific about what you want the AI to produce. What exact output do you need?` });
+  }
+
+  const cMatches = ex.hints.c.filter(h => input.includes(h.toLowerCase()));
+  if (cMatches.length >= 2) {
+    results.c = true;
+    feedback.push({ icon: '✓', text: `<strong>Context:</strong> Good background details — this helps the AI understand your situation.` });
+  } else if (cMatches.length === 1) {
+    feedback.push({ icon: '◐', text: `<strong>Context:</strong> You provided some context, but adding more details about the situation would improve results.` });
+  } else {
+    feedback.push({ icon: '✗', text: `<strong>Context:</strong> Consider adding why you need this and what the broader situation is.` });
+  }
+
+  if (ex.hints.s.length > 0) {
+    const sMatches = ex.hints.s.filter(h => input.includes(h.toLowerCase()));
+    if (sMatches.length > 0) {
+      results.s = true;
+      feedback.push({ icon: '✓', text: `<strong>Source:</strong> You pointed the AI to where it should look — this helps with accuracy.` });
+    } else {
+      feedback.push({ icon: '✗', text: `<strong>Source:</strong> Try specifying where the AI should find the information (specific files, chats, emails, time periods).` });
+    }
+  } else {
+    results.s = true;
+    feedback.push({ icon: '–', text: `<strong>Source:</strong> Not critical for this scenario, but could add value if you reference specific data.` });
+  }
+
+  const eMatches = ex.hints.e.filter(h => input.includes(h.toLowerCase()));
+  if (eMatches.length > 0) {
+    results.e = true;
+    feedback.push({ icon: '✓', text: `<strong>Expectations:</strong> You specified how you want the response — great for getting usable output.` });
+  } else {
+    feedback.push({ icon: '✗', text: `<strong>Expectations:</strong> Add detail about the format, tone, or length you want. Should it be bullet points? Formal? Brief?` });
+  }
+
+  const score = Object.values(results).filter(Boolean).length;
+  let scoreClass, scoreLabel;
+  if (score === 4) { scoreClass = 'excellent'; scoreLabel = 'Excellent'; }
+  else if (score === 3) { scoreClass = 'good'; scoreLabel = 'Good'; }
+  else if (score === 2) { scoreClass = 'needs-work'; scoreLabel = 'Getting there'; }
+  else { scoreClass = 'weak'; scoreLabel = 'Needs work'; }
+
+  const panel = document.getElementById('score-' + id);
+  panel.innerHTML = `
+    <div class="score-header ${scoreClass}">
+      <span class="score-label">${scoreLabel}</span>
+      <span class="score-value">${score}/4</span>
+    </div>
+    <div class="score-body">
+      ${feedback.map(f => `
+        <div class="score-item">
+          <span class="score-icon">${f.icon}</span>
+          <span>${f.text}</span>
+        </div>
+      `).join('')}
+      ${score < 4 ? `<div class="score-tip"><strong>Tip:</strong> Try revising your prompt to address the feedback above, then score again. Even small additions can significantly improve AI output quality.</div>` : `<div class="score-tip"><strong>Well done!</strong> You've included all four GCSE components. This prompt would give the AI a clear, well-structured brief to work from.</div>`}
+    </div>
+  `;
+  panel.classList.add('visible');
+}
+
+function showSample(id) {
+  const el = document.getElementById('sample-' + id);
+  el.classList.toggle('visible');
+}
+
+// ═══════════════════════════════════════
+//  PROMPT BUILDER
+// ═══════════════════════════════════════
+function updateBuilder() {
+  const g = document.getElementById('builder-g').value.trim();
+  const c = document.getElementById('builder-c').value.trim();
+  const s = document.getElementById('builder-s').value.trim();
+  const e = document.getElementById('builder-e').value.trim();
+
+  const parts = [g, c, s, e].filter(Boolean);
+  const output = document.getElementById('builder-result');
+
+  if (parts.length === 0) {
+    output.innerHTML = '<span class="builder-output-placeholder">Start filling in the fields above to see your prompt come together...</span>';
+  } else {
+    output.textContent = parts.join(' ');
+  }
+}
+
+function copyBuilder() {
+  const text = document.getElementById('builder-result').textContent;
+  if (text.includes('Start filling in')) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy to clipboard'; }, 2000);
+  });
+}
+
+function clearBuilder() {
+  ['builder-g','builder-c','builder-s','builder-e'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  updateBuilder();
+}
+
+// ═══════════════════════════════════════
+//  CLAUDE TECHNIQUES
+// ═══════════════════════════════════════
+const claudeTechniques = [
+  {
+    title: "🎯 Role and persona assignment",
+    desc: "Give the AI a specific role to shape the depth and perspective of its response. This is especially effective for specialist analysis.",
+    example: "You are a senior financial analyst at a renewable energy company. Review the attached Q3 revenue forecast and identify any assumptions that seem overly optimistic given current market conditions in the European wind sector.",
+    why: "Assigning a role helps the AI frame its analysis through a specific professional lens, producing more relevant and actionable output."
+  },
+  {
+    title: "📋 Structured output instructions",
+    desc: "AI tools are excellent at following detailed formatting instructions. Specify exactly how you want the output structured.",
+    example: "Analyse this contract and produce a structured risk assessment with the following sections:\n1. Executive Summary (3 sentences max)\n2. Key Risks (table with columns: Risk, Severity, Likelihood, Mitigation)\n3. Recommended Actions (numbered list, priority order)\n4. Questions for Legal Review (bullet points)",
+    why: "Detailed structure instructions eliminate ambiguity and produce output you can use immediately without reformatting."
+  },
+  {
+    title: "🔄 Iterative refinement",
+    desc: "Use conversation memory to refine outputs across multiple messages. Start broad, then narrow down.",
+    example: "First message: \"Analyse the key trends in UK renewable energy policy from the last 12 months.\"\n\nFollow-up: \"Good overview. Now focus specifically on the implications for offshore wind permitting timelines. What should a project developer be preparing for?\"\n\nFollow-up: \"Rewrite the permitting section as a briefing note for our VP of Development. Keep it under 300 words and lead with the most actionable insight.\"",
+    why: "Iterative prompting lets you explore a topic in depth before committing to a final format — particularly valuable for complex analysis."
+  },
+  {
+    title: "📁 Persistent context and custom instructions",
+    desc: "Some AI tools let you save custom instructions and reference files that persist across conversations. This means you don't have to re-explain your context every time you start a new chat.",
+    example: "Set up a workspace for 'Wind Farm Development' with these custom instructions:\n- Always use UK English\n- Reference our internal naming conventions for project phases\n- Assume I'm familiar with renewable energy terminology\n- When creating documents, use the RES brand guidelines\n\nUpload reference files: brand playbook, project charter, stakeholder list.\n\nNow every conversation in this workspace starts with that context automatically.",
+    why: "Persistent context eliminates repetitive setup and ensures consistent, high-quality output aligned to your project needs. Ideal for ongoing initiatives."
+  },
+  {
+    title: "🧠 Chain-of-thought reasoning",
+    desc: "Ask the AI to show its reasoning process. This is particularly useful for complex decisions, financial analysis, and strategy work.",
+    example: "We're evaluating whether to extend our ESRI Enterprise Agreement or switch to an open-source GIS solution. Please think through this step by step:\n1. First, list the key evaluation criteria\n2. Then assess each option against those criteria\n3. Identify what information we're missing to make a confident decision\n4. Finally, give your recommendation with caveats",
+    why: "Explicit reasoning steps produce more thorough analysis and make it easier to spot where the AI's logic might need human judgement."
+  },
+  {
+    title: "📏 Constraints and boundaries",
+    desc: "Set clear boundaries on what the AI should and shouldn't do. This prevents hallucination and keeps responses focused.",
+    example: "Review this project risk register and suggest additions. Important constraints:\n- Only suggest risks that are specific to offshore wind projects in the North Sea\n- Do not include generic project risks that are already covered\n- If you're unsure about a technical detail, flag it rather than guessing\n- Keep each risk description under 50 words",
+    why: "Constraints give the AI permission to say 'I'm not sure' and prevent it from padding responses with generic content."
+  }
+];
+
+function renderClaudeTechniques() {
+  const container = document.getElementById('claude-techniques');
+  container.innerHTML = claudeTechniques.map((tech, i) => `
+    <div class="technique-card">
+      <div class="technique-header" onclick="toggleTechnique(${i})">
+        <h3>${tech.title}</h3>
+        <span class="technique-arrow" id="arrow-${i}">▼</span>
+      </div>
+      <div class="technique-body" id="technique-${i}">
+        <p style="font-size:14px; line-height:1.6; margin-bottom:12px;">${tech.desc}</p>
+        <div class="technique-label">Example prompt</div>
+        <div class="technique-example">${tech.example.replace(/\n/g, '<br>')}</div>
+        <div class="technique-label">Why this works</div>
+        <p style="font-size:14px; line-height:1.6; color:var(--granite);">${tech.why}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleTechnique(i) {
+  const body = document.getElementById('technique-' + i);
+  const arrow = document.getElementById('arrow-' + i);
+  body.classList.toggle('visible');
+  arrow.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+renderBeforeAfter();
+renderExercises();
+renderClaudeTechniques();
+</script>
+</body>
+</html>
