@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tool Decision Guide | RES AI Knowledge Centre</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #F07E26;
+    --orange-light: #F9B122;
+    --slate: #323A45;
+    --granite: #817D8B;
+    --pebble: #EAE1E4;
+    --polar: #F8F6F6;
+    --ocean: #5C80A8;
+    --ocean-ii: #323A45;
+    --sky: #6AB1CD;
+    --glacier: #60A89A;
+    --moss: #76AA75;
+    --sage: #A6BB55;
+    --berry: #BF4E4D;
+    --coral: #DE746F;
+    --lavender: #B26490;
+    --pollen: #E1B94B;
+    --white: #FFFFFF;
+    --gradient-burst: linear-gradient(135deg, #F07E26, #F9B122);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--polar);
+    color: var(--slate);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--gradient-burst);
+    padding: 48px 32px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -60%;
+    right: -20%;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    pointer-events: none;
+  }
+  .hero-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    color: var(--white);
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 5vw, 44px);
+    color: var(--white);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .hero p {
+    color: rgba(255,255,255,0.9);
+    font-size: clamp(15px, 2.5vw, 18px);
+    max-width: 640px;
+    margin: 0 auto;
+    font-weight: 400;
+  }
+
+  /* ── TABS ── */
+  .tabs-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .tab-nav {
+    display: flex;
+    gap: 4px;
+    margin-top: -20px;
+    position: relative;
+    z-index: 2;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    background: var(--white);
+    color: var(--granite);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .tab-btn:hover { color: var(--orange); }
+  .tab-btn:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 2px;
+  }
+  .tab-btn.active {
+    background: var(--slate);
+    color: var(--white);
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+  }
+
+  /* ── SECTION: FLOWCHART ── */
+  .section-card {
+    background: var(--white);
+    border-radius: 0 0 16px 16px;
+    padding: 40px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 16px rgba(50,58,69,0.06);
+  }
+  .section-card.standalone {
+    border-radius: 16px;
+  }
+
+  .flow-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+  .flow-subtitle {
+    color: var(--granite);
+    font-size: 15px;
+    margin-bottom: 32px;
+  }
+
+  /* Flowchart wizard */
+  .wizard { min-height: 300px; }
+  .wizard-step { animation: fadeUp 0.35s ease; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .wizard-question {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--slate);
+    margin-bottom: 6px;
+  }
+  .wizard-helper {
+    color: var(--granite);
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .wizard-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .wizard-opt {
+    font-family: 'Barlow', sans-serif;
+    border: 2px solid var(--pebble);
+    background: var(--polar);
+    border-radius: 10px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--slate);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .wizard-opt:hover {
+    border-color: var(--orange);
+    background: #FFF8F0;
+  }
+  .wizard-opt:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 2px;
+    border-color: var(--orange);
+  }
+  .wizard-opt:active {
+    background: #FDEBD0;
+    transform: scale(0.98);
+  }
+  .wizard-opt .opt-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .wizard-opt .opt-text strong {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .wizard-opt .opt-text span {
+    font-size: 13px;
+    color: var(--granite);
+    font-weight: 400;
+  }
+
+  /* Result card */
+  .result-card {
+    background: var(--polar);
+    border-left: 4px solid var(--orange);
+    border-radius: 0 12px 12px 0;
+    padding: 24px 28px;
+    animation: fadeUp 0.35s ease;
+  }
+  .result-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+  .result-card .tool-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .result-card p { font-size: 15px; color: var(--slate); margin-bottom: 10px; }
+  .result-card .tip {
+    font-size: 13px;
+    color: var(--granite);
+    background: var(--white);
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-top: 8px;
+  }
+  .result-card .tip strong { color: var(--orange); }
+
+  .btn-restart {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    border: 2px solid var(--orange);
+    background: transparent;
+    color: var(--orange);
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: all 0.2s;
+  }
+  .btn-restart:hover {
+    background: var(--orange);
+    color: var(--white);
+  }
+  .btn-restart:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 2px;
+  }
+
+  /* Breadcrumb */
+  .wizard-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .crumb {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--granite);
+    background: var(--pebble);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+  .crumb.active { background: var(--orange); color: var(--white); }
+
+  /* ── COMPARISON TABLE ── */
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table.compare {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+    min-width: 900px;
+  }
+  table.compare thead th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-align: left;
+    padding: 14px 16px;
+    background: var(--slate);
+    color: var(--white);
+    border-bottom: 3px solid var(--orange);
+    position: sticky;
+    top: 0;
+    white-space: nowrap;
+  }
+  table.compare thead th:first-child { border-radius: 8px 0 0 0; }
+  table.compare thead th:last-child { border-radius: 0 8px 0 0; }
+  table.compare tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--pebble);
+    vertical-align: top;
+  }
+  table.compare tbody tr:hover td { background: #FFF8F0; }
+  table.compare tbody td:first-child {
+    font-weight: 600;
+    color: var(--slate);
+    white-space: nowrap;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 1px 2px;
+    white-space: nowrap;
+  }
+  .tag-yes { background: #E8F5E9; color: #2E7D32; }
+  .tag-no { background: #FDECEA; color: #C62828; }
+  .tag-info { background: #E3F2FD; color: #1565C0; }
+  .tag-warn { background: #FFF3E0; color: #E65100; }
+
+  .cat-label {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: 4px;
+  }
+  .cat-microsoft { background: #E3F2FD; color: #1565C0; }
+  .cat-anthropic { background: #FFF3E0; color: #E65100; }
+  .cat-openai { background: #E8F5E9; color: #2E7D32; }
+
+  /* ── TOOL CARDS (mobile-friendly grid) ── */
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .tool-card {
+    background: var(--white);
+    border: 1px solid var(--pebble);
+    border-left: 4px solid var(--pebble);
+    border-radius: 4px 12px 12px 4px;
+    padding: 24px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .tool-card:hover {
+    box-shadow: 0 4px 16px rgba(50,58,69,0.08);
+    transform: translateY(-2px);
+  }
+  .tool-card.card-primary { border-left-color: #43A047; }
+  .tool-card.card-extended { border-left-color: var(--orange); }
+  .tool-card.card-caution { border-left-color: var(--berry); }
+  .tool-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--slate);
+    margin-bottom: 4px;
+  }
+  .tool-card .tool-vendor {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: inline-block;
+    color: var(--granite);
+  }
+  .tool-card p {
+    font-size: 14px;
+    color: var(--granite);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .tool-card .use-cases {
+    font-size: 13px;
+    color: var(--slate);
+  }
+  .tool-card .use-cases strong {
+    color: var(--orange);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .data-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-top: 8px;
+  }
+  .data-safe { background: #E8F5E9; color: #2E7D32; }
+  .data-caution { background: #FFF3E0; color: #E65100; }
+  .data-no { background: #FDECEA; color: #C62828; }
+
+  .tier-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-block;
+    margin-left: 6px;
+  }
+  .tier-primary { background: #E8F5E9; color: #2E7D32; }
+  .tier-extended { background: #FFF3E0; color: #E65100; }
+  .tier-caution { background: #FDECEA; color: #C62828; }
+
+  /* Tier section headers in tool grid */
+  .tier-section-header {
+    grid-column: 1 / -1;
+    padding: 16px 0 4px;
+  }
+  .tier-section-header h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tier-section-header p {
+    font-size: 13px;
+    color: var(--granite);
+    margin-top: 2px;
+    margin-left: 30px;
+  }
+  .tier-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .tier-dot-primary { background: #43A047; }
+  .tier-dot-extended { background: var(--orange); }
+  .tier-dot-caution { background: var(--berry); }
+
+  .info-banner {
+    background: linear-gradient(135deg, #F8F6F6, #EAE1E4);
+    border-left: 4px solid var(--orange);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--slate);
+    line-height: 1.6;
+  }
+  .info-banner strong { color: var(--orange); }
+
+  /* ── HIDDEN TABS ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 13px;
+    color: var(--granite);
+  }
+  .footer a { color: var(--orange); text-decoration: none; font-weight: 600; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero { padding: 32px 20px 28px; }
+    .section-card { padding: 24px 20px; }
+    .wizard-options { grid-template-columns: 1fr; }
+    .tool-grid { grid-template-columns: 1fr; }
+    .tab-btn { font-size: 12px; padding: 10px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════ HERO ══════ -->
+<div class="hero">
+  <div class="hero-logo">res</div>
+  <h1>AI Tool Decision Guide</h1>
+  <p>Find the right AI tool for your task. Answer a few questions or browse the full comparison below.</p>
+</div>
+
+<!-- ══════ TABS ══════ -->
+<div class="tabs-container">
+  <nav class="tab-nav" role="tablist" aria-label="Guide views">
+    <button class="tab-btn active" data-tab="finder" role="tab" aria-selected="true" aria-controls="tab-finder">Find my tool</button>
+    <button class="tab-btn" data-tab="cards" role="tab" aria-selected="false" aria-controls="tab-cards">Tool overview</button>
+    <button class="tab-btn" data-tab="compare" role="tab" aria-selected="false" aria-controls="tab-compare">Full comparison</button>
+  </nav>
+</div>
+
+<div class="main-content">
+
+  <!-- ══════ TAB 1: WIZARD ══════ -->
+  <div class="tab-panel active" id="tab-finder" role="tabpanel" aria-labelledby="tab-finder">
+    <div class="section-card">
+      <div class="flow-title">Which tool should I use?</div>
+      <div class="flow-subtitle">Answer the questions below and we'll recommend the best tool for your task.</div>
+      <div class="wizard" id="wizard"></div>
+    </div>
+  </div>
+
+  <!-- ══════ TAB 2: TOOL CARDS ══════ -->
+  <div class="tab-panel" id="tab-cards" role="tabpanel" aria-labelledby="tab-cards">
+    <div class="section-card standalone">
+      <div class="flow-title">All AI tools at RES</div>
+      <div class="flow-subtitle">A quick overview of every approved AI tool, what it does, and when to use it.</div>
+
+      <div class="info-banner">
+        <strong>Copilot for M365 is your starting point.</strong> It's the primary AI tool at RES and available to all staff with a license.
+        <strong>Claude</strong> extends your AI capabilities for specialist tasks (such as financial analysis and deep research) but is available on a limited evaluation basis and requires Exec approval.
+        <strong>ChatGPT</strong> can be used for non-confidential tasks only — never share RES data or IP.
+      </div>
+
+      <div style="margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; font-size: 13px; color: var(--granite);">
+        <span style="display:flex;align-items:center;gap:5px;"><span class="tier-dot tier-dot-primary" style="width:12px;height:12px;"></span> Primary tool</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span class="tier-dot tier-dot-extended" style="width:12px;height:12px;"></span> Extended (limited access)</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span class="tier-dot tier-dot-caution" style="width:12px;height:12px;"></span> Use with caution</span>
+      </div>
+
+      <div class="tool-grid" id="tool-grid"></div>
+    </div>
+  </div>
+
+  <!-- ══════ TAB 3: COMPARISON TABLE ══════ -->
+  <div class="tab-panel" id="tab-compare" role="tabpanel" aria-labelledby="tab-compare">
+    <div class="section-card standalone">
+      <div class="flow-title">Side-by-side comparison</div>
+      <div class="flow-subtitle">Compare capabilities, data policies, and access methods across all tools.</div>
+      <div class="table-scroll">
+        <table class="compare" id="compare-table"></table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  AI Knowledge Centre &middot; RES &middot; <a href="https://reshive.sharepoint.com/sites/Mind_Teams662">View in Hive</a>
+  <br>Last updated: March 2026
+</div>
+
+<script>
+// ═══════════════════════════════════════
+//  TOOL DATA
+// ═══════════════════════════════════════
+const tools = [
+  {
+    id: 'copilot365',
+    name: 'Copilot for M365',
+    vendor: 'Microsoft',
+    vendorClass: 'cat-microsoft',
+    icon: '🟦',
+    desc: 'Your gateway AI tool at RES. Embedded across Word, Excel, PowerPoint, Outlook, and Teams, Copilot searches your emails, chats, SharePoint, and OneDrive to deliver context-aware answers. Includes built-in Agents (Researcher, Designer, Facilitator, and more) for specialised tasks, plus Agent Builder for creating lightweight Q&A bots with no code.',
+    bestFor: 'Summarising emails and meetings, drafting documents, querying internal data, creating presentations, using built-in Agents (Researcher, Designer, etc.), building simple Q&A agents (Agent Builder)',
+    resData: 'safe',
+    resDataLabel: 'RES data: safe to use',
+    access: 'Copilot license (department funded)',
+    audience: 'All staff',
+    category: 'general',
+    tier: 'primary'
+  },
+  {
+    id: 'teams-pro',
+    name: 'Teams Premium',
+    vendor: 'Microsoft',
+    vendorClass: 'cat-microsoft',
+    icon: '🟦',
+    desc: 'Enhanced Teams features including intelligent meeting recap, live translations, auto-generated chapters, and AI-powered notes. Does not require a Copilot license.',
+    bestFor: 'Meeting summaries and recaps, live captions and translations, catching up on meetings you missed',
+    resData: 'safe',
+    resDataLabel: 'RES data: safe to use',
+    access: 'Teams Premium license',
+    audience: 'All staff',
+    category: 'general',
+    tier: 'primary'
+  },
+  {
+    id: 'copilot-studio',
+    name: 'Copilot Studio',
+    vendor: 'Microsoft',
+    vendorClass: 'cat-microsoft',
+    icon: '🟦',
+    desc: 'Platform for building advanced custom AI agents and chatbots that can be shared across the organisation. Supports multi-step workflows, custom integrations, and external-facing agents. A step up from Agent Builder for more complex automation needs.',
+    bestFor: 'Advanced Q&A bots, multi-step workflow automations, deploying internal self-service agents, connecting to business systems, external-facing agents',
+    resData: 'safe',
+    resDataLabel: 'RES data: safe to use',
+    access: 'Copilot Studio license',
+    audience: 'Power users and makers',
+    category: 'builder',
+    tier: 'primary'
+  },
+  {
+    id: 'azure-openai',
+    name: 'Azure OpenAI',
+    vendor: 'Microsoft / OpenAI',
+    vendorClass: 'cat-microsoft',
+    icon: '🟦',
+    desc: 'Enterprise-grade API access to OpenAI models (GPT-4, DALL-E) hosted within the RES Azure environment. For building custom AI solutions with full data governance.',
+    bestFor: 'Custom application development, API integrations, building bespoke AI features into internal tools, bulk processing',
+    resData: 'safe',
+    resDataLabel: 'RES data: safe (Azure-hosted)',
+    access: 'Via IT / development teams',
+    audience: 'Developers',
+    category: 'developer',
+    tier: 'primary'
+  },
+  {
+    id: 'copilot-github',
+    name: 'Copilot for GitHub',
+    vendor: 'Microsoft / GitHub',
+    vendorClass: 'cat-microsoft',
+    icon: '🟦',
+    desc: 'AI pair programmer that suggests code completions, generates functions, writes tests, and explains code directly in your IDE (VS Code, JetBrains, etc.).',
+    bestFor: 'Code autocompletion, generating boilerplate code, writing unit tests, explaining unfamiliar code, refactoring',
+    resData: 'safe',
+    resDataLabel: 'RES data: safe to use',
+    access: 'GitHub Copilot license',
+    audience: 'Developers',
+    category: 'developer',
+    tier: 'primary'
+  },
+  {
+    id: 'claude-chat',
+    name: 'Claude (chat)',
+    vendor: 'Anthropic',
+    vendorClass: 'cat-anthropic',
+    icon: '🟧',
+    desc: 'Advanced conversational AI for deep research, complex analysis, and nuanced reasoning. Use Claude where you need capabilities beyond what Copilot offers — such as long-form strategic thinking, detailed financial analysis, or working through multi-layered problems. Requires Exec approval; available on a limited evaluation basis.',
+    bestFor: 'Complex financial analysis, deep research and synthesis, strategic reasoning, nuanced policy analysis, long-form content where depth matters',
+    resData: 'safe',
+    resDataLabel: 'RES data: safe to use',
+    access: 'Limited access — requires Exec approval',
+    audience: 'Approved users (Copilot users first)',
+    category: 'general',
+    tier: 'extended'
+  },
+  {
+    id: 'claude-cowork',
+    name: 'Claude Cowork',
+    vendor: 'Anthropic',
+    vendorClass: 'cat-anthropic',
+    icon: '🟧',
+    desc: 'Desktop companion that works directly with your files. Can create and edit documents, spreadsheets, presentations, and automate file management tasks on your computer. The unique Projects feature lets you create dedicated workspaces with custom instructions, reference files, and persistent context across sessions — ideal for sustained initiatives.',
+    bestFor: 'Ongoing projects with persistent context (Projects), creating polished documents and presentations, batch file processing, complex data transformation across formats',
+    resData: 'safe',
+    resDataLabel: 'RES data: safe to use',
+    access: 'Limited access — requires Exec approval (desktop app)',
+    audience: 'Approved users',
+    category: 'general',
+    tier: 'extended'
+  },
+  {
+    id: 'claude-browser',
+    name: 'Claude in Chrome',
+    vendor: 'Anthropic',
+    vendorClass: 'cat-anthropic',
+    icon: '🟧',
+    desc: 'Browser-based AI agent that can navigate, read, and interact with web pages. Works in Chrome and Edge. Useful for research, form filling, and web-based workflows that go beyond Copilot\'s web search.',
+    bestFor: 'Complex web research, navigating internal tools, extracting information from web pages, automating browser-based tasks',
+    resData: 'safe',
+    resDataLabel: 'RES data: safe to use',
+    access: 'Limited access — requires Exec approval (browser extension)',
+    audience: 'Approved users',
+    category: 'general',
+    tier: 'extended'
+  },
+  {
+    id: 'claude-excel',
+    name: 'Claude for Excel',
+    vendor: 'Anthropic',
+    vendorClass: 'cat-anthropic',
+    icon: '🟧',
+    desc: 'Excel plugin that brings advanced AI directly into your spreadsheets. Particularly strong for financial analysis, complex formula creation, pattern recognition, and generating insights from tabular data. A standout Claude capability that goes beyond Copilot in Excel.',
+    bestFor: 'Financial modelling and analysis, complex formulas, data pattern detection, advanced pivot table work, interpreting financial data',
+    resData: 'safe',
+    resDataLabel: 'RES data: safe to use',
+    access: 'Limited access — requires Exec approval (Excel plugin)',
+    audience: 'Finance, data-heavy roles',
+    category: 'general',
+    tier: 'extended'
+  },
+  {
+    id: 'claude-pptx',
+    name: 'Claude for PowerPoint',
+    vendor: 'Anthropic',
+    vendorClass: 'cat-anthropic',
+    icon: '🟧',
+    desc: 'PowerPoint plugin for creating, improving, and restructuring slide decks with AI assistance. Best used when you need more sophisticated content generation or narrative structuring than Copilot in PowerPoint provides.',
+    bestFor: 'Restructuring deck narratives, generating detailed slide content, adding speaker notes, improving presentation flow',
+    resData: 'safe',
+    resDataLabel: 'RES data: safe to use',
+    access: 'Limited access — requires Exec approval (PowerPoint plugin)',
+    audience: 'Approved users',
+    category: 'general',
+    tier: 'extended'
+  },
+  {
+    id: 'chatgpt',
+    name: 'ChatGPT',
+    vendor: 'OpenAI',
+    vendorClass: 'cat-openai',
+    icon: '🟩',
+    desc: 'General-purpose conversational AI for brainstorming, drafting, learning, and quick queries. Important: do not share RES intellectual property or sensitive data. For RES-related work, use Copilot or Claude instead.',
+    bestFor: 'Quick general questions, personal learning, brainstorming ideas (non-confidential only)',
+    resData: 'caution',
+    resDataLabel: 'Do NOT share RES IP',
+    access: 'Free / personal accounts',
+    audience: 'All staff (with caution)',
+    category: 'general',
+    tier: 'caution'
+  },
+  {
+    id: 'claude-code',
+    name: 'Claude Code',
+    vendor: 'Anthropic',
+    vendorClass: 'cat-anthropic',
+    icon: '🟧',
+    desc: 'Command-line AI coding agent for complex, multi-file tasks. Goes beyond Copilot for GitHub when you need autonomous implementation, architectural planning, and end-to-end development work.',
+    bestFor: 'Full feature implementation, debugging complex issues, codebase refactoring, writing and running tests, architectural planning',
+    resData: 'safe',
+    resDataLabel: 'RES data: safe to use',
+    access: 'Limited access — requires Exec approval (CLI tool)',
+    audience: 'Developers (approved)',
+    category: 'developer',
+    tier: 'extended'
+  },
+  {
+    id: 'claude-github',
+    name: 'Claude for GitHub',
+    vendor: 'Anthropic',
+    vendorClass: 'cat-anthropic',
+    icon: '🟧',
+    desc: 'AI-powered code review and pull request assistance integrated directly into GitHub. Reviews changes, suggests improvements, and helps maintain code quality.',
+    bestFor: 'Automated code review, PR summaries, identifying bugs and security issues, enforcing coding standards',
+    resData: 'safe',
+    resDataLabel: 'RES data: safe to use',
+    access: 'Limited access — requires Exec approval (GitHub integration)',
+    audience: 'Developers (approved)',
+    category: 'developer',
+    tier: 'extended'
+  }
+];
+
+// ═══════════════════════════════════════
+//  WIZARD FLOW
+// ═══════════════════════════════════════
+const wizardFlow = {
+  start: {
+    question: "What kind of task are you working on?",
+    helper: "Pick the category that best describes what you need to do.",
+    options: [
+      { label: "Writing or documents", sub: "Emails, reports, presentations, meeting notes", icon: "📝", next: "writing" },
+      { label: "Data and analysis", sub: "Spreadsheets, numbers, charts, trends", icon: "📊", next: "data" },
+      { label: "Research and learning", sub: "Finding information, understanding topics, exploring ideas", icon: "🔍", next: "research" },
+      { label: "Meetings and communication", sub: "Meeting prep, recaps, translations, team comms", icon: "💬", next: "meetings" },
+      { label: "Coding and development", sub: "Writing code, debugging, code review, building tools", icon: "💻", next: "coding" },
+      { label: "Managing an ongoing project", sub: "Sustained work across sessions with files, context, and instructions", icon: "📁", next: "project" },
+      { label: "Building AI tools or agents", sub: "Creating chatbots, custom workflows, automations", icon: "🤖", next: "builder" }
+    ]
+  },
+  writing: {
+    question: "What are you writing?",
+    helper: "Copilot for M365 is the primary tool for most writing tasks. Claude extends your capabilities for specialist needs.",
+    options: [
+      { label: "An email or short message", sub: "Quick drafts, replies, translations", icon: "✉️", result: "copilot365", why: "Copilot lives inside Outlook and can draft, reply, and translate emails using context from your inbox. This is the fastest way to get AI help with email." },
+      { label: "A document or report", sub: "Word docs, long-form writing, policies", icon: "📄", next: "writing_doc" },
+      { label: "A presentation", sub: "PowerPoint slides, pitch decks", icon: "📑", next: "writing_pptx" },
+      { label: "Complex strategic content", sub: "Deep analysis, strategy papers, nuanced long-form writing", icon: "💡", result: "claude-chat", why: "For complex strategic content that requires deep reasoning and nuanced analysis, Claude is the stronger choice. Note: Claude requires Exec approval and limited access. For general drafting, start with Copilot." }
+    ]
+  },
+  writing_doc: {
+    question: "What do you need?",
+    helper: "Copilot in Word is the easiest starting point for most document work.",
+    options: [
+      { label: "Draft or edit inside Word", sub: "Using Copilot within the Word app (recommended)", icon: "📝", result: "copilot365", why: "Copilot in Word can draft, rewrite, and summarise content directly within your existing document. This is the recommended starting point for document work." },
+      { label: "Create a polished .docx from scratch", sub: "Complex formatting, structure, and layout", icon: "📋", result: "claude-cowork", why: "If you need to produce a highly polished document with specific formatting and structure beyond what Copilot generates, Claude Cowork can create and edit Word documents directly on your computer. Note: requires Exec-approved Claude access." },
+      { label: "Deep content development first", sub: "Iterate on complex content, then format later", icon: "💬", result: "claude-chat", why: "For content that requires extended reasoning, multi-layered analysis, or iterative refinement, Claude chat lets you develop the substance first. Note: requires Exec-approved Claude access. For simpler drafting, Copilot in Word is the faster option." }
+    ]
+  },
+  writing_pptx: {
+    question: "How do you want to create the presentation?",
+    helper: "Copilot in PowerPoint is the recommended starting point.",
+    options: [
+      { label: "Get help inside PowerPoint", sub: "Generate slides from prompts or existing files (recommended)", icon: "📑", result: "copilot365", why: "Copilot in PowerPoint can generate slides from a prompt or reference existing documents and presentations in your M365 environment. This is the recommended approach for most presentations." },
+      { label: "Build a polished deck from scratch", sub: "Complete custom layout and design", icon: "📊", result: "claude-cowork", why: "If you need a highly customised deck with specific design elements beyond what Copilot generates, Claude Cowork can create polished PowerPoint files from scratch. Note: requires Exec-approved Claude access." },
+      { label: "Improve an existing deck's narrative", sub: "Restructure, strengthen content, add speaker notes", icon: "🟧", result: "claude-pptx", why: "The Claude PowerPoint plugin is strong at restructuring deck narratives, strengthening content flow, and adding detailed speaker notes. Note: requires Exec-approved Claude access." }
+    ]
+  },
+  data: {
+    question: "What do you need to do with your data?",
+    helper: "Copilot in Excel handles most spreadsheet tasks. Claude excels at advanced financial analysis.",
+    options: [
+      { label: "Work in Excel", sub: "Formulas, analysis, charts within a spreadsheet", icon: "📈", next: "data_excel" },
+      { label: "Process or transform files", sub: "Clean data, merge files, convert formats", icon: "🔄", next: "data_process" },
+      { label: "Build a data application or pipeline", sub: "Custom code or API integration", icon: "⚙️", result: "azure-openai", why: "Azure OpenAI provides the API access needed to build custom data processing applications within the RES infrastructure." }
+    ]
+  },
+  data_excel: {
+    question: "What kind of Excel work?",
+    helper: "Copilot handles most spreadsheet tasks. Claude for Excel is particularly strong for financial analysis.",
+    options: [
+      { label: "General Excel help", sub: "Sort, filter, charts, simple formulas, summaries", icon: "🟦", result: "copilot365", why: "Copilot in Excel can sort and filter data, suggest charts, add formula columns, and run advanced analysis with Python. This is the recommended starting point for most Excel work." },
+      { label: "Financial analysis or modelling", sub: "Complex financial formulas, modelling, pattern analysis", icon: "💰", result: "claude-excel", why: "Claude for Excel is particularly strong at financial modelling, complex formula creation, and interpreting financial data patterns. This is an area where Claude genuinely outperforms Copilot. Note: requires Exec-approved Claude access." },
+      { label: "Complex data pattern analysis", sub: "Advanced pattern detection, anomaly identification", icon: "🔢", result: "claude-excel", why: "For advanced pattern detection and data analysis that goes beyond Copilot's capabilities, Claude for Excel provides deeper analytical reasoning. Note: requires Exec-approved Claude access." }
+    ]
+  },
+  data_process: {
+    question: "What scale of data processing?",
+    helper: "",
+    options: [
+      { label: "Quick data task in M365", sub: "Transform data within Excel, Word, or other M365 apps", icon: "🟦", result: "copilot365", why: "For data transformation within M365 apps, Copilot can help directly within Excel or other tools. This is the fastest route for most data tasks." },
+      { label: "Multi-file processing", sub: "Work across multiple files, formats, or complex transformations", icon: "🔄", result: "claude-cowork", why: "Claude Cowork can process files on your computer — cleaning, transforming, and merging data across formats and multiple files. Note: requires Exec-approved Claude access." }
+    ]
+  },
+  research: {
+    question: "What kind of research are you doing?",
+    helper: "Copilot is the best tool for finding internal RES information. Copilot's built-in Agents — like Researcher — extend its capabilities for deeper work.",
+    options: [
+      { label: "Internal RES information", sub: "Emails, SharePoint, Teams chats, company docs", icon: "🏢", result: "copilot365", why: "Copilot searches across your M365 environment — emails, Teams, SharePoint, and OneDrive — to find internal RES information. This is the only AI tool that can access your internal data." },
+      { label: "Quick general question", sub: "Something you just want a fast answer to", icon: "⚡", result: "copilot365", why: "Copilot can answer quick questions using both your M365 data and web search. Toggle to 'Web' mode for general knowledge queries." },
+      { label: "Deep analysis or exploration", sub: "Complex topics, comparing options, strategic thinking", icon: "📚", result: "copilot365", why: "Use the Researcher Agent in Copilot for deep analytical work — it combines Copilot's M365 integration with Claude-powered reasoning to explore complex topics, compare options, and produce thorough analysis. Find it in Copilot's built-in Agents." },
+      { label: "In-depth web research", sub: "Browsing multiple pages, extracting detailed information", icon: "🌐", result: "claude-browser", why: "For complex web research that requires navigating multiple pages and synthesising findings, Claude in Chrome can browse, read, and compile research. Note: requires Exec-approved Claude access. For simple web searches, Copilot's web mode works well." }
+    ]
+  },
+  meetings: {
+    question: "What do you need help with?",
+    helper: "Teams Premium and Copilot cover all meeting-related tasks.",
+    options: [
+      { label: "Meeting recap or summary", sub: "Catch up on meetings you missed", icon: "📋", result: "teams-pro", why: "Teams Premium provides AI-generated meeting recaps including key points, action items, and chapters. You must be the meeting organiser or have the recording available." },
+      { label: "Live captions or translations", sub: "Real-time translation during meetings", icon: "🌍", result: "teams-pro", why: "Teams Premium offers live translated captions and AI-powered notes during meetings." },
+      { label: "Prepare for a meeting", sub: "Research topics, draft talking points, review context", icon: "📝", result: "copilot365", why: "Ask Copilot to summarise recent communications with attendees, pull relevant documents, and help you prepare talking points." },
+      { label: "Draft a follow-up email", sub: "Send action items or notes after a meeting", icon: "✉️", result: "copilot365", why: "Copilot in Outlook can help draft follow-up emails referencing meeting content and action items." }
+    ]
+  },
+  coding: {
+    question: "What coding task do you need help with?",
+    helper: "GitHub Copilot is the primary coding tool. Claude extends capabilities for complex tasks.",
+    options: [
+      { label: "Real-time code completion", sub: "Suggestions as I type in my editor", icon: "⌨️", result: "copilot-github", why: "GitHub Copilot provides inline code suggestions, generates functions, and writes tests directly in VS Code and other IDEs. This is the recommended tool for day-to-day coding." },
+      { label: "Complex multi-file task", sub: "Full feature implementation, debugging, refactoring", icon: "🏗️", result: "claude-code", why: "For complex, multi-file tasks that require autonomous implementation — from architecture to testing — Claude Code goes beyond what GitHub Copilot offers. Note: requires Exec-approved Claude access." },
+      { label: "Code review", sub: "Review pull requests, identify issues, maintain quality", icon: "🔍", result: "claude-github", why: "Claude for GitHub provides detailed automated PR reviews, identifying bugs, security issues, and suggesting improvements. Note: requires Exec-approved Claude access." },
+      { label: "Learn or understand code", sub: "Explain what code does, how something works", icon: "🧠", result: "copilot-github", why: "GitHub Copilot can explain code, walk through logic, and help you understand unfamiliar codebases directly in your IDE." }
+    ]
+  },
+  project: {
+    question: "What kind of project support do you need?",
+    helper: "For sustained, context-rich work across multiple sessions, Claude Cowork's Projects feature offers capabilities not available in Copilot.",
+    options: [
+      { label: "Quick task or one-off request", sub: "A single question or task that doesn't need ongoing context", icon: "⚡", result: "copilot365", why: "For one-off tasks, Copilot is the fastest route — just ask your question in any M365 app. No project setup needed." },
+      { label: "Ongoing work with persistent context", sub: "Custom instructions, reference files, and memory across sessions", icon: "📁", result: "claude-cowork", why: "Claude Cowork's Projects feature lets you create dedicated project spaces with custom instructions, uploaded reference files, and persistent context that carries across conversations. This is ideal for sustained initiatives where you need AI to remember your goals, guidelines, and materials. Note: requires Exec-approved Claude access." },
+      { label: "Multi-file creation and processing", sub: "Producing documents, presentations, spreadsheets, or processing batches of files", icon: "🔄", result: "claude-cowork", why: "Claude Cowork works directly with files on your computer — creating polished documents, presentations, and spreadsheets, or processing multiple files at once. Combine this with Projects for even more context-aware output. Note: requires Exec-approved Claude access." }
+    ]
+  },
+  builder: {
+    question: "What are you building?",
+    helper: "Copilot Agent Builder and Copilot Studio are the primary tools for building AI agents at RES.",
+    options: [
+      { label: "A simple Q&A chatbot", sub: "Answer questions about policies, documents, processes", icon: "💬", result: "copilot365", why: "The Agent Builder in Copilot for M365 lets you quickly create lightweight Q&A agents with no code. Perfect for policy bots, FAQ helpers, and document-based assistants. You can share these agents across the organisation." },
+      { label: "An advanced agent or automation", sub: "Multi-step workflows, integrations, custom logic", icon: "🤖", result: "copilot-studio", why: "Copilot Studio is built for more advanced agents with multi-step workflows, custom integrations, external-facing capabilities, and orchestration across business systems. A step up from Agent Builder." },
+      { label: "A workflow automation", sub: "Multi-step processes, approvals, notifications", icon: "⚙️", result: "copilot-studio", why: "Copilot Studio supports multi-step workflows with custom integrations, triggers, and actions across business systems." },
+      { label: "A custom AI application", sub: "Bespoke software using AI APIs", icon: "🛠️", result: "azure-openai", why: "Azure OpenAI provides API access to GPT-4 and other models within the RES Azure environment, giving you full control for custom development." }
+    ]
+  }
+};
+
+// ═══════════════════════════════════════
+//  WIZARD RENDERER
+// ═══════════════════════════════════════
+let wizardHistory = [];
+
+function renderWizard(stepId) {
+  const container = document.getElementById('wizard');
+  const step = wizardFlow[stepId];
+  if (!step) return;
+
+  // Build breadcrumb
+  let breadcrumb = '<div class="wizard-breadcrumb">';
+  wizardHistory.forEach((h, i) => {
+    const s = wizardFlow[h.step];
+    const chosen = h.chosen || '';
+    breadcrumb += `<span class="crumb">${chosen}</span>`;
+  });
+  breadcrumb += `<span class="crumb active">Step ${wizardHistory.length + 1}</span></div>`;
+
+  let html = '<div class="wizard-step">';
+  if (wizardHistory.length > 0) html += breadcrumb;
+  html += `<div class="wizard-question">${step.question}</div>`;
+  if (step.helper) html += `<div class="wizard-helper">${step.helper}</div>`;
+  html += '<div class="wizard-options">';
+
+  step.options.forEach((opt, i) => {
+    html += `<button class="wizard-opt" data-idx="${i}">
+      <span class="opt-icon">${opt.icon}</span>
+      <span class="opt-text">
+        <strong>${opt.label}</strong>
+        <span>${opt.sub}</span>
+      </span>
+    </button>`;
+  });
+
+  html += '</div>';
+  if (wizardHistory.length > 0) {
+    html += '<button class="btn-restart" id="btn-back" style="margin-right:8px;font-size:13px;padding:8px 16px;">← Back</button>';
+  }
+  html += '</div>';
+
+  container.innerHTML = html;
+
+  // Attach listeners
+  container.querySelectorAll('.wizard-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.idx);
+      const opt = step.options[idx];
+      wizardHistory.push({ step: stepId, chosen: opt.label });
+      if (opt.result) {
+        showResult(opt.result, opt.why);
+      } else if (opt.next) {
+        renderWizard(opt.next);
+      }
+    });
+  });
+
+  const backBtn = document.getElementById('btn-back');
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      const prev = wizardHistory.pop();
+      if (prev) renderWizard(prev.step);
+      else renderWizard('start');
+    });
+  }
+}
+
+function showResult(toolId, why) {
+  const tool = tools.find(t => t.id === toolId);
+  if (!tool) return;
+  const container = document.getElementById('wizard');
+
+  const dataClass = tool.resData === 'safe' ? 'data-safe' : tool.resData === 'caution' ? 'data-caution' : 'data-no';
+
+  let html = '<div class="wizard-step">';
+
+  // Breadcrumb
+  let breadcrumb = '<div class="wizard-breadcrumb">';
+  wizardHistory.forEach(h => {
+    breadcrumb += `<span class="crumb">${h.chosen}</span>`;
+  });
+  breadcrumb += `<span class="crumb active">Result</span></div>`;
+  html += breadcrumb;
+
+  const tierLabels = { primary: 'Primary tool', extended: 'Extended — limited access', caution: 'Use with caution' };
+  const tierClass = { primary: 'tier-primary', extended: 'tier-extended', caution: 'tier-caution' };
+
+  html += `<div class="result-card">
+    <h3>${tool.icon} ${tool.name} <span class="tier-badge ${tierClass[tool.tier] || ''}">${tierLabels[tool.tier] || ''}</span></h3>
+    <span class="tool-badge ${tool.vendorClass}">${tool.vendor}</span>
+    <p>${why}</p>
+    <div class="tip"><strong>Data policy:</strong> ${tool.resDataLabel}</div>
+    <div class="tip" style="margin-top:6px;"><strong>Access:</strong> ${tool.access}</div>
+  </div>
+  <button class="btn-restart" id="btn-restart">Start over</button>
+  <button class="btn-restart" id="btn-back2" style="margin-left:8px;">← Back one step</button>`;
+  html += '</div>';
+
+  container.innerHTML = html;
+
+  document.getElementById('btn-restart').addEventListener('click', () => {
+    wizardHistory = [];
+    renderWizard('start');
+  });
+  document.getElementById('btn-back2').addEventListener('click', () => {
+    const prev = wizardHistory.pop();
+    if (prev) renderWizard(prev.step);
+    else renderWizard('start');
+  });
+}
+
+// ═══════════════════════════════════════
+//  TOOL CARDS
+// ═══════════════════════════════════════
+function renderToolCards() {
+  const grid = document.getElementById('tool-grid');
+  const tierGroups = [
+    { tier: 'primary', dotClass: 'tier-dot-primary', title: 'Primary tools — available to all licensed staff', subtitle: 'These are your go-to AI tools at RES. Start here.' },
+    { tier: 'extended', dotClass: 'tier-dot-extended', title: 'Extended tools — limited access, Exec approval required', subtitle: 'For specialist tasks where primary tools are not sufficient. Requires a Claude license.' },
+    { tier: 'caution', dotClass: 'tier-dot-caution', title: 'Use with caution — do not share RES data', subtitle: 'Available but not recommended for RES work. Never share confidential information.' }
+  ];
+
+  let html = '';
+  tierGroups.forEach(group => {
+    const groupTools = tools.filter(t => t.tier === group.tier);
+    if (groupTools.length === 0) return;
+
+    html += `<div class="tier-section-header">
+      <h3><span class="tier-dot ${group.dotClass}"></span>${group.title}</h3>
+      <p>${group.subtitle}</p>
+    </div>`;
+
+    groupTools.forEach(t => {
+      const dataClass = t.resData === 'safe' ? 'data-safe' : t.resData === 'caution' ? 'data-caution' : 'data-no';
+      html += `<div class="tool-card card-${t.tier}">
+        <h3>${t.name}</h3>
+        <span class="tool-vendor">${t.vendor}</span>
+        <p>${t.desc}</p>
+        <div class="use-cases">
+          <strong>Best for</strong>
+          ${t.bestFor}
+        </div>
+        <div class="data-badge ${dataClass}">${t.resDataLabel}</div>
+        <div style="margin-top:6px;font-size:12px;color:var(--granite);">${t.access}</div>
+      </div>`;
+    });
+  });
+  grid.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+//  COMPARISON TABLE
+// ═══════════════════════════════════════
+function renderCompareTable() {
+  const table = document.getElementById('compare-table');
+  const headers = ['Tool', 'Availability', 'Vendor', 'RES data safe?', 'Best for', 'Access', 'Audience'];
+  const tierOrder = ['primary', 'extended', 'caution'];
+  const sortedTools = [...tools].sort((a, b) => tierOrder.indexOf(a.tier) - tierOrder.indexOf(b.tier));
+  const tierDots = {
+    primary: '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#43A047;margin-right:4px;vertical-align:middle;"></span> Primary',
+    extended: '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#F07E26;margin-right:4px;vertical-align:middle;"></span> Limited',
+    caution: '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#BF4E4D;margin-right:4px;vertical-align:middle;"></span> Caution'
+  };
+
+  let html = '<thead><tr>';
+  headers.forEach(h => { html += `<th>${h}</th>`; });
+  html += '</tr></thead><tbody>';
+
+  sortedTools.forEach(t => {
+    const dataBadge = t.resData === 'safe'
+      ? '<span class="tag tag-yes">Yes</span>'
+      : t.resData === 'caution'
+        ? '<span class="tag tag-warn">Caution</span>'
+        : '<span class="tag tag-no">No</span>';
+
+    html += `<tr>
+      <td>${t.name}</td>
+      <td style="white-space:nowrap;font-size:12px;">${tierDots[t.tier] || ''}</td>
+      <td style="font-size:13px;">${t.vendor}</td>
+      <td>${dataBadge}</td>
+      <td style="font-size:13px;max-width:300px;">${t.bestFor}</td>
+      <td style="font-size:13px;">${t.access}</td>
+      <td><span class="tag tag-info">${t.audience}</span></td>
+    </tr>`;
+  });
+
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+renderWizard('start');
+renderToolCards();
+renderCompareTable();
+</script>
+</body>
+</html>
