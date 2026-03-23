@@ -1,0 +1,2575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Knowledge Centre — RES</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #F07E26;
+      --orange-light: #F9B122;
+      --slate: #323A45;
+      --granite: #817D8B;
+      --pebble: #EAE1E4;
+      --polar: #F8F6F6;
+      --ocean: #5C80A8;
+      --sky: #6AB1CD;
+      --glacier: #60A89A;
+      --moss: #76AA75;
+      --sage: #A6BB55;
+      --berry: #BF4E4D;
+      --coral: #DE746F;
+      --lavender: #B26490;
+      --pollen: #E1B94B;
+      --white: #FFFFFF;
+      --gradient-burst: linear-gradient(135deg, #F07E26, #F9B122);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      color: var(--slate);
+      background: var(--polar);
+      line-height: 1.6;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      background: var(--gradient-burst);
+      color: var(--white);
+      padding: 60px 40px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    /* GCSE PURPOSE BANNER — COMPACT HORIZONTAL LINE */
+    .gcse-banner {
+      background: var(--white);
+      padding: 20px 40px;
+      display: flex;
+      gap: 0;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--pebble);
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+
+    .gcse-item {
+      flex: 1;
+      min-width: 200px;
+      padding: 16px 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      border-right: 1px solid var(--pebble);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .gcse-item:last-child {
+      border-right: none;
+    }
+
+    .gcse-letter {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .gcse-item.g .gcse-letter { background: var(--sky); }
+    .gcse-item.c .gcse-letter { background: var(--glacier); }
+    .gcse-item.s .gcse-letter { background: var(--pollen); color: var(--slate); }
+    .gcse-item.e .gcse-letter { background: var(--lavender); }
+
+    .gcse-text {
+      color: var(--slate);
+    }
+
+    .gcse-label {
+      font-weight: 600;
+      display: block;
+      color: var(--slate);
+    }
+
+    /* READINESS ASSESSMENT CTA */
+    .readiness-cta {
+      background: var(--gradient-burst);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .readiness-cta-text {
+      color: var(--white);
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+
+    .readiness-cta-text strong {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    .readiness-cta-btn {
+      background: var(--white);
+      color: var(--orange);
+      border: none;
+      padding: 12px 28px;
+      border-radius: 6px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .readiness-cta-btn:hover {
+      background: var(--slate);
+      color: var(--white);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* ASSESSMENT MODAL */
+    .assess-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(50, 58, 69, 0.7);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .assess-backdrop.active {
+      display: flex;
+    }
+
+    .assess-modal {
+      background: var(--white);
+      border-radius: 12px;
+      max-width: 560px;
+      width: 100%;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+      animation: fadeIn 0.3s ease;
+      overflow: hidden;
+    }
+
+    .assess-header {
+      background: var(--gradient-burst);
+      padding: 24px 28px;
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .assess-header-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .assess-close {
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 1.5rem;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+      line-height: 1;
+    }
+
+    .assess-close:hover {
+      opacity: 1;
+    }
+
+    .assess-progress {
+      display: flex;
+      gap: 6px;
+      padding: 16px 28px 0;
+    }
+
+    .assess-progress-dot {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--pebble);
+      transition: background 0.3s ease;
+    }
+
+    .assess-progress-dot.done {
+      background: var(--orange);
+    }
+
+    .assess-progress-dot.current {
+      background: var(--orange-light);
+    }
+
+    .assess-body {
+      padding: 28px;
+    }
+
+    .assess-question-num {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--granite);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .assess-question {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--slate);
+      margin-bottom: 20px;
+      line-height: 1.3;
+    }
+
+    .assess-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .assess-option {
+      background: var(--polar);
+      border: 2px solid var(--pebble);
+      border-radius: 8px;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      color: var(--slate);
+      text-align: left;
+    }
+
+    .assess-option:hover {
+      border-color: var(--orange);
+      background: #FFFBF8;
+    }
+
+    .assess-option.selected {
+      border-color: var(--orange);
+      background: rgba(240, 126, 38, 0.08);
+    }
+
+    /* ASSESSMENT RESULT */
+    .assess-result {
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .assess-result-tier {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--orange);
+      margin-bottom: 4px;
+    }
+
+    .assess-result-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--slate);
+      margin-bottom: 16px;
+    }
+
+    .assess-result-desc {
+      font-size: 0.95rem;
+      color: var(--granite);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .assess-result-next {
+      background: var(--polar);
+      border-left: 4px solid var(--orange);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .assess-result-next-label {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--orange);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .assess-result-next-text {
+      font-size: 0.95rem;
+      color: var(--slate);
+      line-height: 1.5;
+    }
+
+    .assess-done-btn {
+      background: var(--orange);
+      color: var(--white);
+      border: none;
+      padding: 12px 32px;
+      border-radius: 6px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .assess-done-btn:hover {
+      background: var(--orange-light);
+    }
+
+    /* TOOL SELECTOR */
+    .tool-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      padding: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .tool-card {
+      background: var(--white);
+      border: 2px solid var(--pebble);
+      border-radius: 8px;
+      padding: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .tool-card:hover {
+      border-color: var(--orange);
+      box-shadow: 0 8px 24px rgba(240, 126, 38, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .tool-card.active {
+      background: var(--orange);
+      color: var(--white);
+      border-color: var(--orange);
+    }
+
+    .tool-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+
+    .tool-card p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* TOOL PANELS */
+    .panels-container {
+      padding: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: 600px;
+    }
+
+    .tool-panel {
+      display: none;
+    }
+
+    .tool-panel.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* TABS WITHIN PANELS */
+    .tab-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--pebble);
+      flex-wrap: wrap;
+    }
+
+    .tab-nav button {
+      background: none;
+      border: none;
+      padding: 12px 20px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--granite);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.3s ease;
+    }
+
+    .tab-nav button:hover {
+      color: var(--orange);
+    }
+
+    .tab-nav button.active {
+      color: var(--orange);
+      border-bottom-color: var(--orange);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* (footer removed)
+    }
+
+    /* DECISION GUIDE STYLES */
+    #dg-wizard {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+
+    .wizard-header {
+      margin-bottom: 30px;
+    }
+
+    .wizard-question {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--slate);
+    }
+
+    .wizard-helper {
+      font-size: 0.95rem;
+      color: var(--granite);
+      margin-bottom: 24px;
+    }
+
+    .wizard-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .wizard-option {
+      background: var(--polar);
+      border: 2px solid var(--pebble);
+      border-radius: 6px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+    }
+
+    .wizard-option:hover {
+      border-color: var(--orange);
+      background: #FFFBF8;
+    }
+
+    .wizard-option-label {
+      font-weight: 600;
+      color: var(--slate);
+      margin-bottom: 6px;
+    }
+
+    .wizard-option-sub {
+      font-size: 0.85rem;
+      color: var(--granite);
+      margin-bottom: 10px;
+    }
+
+    .wizard-option-icon {
+      font-size: 1.5rem;
+    }
+
+    .wizard-result {
+      background: #E8F4FF;
+      border-left: 5px solid var(--sky);
+      padding: 24px;
+      border-radius: 6px;
+      margin-bottom: 24px;
+    }
+
+    .result-tool-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--sky);
+      margin-bottom: 12px;
+    }
+
+    .result-why {
+      font-size: 0.95rem;
+      color: var(--slate);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .back-button {
+      background: var(--granite);
+      color: var(--white);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .back-button:hover {
+      background: var(--slate);
+    }
+
+
+    #dg-compare-table {
+      overflow-x: auto;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .compare-table thead {
+      background: var(--slate);
+      color: var(--white);
+    }
+
+    .compare-table th, .compare-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--pebble);
+      font-size: 0.9rem;
+    }
+
+    .compare-table tr:hover {
+      background: var(--polar);
+    }
+
+    .compare-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .cat-microsoft { color: #0078D4; font-weight: 600; }
+    .cat-anthropic { color: #9B59B6; font-weight: 600; }
+    .cat-openai { color: #10A37F; font-weight: 600; }
+
+    /* PLAYBOOK STYLES */
+    #pp-ba-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .ba-card {
+      background: var(--white);
+      border: 2px solid var(--pebble);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .ba-scenario {
+      font-weight: 600;
+      color: var(--orange);
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .ba-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--slate);
+      margin-bottom: 16px;
+    }
+
+    .ba-text {
+      background: var(--polar);
+      padding: 16px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      font-style: italic;
+      color: var(--slate);
+    }
+
+    .improvements-list {
+      font-size: 0.85rem;
+      color: var(--granite);
+    }
+
+    .improvements-list li {
+      margin-bottom: 8px;
+      margin-left: 20px;
+    }
+
+    .improvement-tag {
+      background: #E8F4FF;
+      color: var(--sky);
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    .reveal-button {
+      background: var(--orange);
+      color: var(--white);
+      border: none;
+      padding: 10px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-top: 12px;
+      transition: background 0.3s ease;
+    }
+
+    .reveal-button:hover {
+      background: var(--orange-light);
+    }
+
+    .reveal-button.revealed {
+      background: var(--glacier);
+    }
+
+    #pp-exercises-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .exercise-card {
+      background: var(--white);
+      border: 2px solid var(--pebble);
+      border-radius: 6px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .exercise-card:hover {
+      border-color: var(--orange);
+      box-shadow: 0 4px 12px rgba(240, 126, 38, 0.1);
+    }
+
+    .exercise-difficulty {
+      display: inline-block;
+      background: var(--pollen);
+      color: var(--slate);
+      padding: 4px 10px;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .exercise-difficulty.intermediate {
+      background: #FFE5CC;
+    }
+
+    .exercise-difficulty.advanced {
+      background: #FFB3B3;
+    }
+
+    .exercise-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--slate);
+      margin-bottom: 12px;
+    }
+
+    .exercise-scenario {
+      font-size: 0.85rem;
+      color: var(--granite);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .exercise-input {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px;
+      border: 2px solid var(--pebble);
+      border-radius: 4px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      transition: border-color 0.3s ease;
+      resize: vertical;
+    }
+
+    .exercise-input:focus {
+      outline: none;
+      border-color: var(--orange);
+    }
+
+    .exercise-controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .exercise-button {
+      background: var(--ocean);
+      color: var(--white);
+      border: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .exercise-button:hover {
+      background: var(--sky);
+    }
+
+    .exercise-button.score {
+      background: var(--orange);
+    }
+
+    .exercise-button.score:hover {
+      background: var(--orange-light);
+    }
+
+    .score-result {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .score-result.excellent {
+      background: #D4EDDA;
+      color: #155724;
+    }
+
+    .score-result.good {
+      background: #CCE5FF;
+      color: var(--sky);
+    }
+
+    .score-result.fair {
+      background: #FFE5CC;
+      color: var(--orange);
+    }
+
+    .score-result.needs-work {
+      background: #FFB3B3;
+      color: var(--berry);
+    }
+
+    .pp-builder {
+      background: var(--white);
+      border: 2px solid var(--pebble);
+      border-radius: 6px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .builder-section {
+      margin-bottom: 24px;
+    }
+
+    .builder-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--slate);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .builder-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--pebble);
+      border-radius: 4px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .builder-input:focus {
+      outline: none;
+      border-color: var(--orange);
+    }
+
+    textarea.builder-input {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .builder-result {
+      background: var(--polar);
+      padding: 16px;
+      border-radius: 4px;
+      border-left: 4px solid var(--ocean);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--slate);
+    }
+
+    .builder-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .builder-button {
+      background: var(--ocean);
+      color: var(--white);
+      border: none;
+      padding: 10px 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: background 0.3s ease;
+    }
+
+    .builder-button:hover {
+      background: var(--sky);
+    }
+
+    .builder-button.clear {
+      background: var(--granite);
+    }
+
+    .builder-button.clear:hover {
+      background: var(--slate);
+    }
+
+    .builder-button.copy {
+      background: var(--moss);
+    }
+
+    .builder-button.copy:hover {
+      background: var(--sage);
+    }
+
+    #pp-claude-techniques {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .technique-card {
+      background: var(--white);
+      border: 2px solid var(--pebble);
+      border-radius: 6px;
+      padding: 24px;
+      cursor: pointer;
+    }
+
+    .technique-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--slate);
+      margin-bottom: 12px;
+    }
+
+    .technique-desc {
+      font-size: 0.9rem;
+      color: var(--granite);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .technique-body {
+      display: none;
+    }
+
+    .technique-body.revealed {
+      display: block;
+    }
+
+    .technique-example {
+      background: var(--polar);
+      padding: 16px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: var(--slate);
+      margin-bottom: 12px;
+      font-family: 'Barlow', sans-serif;
+      line-height: 1.6;
+      border-left: 4px solid var(--orange);
+    }
+
+    .technique-why {
+      background: #E8F4FF;
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: var(--sky);
+      font-weight: 600;
+      border-left: 4px solid var(--sky);
+    }
+
+    /* LEARN THE FRAMEWORK STYLES */
+    .pp-gcse-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+
+    .pp-gcse-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 24px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-top: 4px solid var(--orange);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .pp-gcse-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .pp-gcse-card-letter {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: var(--orange);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .pp-gcse-card-label {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--slate);
+      margin-bottom: 8px;
+    }
+
+    .pp-gcse-card-question {
+      font-size: 0.85rem;
+      color: var(--granite);
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+
+    .pp-gcse-card-desc {
+      font-size: 0.85rem;
+      color: var(--slate);
+      line-height: 1.5;
+    }
+
+    .pp-example-prompt {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 24px;
+    }
+
+    .pp-prompt-text {
+      background: var(--polar);
+      border-left: 4px solid var(--orange);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .pp-hl-g { background: rgba(96,168,154,0.2); padding: 2px 4px; border-radius: 3px; }
+    .pp-hl-c { background: rgba(92,128,168,0.2); padding: 2px 4px; border-radius: 3px; }
+    .pp-hl-s { background: rgba(178,100,144,0.2); padding: 2px 4px; border-radius: 3px; }
+    .pp-hl-e { background: rgba(225,185,75,0.2); padding: 2px 4px; border-radius: 3px; }
+
+    .pp-legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: var(--granite);
+    }
+
+    .pp-legend span { display: flex; align-items: center; gap: 6px; }
+
+    .pp-legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .pp-legend-dot.g { background: rgba(96,168,154,0.4); }
+    .pp-legend-dot.c { background: rgba(92,128,168,0.4); }
+    .pp-legend-dot.s { background: rgba(178,100,144,0.4); }
+    .pp-legend-dot.e { background: rgba(225,185,75,0.4); }
+
+    .pp-tip-box {
+      background: #FFF8E1;
+      border-left: 4px solid var(--pollen);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      color: var(--slate);
+    }
+
+    /* SKILL TREE STYLES */
+    .st-container {
+      background: var(--white);
+      border: 2px solid var(--pebble);
+      border-radius: 6px;
+      padding: 40px;
+      margin-bottom: 30px;
+    }
+
+    .st-intro {
+      font-size: 0.95rem;
+      color: var(--granite);
+      margin-bottom: 40px;
+      line-height: 1.6;
+      max-width: 800px;
+    }
+
+    .st-tree {
+      position: relative;
+    }
+
+    .st-tier {
+      margin-bottom: 60px;
+      position: relative;
+    }
+
+    .st-tier-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--slate);
+      margin-bottom: 32px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    .st-tier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .st-card {
+      background: var(--white);
+      border: 2px solid var(--pebble);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .st-card:hover {
+      border-color: var(--orange);
+      box-shadow: 0 8px 24px rgba(240, 126, 38, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .st-card-icon {
+      font-size: 2.5rem;
+      line-height: 1;
+    }
+
+    .st-card-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--slate);
+      line-height: 1.3;
+    }
+
+    .st-card-desc {
+      font-size: 0.85rem;
+      color: var(--granite);
+      line-height: 1.4;
+    }
+
+    /* MODAL STYLES */
+    .st-modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(50, 58, 69, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .st-modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .st-modal {
+      background: var(--white);
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(50, 58, 69, 0.3);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .st-modal-header {
+      padding: 32px 32px 24px;
+      border-bottom: 1px solid var(--pebble);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .st-modal-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--slate);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .st-modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--granite);
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .st-modal-close:hover {
+      color: var(--slate);
+    }
+
+    .st-modal-progress {
+      padding: 0 32px 20px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .st-progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--pebble);
+      transition: background 0.2s ease;
+    }
+
+    .st-progress-dot.active {
+      background: var(--orange);
+    }
+
+    .st-progress-dot.done {
+      background: var(--orange-light);
+    }
+
+    .st-modal-content {
+      padding: 32px;
+      min-height: 200px;
+    }
+
+    .st-step {
+      display: none;
+    }
+
+    .st-step.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .st-step-heading {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--slate);
+      margin-bottom: 16px;
+    }
+
+    .st-step-body {
+      font-size: 0.95rem;
+      color: var(--slate);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .st-step-tip {
+      background: #f9f6f6;
+      border-left: 4px solid var(--orange);
+      padding: 12px 16px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      color: var(--slate);
+      margin-top: 16px;
+    }
+
+    .st-modal-footer {
+      padding: 20px 32px;
+      border-top: 1px solid var(--pebble);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .st-btn {
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .st-btn-secondary {
+      background: var(--pebble);
+      color: var(--slate);
+    }
+
+    .st-btn-secondary:hover {
+      background: #ddd3d6;
+    }
+
+    .st-btn-primary {
+      background: var(--orange);
+      color: var(--white);
+    }
+
+    .st-btn-primary:hover {
+      background: #e56f1a;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- HERO SECTION -->
+  <div class="hero">
+    <h1>AI Knowledge Centre</h1>
+    <p>Your guide to AI tools, techniques, and best practices at RES</p>
+  </div>
+
+  <!-- GCSE PURPOSE BANNER -->
+  <div class="gcse-banner">
+    <div class="gcse-item g">
+      <div class="gcse-letter">G</div>
+      <div class="gcse-text">
+        <span class="gcse-label">Goal:</span>
+        Equip every RES colleague to use AI effectively
+      </div>
+    </div>
+    <div class="gcse-item c">
+      <div class="gcse-letter">C</div>
+      <div class="gcse-text">
+        <span class="gcse-label">Context:</span>
+        AI Literacy Programme for consistent AI readiness
+      </div>
+    </div>
+    <div class="gcse-item s">
+      <div class="gcse-letter">S</div>
+      <div class="gcse-text">
+        <span class="gcse-label">Source:</span>
+        10 goal areas, approved tools, GCSE framework
+      </div>
+    </div>
+    <div class="gcse-item e">
+      <div class="gcse-letter">E</div>
+      <div class="gcse-text">
+        <span class="gcse-label">Expectations:</span>
+        Interactive, self-paced, for all levels
+      </div>
+    </div>
+  </div>
+
+  <!-- READINESS ASSESSMENT CTA -->
+  <div class="readiness-cta">
+    <div class="readiness-cta-text"><strong>How AI-ready are you?</strong> Take a 60-second assessment to find your starting point.</div>
+    <button class="readiness-cta-btn" onclick="startAssessment()">Start Assessment →</button>
+  </div>
+
+  <!-- ASSESSMENT MODAL -->
+  <div id="assess-backdrop" class="assess-backdrop" onclick="if(event.target===this)closeAssessment()"></div>
+
+  <!-- TOOL SELECTOR -->
+  <div class="tool-selector">
+    <div class="tool-card active" onclick="switchToolPanel('decision')">
+      <h3>🧭 AI Tool Decision Guide</h3>
+      <p>Not sure which tool to use? Answer a few quick questions to find the right AI tool for your task.</p>
+    </div>
+    <div class="tool-card" onclick="switchToolPanel('playbook')">
+      <h3>📖 Prompt Playbook</h3>
+      <p>Learn the GCSE framework and practice writing better prompts with before/after examples and interactive exercises.</p>
+    </div>
+    <div class="tool-card" onclick="switchToolPanel('skilltree')">
+      <h3>🌳 AI Skill Tree</h3>
+      <p>Explore the learning journey for AI literacy. A visual map of foundational skills through to AI championry.</p>
+    </div>
+  </div>
+
+  <!-- TOOL PANELS -->
+  <div class="panels-container">
+
+    <!-- DECISION GUIDE PANEL -->
+    <div id="panel-decision" class="tool-panel active">
+      <div class="tab-nav">
+        <button class="active" onclick="switchDGTab('wizard', this)">Find My Tool</button>
+        <button onclick="switchDGTab('compare', this)">Tool Definitions</button>
+      </div>
+
+      <div id="dg-tab-wizard" class="tab-content active">
+        <div id="dg-wizard"></div>
+      </div>
+
+      <div id="dg-tab-compare" class="tab-content">
+        <h3 style="margin-bottom: 24px; font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem;">Tool Definitions</h3>
+        <div id="dg-compare-table"></div>
+      </div>
+    </div>
+
+    <!-- PLAYBOOK PANEL -->
+    <div id="panel-playbook" class="tool-panel">
+      <div class="tab-nav">
+        <button class="active" onclick="switchPBTab('learn', this)">Learn the Framework</button>
+        <button onclick="switchPBTab('before-after', this)">Before &amp; After Examples</button>
+        <button onclick="switchPBTab('exercises', this)">Exercises</button>
+        <button onclick="switchPBTab('techniques', this)">Advanced Techniques</button>
+        <button onclick="switchPBTab('builder', this)">Prompt Builder</button>
+      </div>
+
+      <div id="pb-tab-learn" class="tab-content active">
+        <h3 style="margin-bottom: 12px; font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem;">The GCSE Prompting Framework</h3>
+        <p style="font-size: 0.95rem; color: var(--granite); margin-bottom: 28px; line-height: 1.6;">A simple, memorable structure for writing effective prompts. Used across RES for Copilot for M365 and applicable to any AI tool. Think of it as giving your AI colleague a proper brief.</p>
+
+        <div class="pp-gcse-grid">
+          <div class="pp-gcse-card">
+            <div class="pp-gcse-card-letter">G</div>
+            <div class="pp-gcse-card-label">Goal</div>
+            <div class="pp-gcse-card-question">What do you want the AI to do?</div>
+            <div class="pp-gcse-card-desc">Be specific about the task. Tell the AI exactly what output you need — a summary, a draft, a list, an analysis.</div>
+          </div>
+          <div class="pp-gcse-card">
+            <div class="pp-gcse-card-letter">C</div>
+            <div class="pp-gcse-card-label">Context</div>
+            <div class="pp-gcse-card-question">Why do you need it, and who is involved?</div>
+            <div class="pp-gcse-card-desc">Give background. Mention the project, the audience, the reason. The more context, the more relevant the response.</div>
+          </div>
+          <div class="pp-gcse-card">
+            <div class="pp-gcse-card-letter">S</div>
+            <div class="pp-gcse-card-label">Source</div>
+            <div class="pp-gcse-card-question">Where should the AI look for information?</div>
+            <div class="pp-gcse-card-desc">Point to specific files, emails, Teams chats, or web sources. In Copilot, this helps the AI search the right places in your M365 environment.</div>
+          </div>
+          <div class="pp-gcse-card">
+            <div class="pp-gcse-card-letter">E</div>
+            <div class="pp-gcse-card-label">Expectations</div>
+            <div class="pp-gcse-card-question">How should the response look and sound?</div>
+            <div class="pp-gcse-card-desc">Specify the tone, format, length, or level of detail. Do you want bullet points or prose? Formal or casual? Brief or comprehensive?</div>
+          </div>
+        </div>
+
+        <div class="pp-example-prompt">
+          <h4 style="font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 16px;">Example: the GCSE framework in action</h4>
+          <div class="pp-prompt-text">
+            <span class="pp-hl-g">Please generate 3-5 bullet points to prepare for a meeting with client X</span>
+            <span class="pp-hl-c">to discuss their "Phase 3" brand campaign.</span>
+            <span class="pp-hl-s">Focus on email and Teams chats since June.</span>
+            <span class="pp-hl-e">Please use only simple language so I can get up to speed quickly.</span>
+          </div>
+          <div class="pp-legend">
+            <span><span class="pp-legend-dot g"></span> Goal</span>
+            <span><span class="pp-legend-dot c"></span> Context</span>
+            <span><span class="pp-legend-dot s"></span> Source</span>
+            <span><span class="pp-legend-dot e"></span> Expectations</span>
+          </div>
+        </div>
+
+        <div class="pp-tip-box">
+          <strong>Tip:</strong> You don't always need all four components. A quick question might only need a Goal. But for important tasks, the more GCSE elements you include, the better your results will be.
+        </div>
+
+        <div class="pp-example-prompt">
+          <h4 style="font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 16px;">Why does this matter?</h4>
+          <p style="font-size: 0.95rem; line-height: 1.7; margin-bottom: 16px;">AI tools work best when they understand what you need. A vague prompt gets a vague answer. Think of it like briefing a colleague — you wouldn't just say "write something about the project." You'd explain what you need, why, and how you want it delivered.</p>
+          <p style="font-size: 0.95rem; line-height: 1.7;">Copilot enhances your prompt through a process called <strong>grounding</strong> — it searches your M365 environment (emails, Teams, SharePoint, OneDrive) to add relevant context. But the better your initial prompt, the more effectively grounding works.</p>
+        </div>
+      </div>
+
+      <div id="pb-tab-before-after" class="tab-content">
+        <h3 style="margin-bottom: 24px; font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem;">Before &amp; After Examples</h3>
+        <div id="pp-ba-container"></div>
+      </div>
+
+      <div id="pb-tab-exercises" class="tab-content">
+        <h3 style="margin-bottom: 24px; font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem;">Practice Exercises</h3>
+        <div id="pp-exercises-container"></div>
+      </div>
+
+      <div id="pb-tab-techniques" class="tab-content">
+        <h3 style="margin-bottom: 24px; font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem;">Advanced Techniques</h3>
+        <div id="pp-claude-techniques"></div>
+      </div>
+
+      <div id="pb-tab-builder" class="tab-content">
+        <h3 style="margin-bottom: 24px; font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem;">Build Your Own Prompt</h3>
+        <div class="pp-builder">
+          <div class="builder-section">
+            <label class="builder-label">🎯 Goal (what you want)</label>
+            <input type="text" class="builder-input" id="pb-goal" placeholder="What outcome do you need?">
+          </div>
+          <div class="builder-section">
+            <label class="builder-label">📋 Context (the situation)</label>
+            <textarea class="builder-input" id="pb-context" placeholder="What's the background? Who is involved? Why does this matter?"></textarea>
+          </div>
+          <div class="builder-section">
+            <label class="builder-label">🔍 Source (where to look)</label>
+            <input type="text" class="builder-input" id="pb-source" placeholder="Where should the AI find information? (optional)">
+          </div>
+          <div class="builder-section">
+            <label class="builder-label">✨ Expectations (how you want it)</label>
+            <input type="text" class="builder-input" id="pb-expect" placeholder="Format, tone, length, style? (optional)">
+          </div>
+          <div class="builder-result" id="pb-result" style="display: none;"></div>
+          <div class="builder-buttons">
+            <button class="builder-button" onclick="buildPrompt()">Build Prompt</button>
+            <button class="builder-button copy" onclick="copyPrompt()">Copy to clipboard</button>
+            <button class="builder-button clear" onclick="clearBuilder()">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILL TREE PANEL -->
+    <div id="panel-skilltree" class="tool-panel">
+      <div class="st-container">
+        <div class="st-intro">
+          Your AI literacy journey starts with foundational knowledge, grows into practical skills, and culminates in becoming an AI champion for your team. Click any skill to learn more.
+        </div>
+        <div class="st-tree">
+          <!-- TIER 1: FOUNDATIONS -->
+          <div class="st-tier">
+            <div class="st-tier-label">Tier 1: Foundations</div>
+            <div class="st-tier-grid">
+              <div class="st-card" onclick="openCourse('what-is-ai')">
+                <div class="st-card-icon">🧠</div>
+                <div class="st-card-title">What is AI?</div>
+                <div class="st-card-desc">Understand generative AI and how it works</div>
+              </div>
+              <div class="st-card" onclick="openCourse('ai-tools-at-res')">
+                <div class="st-card-icon">🛠️</div>
+                <div class="st-card-title">AI Tools at RES</div>
+                <div class="st-card-desc">Know which tools are available and when to use each</div>
+              </div>
+              <div class="st-card" onclick="openCourse('ethics-policy-safety')">
+                <div class="st-card-icon">🔒</div>
+                <div class="st-card-title">Ethics, Policy & Data Safety</div>
+                <div class="st-card-desc">Responsible use, RES policies, and protecting data</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TIER 2: CORE SKILLS -->
+          <div class="st-tier">
+            <div class="st-tier-label">Tier 2: Core Skills</div>
+            <div class="st-tier-grid">
+              <div class="st-card" onclick="openCourse('gcse-framework')">
+                <div class="st-card-icon">✍️</div>
+                <div class="st-card-title">The GCSE Framework</div>
+                <div class="st-card-desc">Master Goal-Context-Source-Expectations prompting</div>
+              </div>
+              <div class="st-card" onclick="openCourse('copilot-in-action')">
+                <div class="st-card-icon">🛠️</div>
+                <div class="st-card-title">Copilot in Action</div>
+                <div class="st-card-desc">Use Copilot across Word, Excel, PowerPoint and more</div>
+              </div>
+              <div class="st-card" onclick="openCourse('check-output')">
+                <div class="st-card-icon">🔍</div>
+                <div class="st-card-title">Check the Output</div>
+                <div class="st-card-desc">Spot hallucinations, bias, and errors</div>
+              </div>
+              <div class="st-card" onclick="openCourse('ai-in-your-role')">
+                <div class="st-card-icon">💼</div>
+                <div class="st-card-title">AI in Your Role</div>
+                <div class="st-card-desc">Identify practical applications for your day-to-day work</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TIER 3: ADVANCED -->
+          <div class="st-tier">
+            <div class="st-tier-label">Tier 3: Advanced</div>
+            <div class="st-tier-grid">
+              <div class="st-card" onclick="openCourse('advanced-prompting')">
+                <div class="st-card-icon">✍️</div>
+                <div class="st-card-title">Advanced Prompting</div>
+                <div class="st-card-desc">Iterative refinement, role assignment, and structured outputs</div>
+              </div>
+              <div class="st-card" onclick="openCourse('build-copilot-agent')">
+                <div class="st-card-icon">🛠️</div>
+                <div class="st-card-title">Build a Copilot Agent</div>
+                <div class="st-card-desc">Create Q&A agents and automations with Agent Builder</div>
+              </div>
+              <div class="st-card" onclick="openCourse('data-classification')">
+                <div class="st-card-icon">🔒</div>
+                <div class="st-card-title">Data Classification</div>
+                <div class="st-card-desc">Understand sensitivity levels and sharing guidelines</div>
+              </div>
+              <div class="st-card" onclick="openCourse('quality-review')">
+                <div class="st-card-icon">🔍</div>
+                <div class="st-card-title">Quality Review</div>
+                <div class="st-card-desc">Critically evaluate AI output before sharing</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TIER 4: CHAMPION -->
+          <div class="st-tier">
+            <div class="st-tier-label">Tier 4: Champion</div>
+            <div class="st-tier-grid">
+              <div class="st-card" onclick="openCourse('mentor-train')">
+                <div class="st-card-icon">🤝</div>
+                <div class="st-card-title">Mentor & Train Others</div>
+                <div class="st-card-desc">Help colleagues get started and run training sessions</div>
+              </div>
+              <div class="st-card" onclick="openCourse('share-wins')">
+                <div class="st-card-icon">📣</div>
+                <div class="st-card-title">Share Your Wins</div>
+                <div class="st-card-desc">Contribute success stories and learnings</div>
+              </div>
+              <div class="st-card" onclick="openCourse('become-champion')">
+                <div class="st-card-icon">🎓</div>
+                <div class="st-card-title">Become an AI Champion</div>
+                <div class="st-card-desc">Lead adoption and drive culture change</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL BACKDROP AND CONTAINER -->
+    <div id="st-modal-backdrop" class="st-modal-backdrop"></div>
+
+  </div>
+
+  <script>
+    // ========== DATA ==========
+    const tools = [
+      { id: 'copilot365', name: 'Copilot for M365', vendor: 'Microsoft', vendorClass: 'cat-microsoft', icon: '🟦', desc: 'Your gateway AI tool at RES. Embedded across Word, Excel, PowerPoint, Outlook, and Teams, Copilot searches your emails, chats, SharePoint, and OneDrive to deliver context-aware answers. Includes built-in Agents (Researcher, Designer, Facilitator, and more) for specialised tasks, plus Agent Builder for creating lightweight Q&A bots with no code.', bestFor: 'Summarising emails and meetings, drafting documents, querying internal data, creating presentations, using built-in Agents (Researcher, Designer, etc.), building simple Q&A agents (Agent Builder)', resData: 'safe', resDataLabel: 'RES data: safe to use', access: 'Copilot license (department funded)', audience: 'All staff', category: 'general', tier: 'primary' },
+      { id: 'teams-pro', name: 'Teams Premium', vendor: 'Microsoft', vendorClass: 'cat-microsoft', icon: '🟦', desc: 'Enhanced Teams features including intelligent meeting recap, live translations, auto-generated chapters, and AI-powered notes. Does not require a Copilot license.', bestFor: 'Meeting summaries and recaps, live captions and translations, catching up on meetings you missed', resData: 'safe', resDataLabel: 'RES data: safe to use', access: 'Teams Premium license', audience: 'All staff', category: 'general', tier: 'primary' },
+      { id: 'copilot-studio', name: 'Copilot Studio', vendor: 'Microsoft', vendorClass: 'cat-microsoft', icon: '🟦', desc: 'Platform for building advanced custom AI agents and chatbots that can be shared across the organisation. Supports multi-step workflows, custom integrations, and external-facing agents. A step up from Agent Builder for more complex automation needs.', bestFor: 'Advanced Q&A bots, multi-step workflow automations, deploying internal self-service agents, connecting to business systems, external-facing agents', resData: 'safe', resDataLabel: 'RES data: safe to use', access: 'Copilot Studio license', audience: 'Power users and makers', category: 'builder', tier: 'primary' },
+      { id: 'azure-openai', name: 'Azure OpenAI', vendor: 'Microsoft / OpenAI', vendorClass: 'cat-microsoft', icon: '🟦', desc: 'Enterprise-grade API access to OpenAI models (GPT-4, DALL-E) hosted within the RES Azure environment. For building custom AI solutions with full data governance.', bestFor: 'Custom application development, API integrations, building bespoke AI features into internal tools, bulk processing', resData: 'safe', resDataLabel: 'RES data: safe (Azure-hosted)', access: 'Via IT / development teams', audience: 'Developers', category: 'developer', tier: 'primary' },
+      { id: 'copilot-github', name: 'Copilot for GitHub', vendor: 'Microsoft / GitHub', vendorClass: 'cat-microsoft', icon: '🟦', desc: 'AI pair programmer that suggests code completions, generates functions, writes tests, and explains code directly in your IDE (VS Code, JetBrains, etc.).', bestFor: 'Code autocompletion, generating boilerplate code, writing unit tests, explaining unfamiliar code, refactoring', resData: 'safe', resDataLabel: 'RES data: safe to use', access: 'GitHub Copilot license', audience: 'Developers', category: 'developer', tier: 'primary' },
+      { id: 'claude-chat', name: 'Claude (chat)', vendor: 'Anthropic', vendorClass: 'cat-anthropic', icon: '🟧', desc: 'Advanced conversational AI for deep research, complex analysis, and nuanced reasoning. Use Claude where you need capabilities beyond what Copilot offers — such as long-form strategic thinking, detailed financial analysis, or working through multi-layered problems. Requires Exec approval; available on a limited evaluation basis.', bestFor: 'Complex financial analysis, deep research and synthesis, strategic reasoning, nuanced policy analysis, long-form content where depth matters', resData: 'safe', resDataLabel: 'RES data: safe to use', access: 'Limited access — requires Exec approval', audience: 'Approved users (Copilot users first)', category: 'general', tier: 'extended' },
+      { id: 'claude-cowork', name: 'Claude Cowork', vendor: 'Anthropic', vendorClass: 'cat-anthropic', icon: '🟧', desc: 'Desktop companion that works directly with your files. Can create and edit documents, spreadsheets, presentations, and automate file management tasks on your computer. The unique Projects feature lets you create dedicated workspaces with custom instructions, reference files, and persistent context across sessions — ideal for sustained initiatives.', bestFor: 'Ongoing projects with persistent context (Projects), creating polished documents and presentations, batch file processing, complex data transformation across formats', resData: 'safe', resDataLabel: 'RES data: safe to use', access: 'Limited access — requires Exec approval (desktop app)', audience: 'Approved users', category: 'general', tier: 'extended' },
+      { id: 'claude-browser', name: 'Claude in Chrome', vendor: 'Anthropic', vendorClass: 'cat-anthropic', icon: '🟧', desc: 'Browser-based AI agent that can navigate, read, and interact with web pages. Works in Chrome and Edge. Useful for research, form filling, and web-based workflows that go beyond Copilot\'s web search.', bestFor: 'Complex web research, navigating internal tools, extracting information from web pages, automating browser-based tasks', resData: 'safe', resDataLabel: 'RES data: safe to use', access: 'Limited access — requires Exec approval (browser extension)', audience: 'Approved users', category: 'general', tier: 'extended' },
+      { id: 'claude-excel', name: 'Claude for Excel', vendor: 'Anthropic', vendorClass: 'cat-anthropic', icon: '🟧', desc: 'Excel plugin that brings advanced AI directly into your spreadsheets. Particularly strong for financial analysis, complex formula creation, pattern recognition, and generating insights from tabular data. A standout Claude capability that goes beyond Copilot in Excel.', bestFor: 'Financial modelling and analysis, complex formulas, data pattern detection, advanced pivot table work, interpreting financial data', resData: 'safe', resDataLabel: 'RES data: safe to use', access: 'Limited access — requires Exec approval (Excel plugin)', audience: 'Finance, data-heavy roles', category: 'general', tier: 'extended' },
+      { id: 'claude-pptx', name: 'Claude for PowerPoint', vendor: 'Anthropic', vendorClass: 'cat-anthropic', icon: '🟧', desc: 'PowerPoint plugin for creating, improving, and restructuring slide decks with AI assistance. Best used when you need more sophisticated content generation or narrative structuring than Copilot in PowerPoint provides.', bestFor: 'Restructuring deck narratives, generating detailed slide content, adding speaker notes, improving presentation flow', resData: 'safe', resDataLabel: 'RES data: safe to use', access: 'Limited access — requires Exec approval (PowerPoint plugin)', audience: 'Approved users', category: 'general', tier: 'extended' },
+      { id: 'chatgpt', name: 'ChatGPT', vendor: 'OpenAI', vendorClass: 'cat-openai', icon: '🟩', desc: 'General-purpose conversational AI for brainstorming, drafting, learning, and quick queries. Important: do not share RES intellectual property or sensitive data. For RES-related work, use Copilot or Claude instead.', bestFor: 'Quick general questions, personal learning, brainstorming ideas (non-confidential only)', resData: 'caution', resDataLabel: 'Do NOT share RES IP', access: 'Free / personal accounts', audience: 'All staff (with caution)', category: 'general', tier: 'caution' },
+      { id: 'claude-code', name: 'Claude Code', vendor: 'Anthropic', vendorClass: 'cat-anthropic', icon: '🟧', desc: 'Command-line AI coding agent for complex, multi-file tasks. Goes beyond Copilot for GitHub when you need autonomous implementation, architectural planning, and end-to-end development work.', bestFor: 'Full feature implementation, debugging complex issues, codebase refactoring, writing and running tests, architectural planning', resData: 'safe', resDataLabel: 'RES data: safe to use', access: 'Limited access — requires Exec approval (CLI tool)', audience: 'Developers (approved)', category: 'developer', tier: 'extended' },
+      { id: 'claude-github', name: 'Claude for GitHub', vendor: 'Anthropic', vendorClass: 'cat-anthropic', icon: '🟧', desc: 'AI-powered code review and pull request assistance integrated directly into GitHub. Reviews changes, suggests improvements, and helps maintain code quality.', bestFor: 'Automated code review, PR summaries, identifying bugs and security issues, enforcing coding standards', resData: 'safe', resDataLabel: 'RES data: safe to use', access: 'Limited access — requires Exec approval (GitHub integration)', audience: 'Developers (approved)', category: 'developer', tier: 'extended' }
+    ];
+
+    const wizardFlow = {
+      start: { question: "What kind of task are you working on?", helper: "Pick the category that best describes what you need to do.", options: [ { label: "Writing or documents", sub: "Emails, reports, presentations, meeting notes", icon: "📝", next: "writing" }, { label: "Data and analysis", sub: "Spreadsheets, numbers, charts, trends", icon: "📊", next: "data" }, { label: "Research and learning", sub: "Finding information, understanding topics, exploring ideas", icon: "🔍", next: "research" }, { label: "Meetings and communication", sub: "Meeting prep, recaps, translations, team comms", icon: "💬", next: "meetings" }, { label: "Coding and development", sub: "Writing code, debugging, code review, building tools", icon: "💻", next: "coding" }, { label: "Managing an ongoing project", sub: "Sustained work across sessions with files, context, and instructions", icon: "📁", next: "project" }, { label: "Building AI tools or agents", sub: "Creating chatbots, custom workflows, automations", icon: "🤖", next: "builder" } ] },
+      writing: { question: "What are you writing?", helper: "Copilot for M365 is the primary tool for most writing tasks. Claude extends your capabilities for specialist needs.", options: [ { label: "An email or short message", sub: "Quick drafts, replies, translations", icon: "✉️", result: "copilot365", why: "Copilot lives inside Outlook and can draft, reply, and translate emails using context from your inbox. This is the fastest way to get AI help with email." }, { label: "A document or report", sub: "Word docs, long-form writing, policies", icon: "📄", next: "writing_doc" }, { label: "A presentation", sub: "PowerPoint slides, pitch decks", icon: "📑", next: "writing_pptx" }, { label: "Complex strategic content", sub: "Deep analysis, strategy papers, nuanced long-form writing", icon: "💡", result: "claude-chat", why: "For complex strategic content that requires deep reasoning and nuanced analysis, Claude is the stronger choice. Note: Claude requires Exec approval and limited access. For general drafting, start with Copilot." } ] },
+      writing_doc: { question: "What do you need?", helper: "Copilot in Word is the easiest starting point for most document work.", options: [ { label: "Draft or edit inside Word", sub: "Using Copilot within the Word app (recommended)", icon: "📝", result: "copilot365", why: "Copilot in Word can draft, rewrite, and summarise content directly within your existing document. This is the recommended starting point for document work." }, { label: "Create a polished .docx from scratch", sub: "Complex formatting, structure, and layout", icon: "📋", result: "claude-cowork", why: "If you need to produce a highly polished document with specific formatting and structure beyond what Copilot generates, Claude Cowork can create and edit Word documents directly on your computer. Note: requires Exec-approved Claude access." }, { label: "Deep content development first", sub: "Iterate on complex content, then format later", icon: "💬", result: "claude-chat", why: "For content that requires extended reasoning, multi-layered analysis, or iterative refinement, Claude chat lets you develop the substance first. Note: requires Exec-approved Claude access. For simpler drafting, Copilot in Word is the faster option." } ] },
+      writing_pptx: { question: "How do you want to create the presentation?", helper: "Copilot in PowerPoint is the recommended starting point.", options: [ { label: "Get help inside PowerPoint", sub: "Generate slides from prompts or existing files (recommended)", icon: "📑", result: "copilot365", why: "Copilot in PowerPoint can generate slides from a prompt or reference existing documents and presentations in your M365 environment. This is the recommended approach for most presentations." }, { label: "Build a polished deck from scratch", sub: "Complete custom layout and design", icon: "📊", result: "claude-cowork", why: "If you need a highly customised deck with specific design elements beyond what Copilot generates, Claude Cowork can create polished PowerPoint files from scratch. Note: requires Exec-approved Claude access." }, { label: "Improve an existing deck's narrative", sub: "Restructure, strengthen content, add speaker notes", icon: "🟧", result: "claude-pptx", why: "The Claude PowerPoint plugin is strong at restructuring deck narratives, strengthening content flow, and adding detailed speaker notes. Note: requires Exec-approved Claude access." } ] },
+      data: { question: "What do you need to do with your data?", helper: "Copilot in Excel handles most spreadsheet tasks. Claude excels at advanced financial analysis.", options: [ { label: "Work in Excel", sub: "Formulas, analysis, charts within a spreadsheet", icon: "📈", next: "data_excel" }, { label: "Process or transform files", sub: "Clean data, merge files, convert formats", icon: "🔄", next: "data_process" }, { label: "Build a data application or pipeline", sub: "Custom code or API integration", icon: "⚙️", result: "azure-openai", why: "Azure OpenAI provides the API access needed to build custom data processing applications within the RES infrastructure." } ] },
+      data_excel: { question: "What kind of Excel work?", helper: "Copilot handles most spreadsheet tasks. Claude for Excel is particularly strong for financial analysis.", options: [ { label: "General Excel help", sub: "Sort, filter, charts, simple formulas, summaries", icon: "🟦", result: "copilot365", why: "Copilot in Excel can sort and filter data, suggest charts, add formula columns, and run advanced analysis with Python. This is the recommended starting point for most Excel work." }, { label: "Financial analysis or modelling", sub: "Complex financial formulas, modelling, pattern analysis", icon: "💰", result: "claude-excel", why: "Claude for Excel is particularly strong at financial modelling, complex formula creation, and interpreting financial data patterns. This is an area where Claude genuinely outperforms Copilot. Note: requires Exec-approved Claude access." }, { label: "Complex data pattern analysis", sub: "Advanced pattern detection, anomaly identification", icon: "🔢", result: "claude-excel", why: "For advanced pattern detection and data analysis that goes beyond Copilot's capabilities, Claude for Excel provides deeper analytical reasoning. Note: requires Exec-approved Claude access." } ] },
+      data_process: { question: "What scale of data processing?", helper: "", options: [ { label: "Quick data task in M365", sub: "Transform data within Excel, Word, or other M365 apps", icon: "🟦", result: "copilot365", why: "For data transformation within M365 apps, Copilot can help directly within Excel or other tools. This is the fastest route for most data tasks." }, { label: "Multi-file processing", sub: "Work across multiple files, formats, or complex transformations", icon: "🔄", result: "claude-cowork", why: "Claude Cowork can process files on your computer — cleaning, transforming, and merging data across formats and multiple files. Note: requires Exec-approved Claude access." } ] },
+      research: { question: "What kind of research are you doing?", helper: "Copilot is the best tool for finding internal RES information. Copilot's built-in Agents — like Researcher — extend its capabilities for deeper work.", options: [ { label: "Internal RES information", sub: "Emails, SharePoint, Teams chats, company docs", icon: "🏢", result: "copilot365", why: "Copilot searches across your M365 environment — emails, Teams, SharePoint, and OneDrive — to find internal RES information. This is the only AI tool that can access your internal data." }, { label: "Quick general question", sub: "Something you just want a fast answer to", icon: "⚡", result: "copilot365", why: "Copilot can answer quick questions using both your M365 data and web search. Toggle to 'Web' mode for general knowledge queries." }, { label: "Deep analysis or exploration", sub: "Complex topics, comparing options, strategic thinking", icon: "📚", result: "copilot365", why: "Use the Researcher Agent in Copilot for deep analytical work — it combines Copilot's M365 integration with Claude-powered reasoning to explore complex topics, compare options, and produce thorough analysis. Find it in Copilot's built-in Agents." }, { label: "In-depth web research", sub: "Browsing multiple pages, extracting detailed information", icon: "🌐", result: "claude-browser", why: "For complex web research that requires navigating multiple pages and synthesising findings, Claude in Chrome can browse, read, and compile research. Note: requires Exec-approved Claude access. For simple web searches, Copilot's web mode works well." } ] },
+      meetings: { question: "What do you need help with?", helper: "Teams Premium and Copilot cover all meeting-related tasks.", options: [ { label: "Meeting recap or summary", sub: "Catch up on meetings you missed", icon: "📋", result: "teams-pro", why: "Teams Premium provides AI-generated meeting recaps including key points, action items, and chapters. You must be the meeting organiser or have the recording available." }, { label: "Live captions or translations", sub: "Real-time translation during meetings", icon: "🌍", result: "teams-pro", why: "Teams Premium offers live translated captions and AI-powered notes during meetings." }, { label: "Prepare for a meeting", sub: "Research topics, draft talking points, review context", icon: "📝", result: "copilot365", why: "Ask Copilot to summarise recent communications with attendees, pull relevant documents, and help you prepare talking points." }, { label: "Draft a follow-up email", sub: "Send action items or notes after a meeting", icon: "✉️", result: "copilot365", why: "Copilot in Outlook can help draft follow-up emails referencing meeting content and action items." } ] },
+      coding: { question: "What coding task do you need help with?", helper: "GitHub Copilot is the primary coding tool. Claude extends capabilities for complex tasks.", options: [ { label: "Real-time code completion", sub: "Suggestions as I type in my editor", icon: "⌨️", result: "copilot-github", why: "GitHub Copilot provides inline code suggestions, generates functions, and writes tests directly in VS Code and other IDEs. This is the recommended tool for day-to-day coding." }, { label: "Complex multi-file task", sub: "Full feature implementation, debugging, refactoring", icon: "🏗️", result: "claude-code", why: "For complex, multi-file tasks that require autonomous implementation — from architecture to testing — Claude Code goes beyond what GitHub Copilot offers. Note: requires Exec-approved Claude access." }, { label: "Code review", sub: "Review pull requests, identify issues, maintain quality", icon: "🔍", result: "claude-github", why: "Claude for GitHub provides detailed automated PR reviews, identifying bugs, security issues, and suggesting improvements. Note: requires Exec-approved Claude access." }, { label: "Learn or understand code", sub: "Explain what code does, how something works", icon: "🧠", result: "copilot-github", why: "GitHub Copilot can explain code, walk through logic, and help you understand unfamiliar codebases directly in your IDE." } ] },
+      project: { question: "What kind of project support do you need?", helper: "For sustained, context-rich work across multiple sessions, Claude Cowork's Projects feature offers capabilities not available in Copilot.", options: [ { label: "Quick task or one-off request", sub: "A single question or task that doesn't need ongoing context", icon: "⚡", result: "copilot365", why: "For one-off tasks, Copilot is the fastest route — just ask your question in any M365 app. No project setup needed." }, { label: "Ongoing work with persistent context", sub: "Custom instructions, reference files, and memory across sessions", icon: "📁", result: "claude-cowork", why: "Claude Cowork's Projects feature lets you create dedicated project spaces with custom instructions, uploaded reference files, and persistent context that carries across conversations. This is ideal for sustained initiatives where you need AI to remember your goals, guidelines, and materials. Note: requires Exec-approved Claude access." }, { label: "Multi-file creation and processing", sub: "Producing documents, presentations, spreadsheets, or processing batches of files", icon: "🔄", result: "claude-cowork", why: "Claude Cowork works directly with files on your computer — creating polished documents, presentations, and spreadsheets, or processing multiple files at once. Combine this with Projects for even more context-aware output. Note: requires Exec-approved Claude access." } ] },
+      builder: { question: "What are you building?", helper: "Copilot Agent Builder and Copilot Studio are the primary tools for building AI agents at RES.", options: [ { label: "A simple Q&A chatbot", sub: "Answer questions about policies, documents, processes", icon: "💬", result: "copilot365", why: "The Agent Builder in Copilot for M365 lets you quickly create lightweight Q&A agents with no code. Perfect for policy bots, FAQ helpers, and document-based assistants. You can share these agents across the organisation." }, { label: "An advanced agent or automation", sub: "Multi-step workflows, integrations, custom logic", icon: "🤖", result: "copilot-studio", why: "Copilot Studio is built for more advanced agents with multi-step workflows, custom integrations, external-facing capabilities, and orchestration across business systems. A step up from Agent Builder." }, { label: "A workflow automation", sub: "Multi-step processes, approvals, notifications", icon: "⚙️", result: "copilot-studio", why: "Copilot Studio supports multi-step workflows with custom integrations, triggers, and actions across business systems." }, { label: "A custom AI application", sub: "Bespoke software using AI APIs", icon: "🛠️", result: "azure-openai", why: "Azure OpenAI provides API access to GPT-4 and other models within the RES Azure environment, giving you full control for custom development." } ] }
+    };
+
+    let currentWizardStep = 'start';
+
+    const beforeAfterData = [
+      { scenario: "Summarising an email thread", app: "Outlook", before: "Summarise this email.", after: "Please summarise the key decisions and action items from this email thread with the procurement team. Present them as bullet points, noting who is responsible for each action.", improvements: ["Added a clear Goal: key decisions and action items (not just a generic summary)","Added Context: it's about a procurement discussion","Added Expectations: bullet points with named owners for each action"] },
+      { scenario: "Preparing for a meeting", app: "Business Chat", before: "What's happening with the solar project?", after: "Please generate a brief status update on the Greenfield Solar project. Focus on emails and Teams messages from the last two weeks between myself and the project team. Highlight any risks or blockers mentioned, and keep the summary under 200 words.", improvements: ["Added a specific Goal: a status update (not just 'what's happening')","Added Context: named the specific project","Added Source: emails and Teams messages from the last two weeks","Added Expectations: highlight risks/blockers, under 200 words"] },
+      { scenario: "Drafting a presentation", app: "PowerPoint", before: "Make a presentation about data security.", after: "Create a 6-slide presentation on RES data classification policies for a team onboarding session. Use the RES Group Data Handling Guide as the primary source. Keep the language accessible for non-technical staff and include a summary slide with key dos and don'ts.", improvements: ["Added a specific Goal: 6 slides on data classification policies","Added Context: for team onboarding (defines the audience)","Added Source: the specific document to reference","Added Expectations: accessible language, summary slide with dos and don'ts"] },
+      { scenario: "Analysing spreadsheet data", app: "Excel", before: "Analyse this data.", after: "Please analyse the storage usage trends in the 'Storage Used' tab. Add a column converting bytes to terabytes, then create a time series chart showing storage used vs quota over time. Include trendlines forecasting 360 days forward.", improvements: ["Added a detailed Goal: specific analysis steps (convert, chart, forecast)","Added Source: pointed to the specific tab","Added Expectations: time series chart with trendlines and forecast period"] },
+      { scenario: "Getting project context", app: "Business Chat", before: "Tell me about the Salesforce project.", after: "What were the main updates from Kyle Love at the last steering committee for the Salesforce project? Focus on Teams chats and emails from the past month. Please summarise in 3-4 concise bullet points.", improvements: ["Added a specific Goal: updates from a named person at a specific meeting","Added Source: Teams chats and emails, with a time window","Added Expectations: 3-4 concise bullet points"] },
+      { scenario: "Translating content", app: "Word / Outlook", before: "Translate this into French.", after: "Please translate the introduction section of this document into French. Add a disclaimer at the start of the translation noting that it has been translated using AI and should be reviewed by a native speaker before external distribution.", improvements: ["Added a specific Goal: translate only the introduction section (not the entire document)","Added Expectations: include an AI translation disclaimer","Added Context: implies external distribution, so quality matters"] }
+    ];
+
+    const exercises = [
+      { id: 'ex1', title: 'Catch up on a missed meeting', difficulty: 'beginner', scenario: 'You missed the weekly project sync with the wind farm development team yesterday. You need to quickly understand what was discussed, any decisions made, and what actions were assigned to you.', hints: { g: ['recap','summary','action items','decisions','catch up','what was discussed'], c: ['meeting','project sync','wind farm','development team','missed','yesterday'], s: ['teams','recording','transcript','recap','notes'], e: ['bullet','concise','brief','action items','my name','assigned to me'] }, sampleAnswer: "Please provide a recap of yesterday's wind farm development team project sync. Highlight the key decisions made and any action items assigned to me. Present the summary as concise bullet points so I can get up to speed quickly." },
+      { id: 'ex2', title: 'Draft a team communication', difficulty: 'beginner', scenario: 'You need to inform your team of 12 people that the annual team workshop is scheduled for 15th April. Everyone needs to book their own travel and prepare a 10-minute presentation on their project status over the past six months.', hints: { g: ['draft','write','inform','email','communicate','team workshop'], c: ['team','workshop','15th April','annual','travel','presentation','10 minute','project status','six months'], s: [], e: ['informal','short','friendly','casual','concise','tone'] }, sampleAnswer: "Please draft an email informing my team that our annual team workshop is on 15th April. Let them know they need to book their own travel and prepare a 10-minute presentation summarising their project status over the past six months. Keep the tone informal and friendly, and keep the message short." },
+      { id: 'ex3', title: 'Analyse contract terms', difficulty: 'intermediate', scenario: 'You\'re reviewing a software vendor contract (the "ESRI Enterprise Agreement") before a renewal discussion next week. You need to understand the service level commitments and whether RES is entitled to compensation if those levels aren\'t met.', hints: { g: ['service level','compensation','commitments','SLA','entitle','analyse','review','what does the contract say'], c: ['ESRI','enterprise agreement','renewal','vendor','contract','next week'], s: ['ESRI Enterprise Agreement','contract','document','pdf'], e: ['specific clauses','summarise','highlight','relevant sections','compensation'] }, sampleAnswer: "What does the ESRI Enterprise Agreement say about service support commitments? Are we entitled to compensation if the agreed service levels are not met? Please reference the specific clauses and summarise the key terms I should raise in our renewal discussion next week." },
+      { id: 'ex4', title: 'Create a data-driven report', difficulty: 'intermediate', scenario: 'You have a SharePoint storage usage spreadsheet with tabs for "Storage Used" and "Available Storage". You need to present a forecast to your manager showing whether the current trajectory will exceed the storage quota within the next year.', hints: { g: ['chart','forecast','trend','analyse','time series','create','visualise'], c: ['storage','quota','manager','trajectory','exceed','next year','capacity planning'], s: ['Storage Used','Available Storage','tab','spreadsheet','SharePoint storage'], e: ['trendline','forecast','360 days','chart','terabytes','visual'] }, sampleAnswer: "Using the 'Storage Used' and 'Available Storage' tabs, create a time series chart showing storage used vs storage quota over time. Convert storage values to terabytes. Include trendlines for both data sets that forecast forward 360 days, so I can present a clear visual to my manager on whether we'll exceed our quota." },
+      { id: 'ex5', title: 'Build a knowledge agent', difficulty: 'advanced', scenario: 'Your team frequently gets the same questions about the IT Acceptable Use Policy. You want to create a Copilot Agent that can answer these questions automatically, using only the official policy document as its source.', hints: { g: ['create','agent','answer questions','build','chatbot','Q&A'], c: ['IT Acceptable Use Policy','team','frequent questions','self-service','reduce repetitive queries'], s: ['IT acceptable use policy','policy document','data source','only'], e: ['concise','bullet points','name','suggested prompts','clear'] }, sampleAnswer: "Create an agent that can answer questions related to the IT Acceptable Use Policy. Use only the IT Acceptable Use Policy as a data source. Answer questions in concise bullet points. Call this agent the IT AUP Helper. Add suggested prompts to help users get started, such as 'Can I use gen AI tools at work?' and 'What are the rules about personal social media?'" }
+    ];
+
+    const claudeTechniques = [
+      { title: "🎯 Role and persona assignment", desc: "Give the AI a specific role to shape the depth and perspective of its response. This is especially effective for specialist analysis.", example: "You are a senior financial analyst at a renewable energy company. Review the attached Q3 revenue forecast and identify any assumptions that seem overly optimistic given current market conditions in the European wind sector.", why: "Assigning a role helps the AI frame its analysis through a specific professional lens, producing more relevant and actionable output." },
+      { title: "📋 Structured output instructions", desc: "AI tools are excellent at following detailed formatting instructions. Specify exactly how you want the output structured.", example: "Analyse this contract and produce a structured risk assessment with the following sections:\n1. Executive Summary (3 sentences max)\n2. Key Risks (table with columns: Risk, Severity, Likelihood, Mitigation)\n3. Recommended Actions (numbered list, priority order)\n4. Questions for Legal Review (bullet points)", why: "Detailed structure instructions eliminate ambiguity and produce output you can use immediately without reformatting." },
+      { title: "🔄 Iterative refinement", desc: "Use conversation memory to refine outputs across multiple messages. Start broad, then narrow down.", example: "First message: \"Analyse the key trends in UK renewable energy policy from the last 12 months.\"\n\nFollow-up: \"Good overview. Now focus specifically on the implications for offshore wind permitting timelines. What should a project developer be preparing for?\"\n\nFollow-up: \"Rewrite the permitting section as a briefing note for our VP of Development. Keep it under 300 words and lead with the most actionable insight.\"", why: "Iterative prompting lets you explore a topic in depth before committing to a final format — particularly valuable for complex analysis." },
+      { title: "📁 Persistent context and custom instructions", desc: "Some AI tools let you save custom instructions and reference files that persist across conversations. This means you don't have to re-explain your context every time you start a new chat.", example: "Set up a workspace for 'Wind Farm Development' with these custom instructions:\n- Always use UK English\n- Reference our internal naming conventions for project phases\n- Assume I'm familiar with renewable energy terminology\n- When creating documents, use the RES brand guidelines\n\nUpload reference files: brand playbook, project charter, stakeholder list.\n\nNow every conversation in this workspace starts with that context automatically.", why: "Persistent context eliminates repetitive setup and ensures consistent, high-quality output aligned to your project needs. Ideal for ongoing initiatives." },
+      { title: "🧠 Chain-of-thought reasoning", desc: "Ask the AI to show its reasoning process. This is particularly useful for complex decisions, financial analysis, and strategy work.", example: "We're evaluating whether to extend our ESRI Enterprise Agreement or switch to an open-source GIS solution. Please think through this step by step:\n1. First, list the key evaluation criteria\n2. Then assess each option against those criteria\n3. Identify what information we're missing to make a confident decision\n4. Finally, give your recommendation with caveats", why: "Explicit reasoning steps produce more thorough analysis and make it easier to spot where the AI's logic might need human judgement." },
+      { title: "📏 Constraints and boundaries", desc: "Set clear boundaries on what the AI should and shouldn't do. This prevents hallucination and keeps responses focused.", example: "Review this project risk register and suggest additions. Important constraints:\n- Only suggest risks that are specific to offshore wind projects in the North Sea\n- Do not include generic project risks that are already covered\n- If you're unsure about a technical detail, flag it rather than guessing\n- Keep each risk description under 50 words", why: "Constraints give the AI permission to say 'I'm not sure' and prevent it from padding responses with generic content." }
+    ];
+
+    // ========== INITIALIZE ON PAGE LOAD ==========
+    function initDecisionGuide() {
+      renderWizard('start');
+      renderCompareTable();
+    }
+
+    function initPlaybook() {
+      renderBeforeAfter();
+      renderExercises();
+      renderClaudeTechniques();
+    }
+
+    // ========== DECISION GUIDE ==========
+    function renderWizard(stepId) {
+      currentWizardStep = stepId;
+      const step = wizardFlow[stepId];
+      const container = document.getElementById('dg-wizard');
+
+      let html = '<div class="wizard-header">';
+      html += '<div class="wizard-question">' + step.question + '</div>';
+      html += '<div class="wizard-helper">' + step.helper + '</div>';
+      html += '</div>';
+      html += '<div class="wizard-options">';
+
+      step.options.forEach(opt => {
+        if (opt.result) {
+          html += `<div class="wizard-option" onclick="showResult('${opt.result}', '${opt.why.replace(/'/g, "\\'")}')">
+            <div style="font-size: 1.8rem; margin-bottom: 8px;">${opt.icon}</div>
+            <div class="wizard-option-label">${opt.label}</div>
+            <div class="wizard-option-sub">${opt.sub}</div>
+          </div>`;
+        } else {
+          html += `<div class="wizard-option" onclick="renderWizard('${opt.next}')">
+            <div style="font-size: 1.8rem; margin-bottom: 8px;">${opt.icon}</div>
+            <div class="wizard-option-label">${opt.label}</div>
+            <div class="wizard-option-sub">${opt.sub}</div>
+          </div>`;
+        }
+      });
+
+      html += '</div>';
+      if (stepId !== 'start') {
+        html += '<button class="back-button" style="margin-top: 24px;" onclick="renderWizard(\'start\')">Back to start</button>';
+      }
+
+      container.innerHTML = html;
+    }
+
+    function showResult(toolId, why) {
+      const tool = tools.find(t => t.id === toolId);
+      const container = document.getElementById('dg-wizard');
+
+      let html = '<div class="wizard-result">';
+      html += '<div class="result-tool-name">' + tool.icon + ' ' + tool.name + '</div>';
+      html += '<div style="margin-bottom: 12px; font-size: 0.85rem; color: var(--granite);"><strong>' + tool.vendor + '</strong></div>';
+      html += '<div class="result-why">' + why + '</div>';
+      html += '<button class="back-button" onclick="renderWizard(\'start\')">Try another task</button>';
+      html += '</div>';
+
+      container.innerHTML = html;
+    }
+
+    function renderCompareTable() {
+      const container = document.getElementById('dg-compare-table');
+      let html = '<table class="compare-table"><thead><tr><th>Tool</th><th>Best for</th><th>Access</th><th>RES Data</th><th>Tier</th></tr></thead><tbody>';
+
+      tools.forEach(tool => {
+        html += `<tr>
+          <td><strong>${tool.icon} ${tool.name}</strong><br><span style="font-size: 0.8rem; color: var(--granite);">${tool.vendor}</span></td>
+          <td style="font-size: 0.85rem;">${tool.bestFor}</td>
+          <td style="font-size: 0.85rem;">${tool.access}</td>
+          <td style="font-size: 0.85rem;"><span class="improvement-tag" style="background: ${tool.resData === 'safe' ? '#D4EDDA' : '#FFE5CC'}; color: ${tool.resData === 'safe' ? '#155724' : 'var(--orange)'};">${tool.resDataLabel}</span></td>
+          <td style="font-size: 0.85rem;"><strong>${tool.tier === 'primary' ? '⭐ Primary' : tool.tier === 'extended' ? '✨ Extended' : '⚠️ Caution'}</strong></td>
+        </tr>`;
+      });
+
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    function switchDGTab(tabId, btn) {
+      document.querySelectorAll('#panel-decision .tab-content').forEach(p => p.classList.remove('active'));
+      document.getElementById('dg-tab-' + tabId).classList.add('active');
+      document.querySelectorAll('#panel-decision .tab-nav button').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
+
+    // ========== PLAYBOOK ==========
+    function renderBeforeAfter() {
+      const container = document.getElementById('pp-ba-container');
+      let html = '';
+
+      beforeAfterData.forEach((item, i) => {
+        html += `<div class="ba-card">
+          <div class="ba-scenario">${item.scenario}</div>
+          <div class="ba-label">❌ Before (weak)</div>
+          <div class="ba-text">${item.before}</div>
+        </div>
+        <div class="ba-card">
+          <div class="ba-scenario">${item.scenario}</div>
+          <div class="ba-label">✅ After (GCSE)</div>
+          <div class="ba-text">${item.after}</div>
+          <div style="margin-top: 16px;">
+            <button class="reveal-button" id="pp-reveal-btn-${i}" onclick="toggleExplain(${i})">Show improvements</button>
+            <div id="pp-explain-${i}" style="display: none; margin-top: 12px;">
+              <ul class="improvements-list">`;
+
+        item.improvements.forEach(imp => {
+          html += `<li>${imp}</li>`;
+        });
+
+        html += `</ul>
+            </div>
+          </div>
+        </div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function toggleExplain(i) {
+      const btn = document.getElementById('pp-reveal-btn-' + i);
+      const body = document.getElementById('pp-explain-' + i);
+      body.style.display = body.style.display === 'none' ? 'block' : 'none';
+      btn.textContent = body.style.display === 'none' ? 'Show improvements' : 'Hide improvements';
+      btn.classList.toggle('revealed');
+    }
+
+    function renderExercises() {
+      const container = document.getElementById('pp-exercises-container');
+      let html = '';
+
+      exercises.forEach(ex => {
+        const diffClass = ex.difficulty === 'beginner' ? '' : ex.difficulty === 'intermediate' ? 'intermediate' : 'advanced';
+        html += `<div class="exercise-card">
+          <div class="exercise-difficulty ${diffClass}">${ex.difficulty.toUpperCase()}</div>
+          <div class="exercise-title">${ex.title}</div>
+          <div class="exercise-scenario">${ex.scenario}</div>
+          <textarea class="exercise-input" id="pp-input-${ex.id}" placeholder="Write your prompt here..."></textarea>
+          <div class="exercise-controls">
+            <button class="exercise-button score" onclick="scoreExercise('${ex.id}')">Score my prompt</button>
+            <button class="exercise-button" onclick="showSample('${ex.id}')">See sample</button>
+          </div>
+          <div id="pp-score-${ex.id}" class="score-result" style="display: none;"></div>
+          <div id="pp-sample-${ex.id}" style="display: none; margin-top: 16px; padding: 12px; background: var(--polar); border-radius: 4px; font-size: 0.85rem; border-left: 4px solid var(--sky);">
+            <strong>Sample prompt:</strong><br><em>"${ex.sampleAnswer}"</em>
+          </div>
+        </div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function scoreExercise(id) {
+      const ex = exercises.find(e => e.id === id);
+      const input = document.getElementById('pp-input-' + id).value.trim().toLowerCase();
+      if (!input) { alert('Write your prompt first, then score it.'); return; }
+
+      const results = { g: false, c: false, s: false, e: false };
+      const feedback = [];
+
+      const gMatches = ex.hints.g.filter(h => input.includes(h.toLowerCase()));
+      if (gMatches.length > 0) { results.g = true; feedback.push('✓ Goal: You clearly stated what you want.'); }
+      else { feedback.push('✗ Goal: Be more specific about the output you need.'); }
+
+      const cMatches = ex.hints.c.filter(h => input.includes(h.toLowerCase()));
+      if (cMatches.length >= 2) { results.c = true; feedback.push('✓ Context: Good background details.'); }
+      else { feedback.push('✗ Context: Add more about the situation and why you need this.'); }
+
+      if (ex.hints.s.length > 0) {
+        const sMatches = ex.hints.s.filter(h => input.includes(h.toLowerCase()));
+        if (sMatches.length > 0) { results.s = true; feedback.push('✓ Source: You pointed the AI to where to look.'); }
+        else { feedback.push('✗ Source: Specify where the AI should find the information.'); }
+      } else { results.s = true; feedback.push('– Source: Not critical for this scenario.'); }
+
+      const eMatches = ex.hints.e.filter(h => input.includes(h.toLowerCase()));
+      if (eMatches.length > 0) { results.e = true; feedback.push('✓ Expectations: You specified how you want the response.'); }
+      else { feedback.push('✗ Expectations: Add detail about format, tone, or length.'); }
+
+      const score = Object.values(results).filter(Boolean).length;
+      let scoreClass = 'needs-work';
+      if (score === 4) scoreClass = 'excellent';
+      else if (score === 3) scoreClass = 'good';
+      else if (score === 2) scoreClass = 'fair';
+
+      const scoreContainer = document.getElementById('pp-score-' + id);
+      scoreContainer.innerHTML = `<strong>Score: ${score}/4</strong><br>` + feedback.join('<br>');
+      scoreContainer.className = 'score-result ' + scoreClass;
+      scoreContainer.style.display = 'block';
+    }
+
+    function showSample(id) {
+      const container = document.getElementById('pp-sample-' + id);
+      container.style.display = container.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function renderClaudeTechniques() {
+      const container = document.getElementById('pp-claude-techniques');
+      let html = '';
+
+      claudeTechniques.forEach((t, i) => {
+        html += `<div class="technique-card">
+          <div class="technique-title">${t.title}</div>
+          <div class="technique-desc">${t.desc}</div>
+          <button class="reveal-button" onclick="toggleTechnique(${i})">Show example</button>
+          <div id="pp-technique-${i}" class="technique-body">
+            <div class="technique-example">${t.example}</div>
+            <div class="technique-why">${t.why}</div>
+          </div>
+        </div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function toggleTechnique(i) {
+      const body = document.getElementById('pp-technique-' + i);
+      body.classList.toggle('revealed');
+    }
+
+    function switchPBTab(tabId, btn) {
+      document.querySelectorAll('#panel-playbook .tab-content').forEach(p => p.classList.remove('active'));
+      document.getElementById('pb-tab-' + tabId).classList.add('active');
+      document.querySelectorAll('#panel-playbook .tab-nav button').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
+
+    function buildPrompt() {
+      const goal = document.getElementById('pb-goal').value.trim();
+      const context = document.getElementById('pb-context').value.trim();
+      const source = document.getElementById('pb-source').value.trim();
+      const expect = document.getElementById('pb-expect').value.trim();
+
+      let prompt = '';
+      if (goal) prompt += 'Goal: ' + goal + '\n\n';
+      if (context) prompt += 'Context: ' + context + '\n\n';
+      if (source) prompt += 'Source: ' + source + '\n\n';
+      if (expect) prompt += 'Expectations: ' + expect + '\n\n';
+
+      const resultContainer = document.getElementById('pb-result');
+      if (prompt.trim()) {
+        resultContainer.innerHTML = '<strong>Your GCSE prompt:</strong><br>' + prompt.replace(/\n/g, '<br>');
+        resultContainer.style.display = 'block';
+      }
+    }
+
+    function copyPrompt() {
+      const result = document.getElementById('pb-result').innerText;
+      if (result) {
+        navigator.clipboard.writeText(result);
+        alert('Prompt copied to clipboard!');
+      }
+    }
+
+    function clearBuilder() {
+      document.getElementById('pb-goal').value = '';
+      document.getElementById('pb-context').value = '';
+      document.getElementById('pb-source').value = '';
+      document.getElementById('pb-expect').value = '';
+      document.getElementById('pb-result').style.display = 'none';
+    }
+
+    // ========== SKILL TREE COURSES ==========
+    const skillCourses = {
+      'what-is-ai': {
+        title: 'What is AI?',
+        icon: '🧠',
+        steps: [
+          {
+            heading: 'Generative AI in simple terms',
+            body: 'Generative AI learns patterns from vast amounts of text and data, then uses those patterns to generate new content — like drafting emails, writing code, or analyzing documents. At RES, Copilot for M365 is our primary tool, and it\'s built on this technology.',
+            tip: '💡 Key takeaway: Generative AI predicts the next word, over and over, to create coherent outputs.'
+          },
+          {
+            heading: 'How does it actually work?',
+            body: 'These models use something called a "transformer" architecture that processes language in context. They don\'t truly "understand" like humans do — they\'re pattern-matching experts. That\'s why outputs can sometimes be inaccurate (hallucinations) or reflect biases in training data.',
+            tip: '💡 Key takeaway: AI is powerful but not infallible. Always review output critically.'
+          },
+          {
+            heading: 'Why it matters for you',
+            body: 'Understanding these basics helps you use AI more effectively at RES. You\'ll know when to trust AI output, when to double-check, and why data security matters (AI models train on data). This foundation unlocks all other skills.',
+            tip: '💡 Ready for the next step? Explore "AI Tools at RES" or the "GCSE Framework" for practical techniques.'
+          }
+        ]
+      },
+      'ai-tools-at-res': {
+        title: 'AI Tools at RES',
+        icon: '🛠️',
+        steps: [
+          {
+            heading: 'Your primary tool: Copilot for M365',
+            body: 'Copilot is embedded in Word, Excel, PowerPoint, Outlook, and Teams. It can summarize emails, draft documents, analyze spreadsheets, and create presentations. Bonus: it searches your RES data (emails, Teams, SharePoint) so it understands your context.',
+            tip: '💡 Key takeaway: Start with Copilot. It\'s your gateway to AI at RES and covers 80% of use cases.'
+          },
+          {
+            heading: 'Extended tools for specialist needs',
+            body: 'Claude is available on a limited basis for deep analysis, financial modeling, and complex reasoning. Teams Premium adds meeting recaps and live translation. Agent Builder lets you create simple Q&A bots. Each tool has a role — the Decision Guide helps you choose the right one.',
+            tip: '💡 Key takeaway: Copilot first. Use the Decision Guide wizard to find the right extended tool for specialist tasks.'
+          },
+          {
+            heading: 'Stay current with new features',
+            body: 'AI tools evolve rapidly. RES regularly shares updates about new Copilot features, agent capabilities, and best practices. Follow your department\'s AI updates and attend demos to stay ahead.',
+            tip: '💡 Ready to learn prompting? Check out "The GCSE Framework" next.'
+          }
+        ]
+      },
+      'ethics-policy-safety': {
+        title: 'Ethics, Policy & Data Safety',
+        icon: '🔒',
+        steps: [
+          {
+            heading: 'What data is safe to share?',
+            body: 'RES has clear data sensitivity guidelines. Never share confidential financial data, client information, or proprietary strategy with external AI tools like ChatGPT. For RES work, use Copilot (which is within RES infrastructure) or Claude with Exec approval. When in doubt, ask your manager or IT.',
+            tip: '💡 Key takeaway: Public data (your own analysis) is fine. Confidential RES data stays internal.'
+          },
+          {
+            heading: 'Responsible AI use at RES',
+            body: 'Use AI to augment your work, not replace critical thinking. Always review AI output for accuracy, bias, and appropriateness before sharing with stakeholders. Don\'t rely on AI for high-stakes decisions without human validation. Disclose when you used AI in reports or presentations to maintain transparency.',
+            tip: '💡 Key takeaway: AI is a tool. You remain accountable for decisions made with its help.'
+          },
+          {
+            heading: 'RES AI Policies',
+            body: 'RES has established governance around AI use, including which tools are approved, data handling standards, and compliance requirements. Your department may have additional guidelines. If a tool or use case isn\'t explicitly approved, ask IT or your manager before proceeding.',
+            tip: '💡 More questions? Contact the AI Literacy team for policy clarification.'
+          }
+        ]
+      },
+      'gcse-framework': {
+        title: 'The GCSE Framework',
+        icon: '✍️',
+        steps: [
+          {
+            heading: 'Four elements of a great prompt',
+            body: 'GCSE stands for Goal, Context, Source, and Expectations. Goal tells the AI what you want. Context explains the background. Source indicates where information comes from. Expectations describe how you want the output formatted. Together, they create focused, high-quality AI responses.',
+            tip: '💡 Key takeaway: A vague prompt gets a vague answer. GCSE makes your prompts specific.'
+          },
+          {
+            heading: 'How to apply GCSE',
+            body: 'Instead of "summarize this email," try: Goal: Extract key decisions and action items. Context: Email thread about Q1 budgets. Source: Email from Finance team. Expectations: Bullet format, one line per item, with owners noted. This clarity helps Copilot generate exactly what you need.',
+            tip: '💡 Test it: Use the Prompt Builder in the Playbook to construct your first GCSE prompt.'
+          },
+          {
+            heading: 'Iterate and refine',
+            body: 'GCSE is not a one-shot formula. If the first output isn\'t quite right, refine any element: make the Goal more specific, add Context, adjust Expectations. Over time, you\'ll develop a sense for what works. The best prompts are often the simplest.',
+            tip: '💡 Pro tip: Combine GCSE with advanced techniques like role-assignment and chain-of-thought for complex tasks.'
+          }
+        ]
+      },
+      'copilot-in-action': {
+        title: 'Copilot in Action',
+        icon: '🛠️',
+        steps: [
+          {
+            heading: 'Copilot in Word & Outlook',
+            body: 'In Word, use Copilot to draft, rewrite, or summarize documents. In Outlook, ask it to compose emails, translate messages, or summarize email threads. Both tools access your M365 context, so Copilot knows your recent communications and can reference them in drafts.',
+            tip: '💡 Quick win: Use Copilot in Outlook to draft a reply to a long email thread — it\'s faster than re-reading.'
+          },
+          {
+            heading: 'Copilot in Excel & PowerPoint',
+            body: 'Excel Copilot can suggest formulas, analyze trends, and create charts from data. PowerPoint Copilot generates slides from prompts, outlines, or existing documents. Both save hours of manual work. Remember to review and edit AI-generated content to match RES style and accuracy standards.',
+            tip: '💡 Pro move: Use Copilot to generate a first draft, then refine it with domain expertise.'
+          },
+          {
+            heading: 'Copilot Agents for specialized tasks',
+            body: 'Copilot includes built-in Agents like Researcher (for deep analysis), Designer (for creative work), and Facilitator (for meeting prep). Agent Builder lets you create custom Q&A bots tailored to RES processes or document repositories. These extend Copilot\'s capabilities without coding.',
+            tip: '💡 Next: Learn "Advanced Prompting" or "Build a Copilot Agent" for deeper customization.'
+          }
+        ]
+      },
+      'check-output': {
+        title: 'Check the Output',
+        icon: '🔍',
+        steps: [
+          {
+            heading: 'What is a hallucination?',
+            body: 'A hallucination is when AI generates plausible-sounding but false information. It might cite a source that doesn\'t exist, invent data, or misquote someone. Hallucinations happen because AI predicts text patterns without truly verifying facts. Always fact-check critical outputs — especially numbers, dates, and citations.',
+            tip: '💡 Key takeaway: AI confidence and accuracy are not the same thing. A confident-sounding lie is still a lie.'
+          },
+          {
+            heading: 'Spot bias and unfair assumptions',
+            body: 'AI models train on data that reflects real-world biases. The output might inappropriately generalize, miss important nuance, or perpetuate stereotypes. When AI output affects decisions (hiring, budgeting, strategy), think critically about whether it\'s fair and complete. Diverse human review is your safeguard.',
+            tip: '💡 Practice: Ask yourself, "Would a human expert agree with this?" If unsure, ask one.'
+          },
+          {
+            heading: 'Your quality review checklist',
+            body: 'Before sharing AI output with stakeholders: 1) Fact-check key claims. 2) Verify calculations. 3) Check for tone and accuracy. 4) Consider if it\'s fair and unbiased. 5) Disclose that AI was used. This brief review catches mistakes and maintains RES credibility.',
+            tip: '💡 Pro tip: Use the "Quality Review" skill for detailed guidance on evaluating high-stakes AI output.'
+          }
+        ]
+      },
+      'ai-in-your-role': {
+        title: 'AI in Your Role',
+        icon: '💼',
+        steps: [
+          {
+            heading: 'Map your high-volume tasks',
+            body: 'Think about your typical week. What do you repeat often? Writing reports, summarizing emails, analyzing data, preparing presentations? These repetitive tasks are prime candidates for AI assistance. A task that takes an hour per week could save you 40+ hours per year with AI support.',
+            tip: '💡 First step: List your top 5 recurring tasks and imagine which ones AI could help with.'
+          },
+          {
+            heading: 'Start small and measure impact',
+            body: 'Don\'t overhaul your workflow overnight. Pick one recurring task — like email summaries or report drafts — and use AI for one week. Measure time saved and quality. If it works, scale to another task. This iterative approach builds confidence and surfaces pitfalls early.',
+            tip: '💡 Example: Use Copilot to draft your next meeting summary. Time yourself. Then decide if it\'s worth repeating.'
+          },
+          {
+            heading: 'Build AI into your standard processes',
+            body: 'Once you find high-impact use cases, make them routine. Create Copilot Agent bots for common questions. Set up templates with prompting guidelines. Share learnings with your team. Over time, AI becomes part of your team\'s standard toolkit, multiplying its value.',
+            tip: '💡 Next level: Explore "Build a Copilot Agent" to create automations for your team.'
+          }
+        ]
+      },
+      'advanced-prompting': {
+        title: 'Advanced Prompting',
+        icon: '✍️',
+        steps: [
+          {
+            heading: 'Role assignment and chain-of-thought',
+            body: 'Tell AI to act as a specific expert: "Act as a financial analyst. Evaluate this budget proposal." Or ask it to think step-by-step: "Walk me through the logic for why this strategy might fail." These techniques unlock deeper reasoning and more nuanced outputs than basic GCSE alone.',
+            tip: '💡 Pro tip: Combine roles with GCSE. "As a data scientist, summarize this dataset (Goal) which tracks Q1 sales (Context)..."'
+          },
+          {
+            heading: 'Structured outputs and few-shot examples',
+            body: 'Ask AI to output in specific formats: "Return a JSON object with fields X, Y, Z" or "Use this template: [template]." Give examples of good outputs: "Here are two examples of the style I want..." These constraints make AI outputs more usable and consistent.',
+            tip: '💡 Real use case: Ask Copilot to extract meeting notes into a structured decision log with specific fields.'
+          },
+          {
+            heading: 'Iterative refinement and follow-ups',
+            body: 'Don\'t expect perfection in one prompt. Use follow-ups: "Rewrite that more concisely" or "Add more detail to the financial section." This iterative loop is powerful for refining complex outputs. Save your best prompts and refine them over time.',
+            tip: '💡 Master advanced prompting and you\'ll get 3x better results from the same tools.'
+          }
+        ]
+      },
+      'build-copilot-agent': {
+        title: 'Build a Copilot Agent',
+        icon: '🛠️',
+        steps: [
+          {
+            heading: 'What\'s a Copilot Agent?',
+            body: 'A Copilot Agent is a custom AI bot built with Agent Builder (no code required). It answers questions about specific RES content — like policies, FAQs, or internal documents. Agents live in Teams or other M365 apps and can be shared across your department. Example: a "HR Policy Bot" that answers benefits questions.',
+            tip: '💡 Key takeaway: Agents are lightweight, easy to build, and dramatically improve self-service for your team.'
+          },
+          {
+            heading: 'How to build one (three steps)',
+            body: '1) Upload documents or link SharePoint repositories that contain the knowledge you want the agent to use. 2) Configure the agent\'s tone and behavior. 3) Share it with your team in Teams. Agent Builder handles the AI reasoning — you just provide the source material and test the bot.',
+            tip: '💡 Real example: Upload your team\'s process docs, and Agent Builder creates a bot that answers "How do I...?" questions.'
+          },
+          {
+            heading: 'Tips for a great agent',
+            body: 'Use clear, well-organized source documents. Test the agent with real questions from your team. Iterate on the source material if the bot misses common questions. Promote the agent in your team so people know to use it instead of hunting for documents. Monitor usage and feedback.',
+            tip: '💡 Next step: Try building a simple Q&A bot for your team\'s most-asked questions.'
+          }
+        ]
+      },
+      'data-classification': {
+        title: 'Data Classification',
+        icon: '🔒',
+        steps: [
+          {
+            heading: 'Understanding sensitivity levels',
+            body: 'RES classifies data into levels: Public (general knowledge), Internal (RES staff only), Confidential (limited access), and Restricted (highly sensitive). Public data can be shared with external AI tools like ChatGPT. Confidential and Restricted data must stay in RES-controlled systems like Copilot.',
+            tip: '💡 Example: Your own analysis is Public. Client contracts are Confidential. Board minutes are Restricted.'
+          },
+          {
+            heading: 'Applying the rules',
+            body: 'Before sharing content with any AI tool, ask: "What classification is this data?" If it\'s Confidential or Restricted, use only Copilot, Claude (with approval), or Azure OpenAI (RES-hosted). If it\'s Internal, use Copilot. If it\'s Public, you have flexibility, but Copilot is still preferred for RES work.',
+            tip: '💡 Unsure? Default to Copilot. It\'s built for RES data and you\'ll never go wrong.'
+          },
+          {
+            heading: 'Building a culture of data awareness',
+            body: 'Help your team understand data sensitivity. Train them on the classification system. Make it easy to flag sensitive content. Reward good practices. Over time, responsible data use becomes second nature, protecting RES and your clients.',
+            tip: '💡 Champion this skill: Use your "Mentor & Train Others" knowledge to spread data responsibility.'
+          }
+        ]
+      },
+      'quality-review': {
+        title: 'Quality Review',
+        icon: '🔍',
+        steps: [
+          {
+            heading: 'Build your review checklist',
+            body: 'For high-stakes AI output (reports to executives, client deliverables, strategic decisions), use a structured review: 1) Accuracy (fact-check claims). 2) Completeness (missing key points?). 3) Tone (matches RES standards?). 4) Fairness (biased assumptions?). 5) Source attribution (cited properly?). A five-minute review catches most issues.',
+            tip: '💡 Key takeaway: You are accountable for output bearing your name. Always review thoroughly.'
+          },
+          {
+            heading: 'Critical thinking with AI',
+            body: 'AI excels at synthesis but can miss context only you know. Ask yourself: "Would an expert challenge this?" "Is the reasoning sound?" "Does it align with my domain knowledge?" Your expertise is the final validation. Use AI to enhance, not replace, critical thinking.',
+            tip: '💡 Pro practice: Document your review notes. Over time, you\'ll spot patterns in AI strengths and weaknesses.'
+          },
+          {
+            heading: 'Transparency and disclosure',
+            body: 'If you used AI to create something shared with stakeholders or clients, say so. "This draft was created with AI assistance" builds trust and sets expectations. Transparency is part of responsible AI use. It also helps recipients understand the review process you applied.',
+            tip: '💡 Example: In a report, add a footer: "This analysis was generated using Copilot for M365 and reviewed for accuracy by [you]."'
+          }
+        ]
+      },
+      'mentor-train': {
+        title: 'Mentor & Train Others',
+        icon: '🤝',
+        steps: [
+          {
+            heading: 'Become a trusted guide',
+            body: 'Your colleagues look to you when learning AI. Share what you\'ve learned from the Skill Tree — especially "What is AI?" and "The GCSE Framework." Run brown-bag sessions or one-on-ones. Show real examples from your work. Be honest about AI limitations. Your experience builds credibility.',
+            tip: '💡 Start simple: Show a peer how Copilot can draft an email. Let them try it. Answer questions.'
+          },
+          {
+            heading: 'Run demos and training sessions',
+            body: 'Organize live demos showing Copilot across M365, Agent Builder in action, or how GCSE improves prompts. Keep it interactive — let people try tools hands-on. Q&A sessions uncover real use cases in your team. Demos make AI less mysterious and more accessible.',
+            tip: '💡 Tip: Record demos so people can watch on their own time. Share the recordings via Teams.'
+          },
+          {
+            heading: 'Evolve into a champion',
+            body: 'As you mentor more, you\'ll identify patterns — common fears, blockers, high-impact use cases. Use these insights to shape your team\'s AI culture. Advocate for new tools when they fit. Connect people who are solving similar problems. You become the internal expert your team relies on.',
+            tip: '💡 Next: Explore "Share Your Wins" and "Become an AI Champion" to amplify your impact.'
+          }
+        ]
+      },
+      'share-wins': {
+        title: 'Share Your Wins',
+        icon: '📣',
+        steps: [
+          {
+            heading: 'Why share success stories?',
+            body: 'Real examples inspire people. When a colleague sees you saved 5 hours per week using Copilot, or how an Agent solved a recurring problem, they\'re motivated to try AI themselves. Success stories overcome skepticism and show tangible ROI. They\'re your most powerful training tool.',
+            tip: '💡 What to share: Time saved, quality improvements, process innovations, or surprising discoveries.'
+          },
+          {
+            heading: 'How to tell a compelling story',
+            body: 'Start with the problem: "We were spending 10 hours per week on X." Show the AI solution: "Copilot Agent now handles 80% of requests." End with the impact: "Team saves time, clients get faster responses." Include before-and-after metrics. A simple one-page case study is powerful.',
+            tip: '💡 Format: Problem → Solution → Impact. Numbers resonate. A story with data is unforgettable.'
+          },
+          {
+            heading: 'Contribute to the Knowledge Centre',
+            body: 'Submit your wins to the AI Knowledge Centre or your team\'s AI learning hub. Write up your case study, share a screenshot of the Agent or prompt you created, or record a 5-minute video. Your contribution becomes a resource for hundreds of colleagues and reinforces your expertise.',
+            tip: '💡 Contact the AI Literacy team to share your story. Community contributions drive RES\'s AI culture forward.'
+          }
+        ]
+      },
+      'become-champion': {
+        title: 'Become an AI Champion',
+        icon: '🎓',
+        steps: [
+          {
+            heading: 'What does a champion do?',
+            body: 'An AI Champion is a trusted leader in your department who drives adoption, mentors peers, shapes culture, and advocates for responsible AI use. Champions stay current with new tools, model best practices, and make AI accessible to everyone. You\'re not an expert solving all problems — you\'re a catalyst multiplying the team\'s AI capability.',
+            tip: '💡 Champions exist at all levels. You don\'t need a title — just enthusiasm and a willingness to help.'
+          },
+          {
+            heading: 'The champion playbook',
+            body: 'Combine all your Skill Tree knowledge: mentor colleagues (Mentor & Train Others), run demos and training, share successes, spot new use cases, challenge unsafe practices, and stay curious about new tools. Build relationships. Listen to blockers. Advocate for your team\'s needs upward. Lead by example.',
+            tip: '💡 Monthly rhythm: mentor someone, share one win, run a demo, spot a new use case, iterate on training.'
+          },
+          {
+            heading: 'Your lasting impact',
+            body: 'Champions transform cultures. Over time, AI becomes normal, efficient, and trusted in your team. People come to you with ideas. New hires learn AI from you. RES becomes an organization where everyone confidently uses AI tools. Your legacy is a team that thrives with AI.',
+            tip: '💡 Congratulations: You\'ve completed the Skill Tree. You\'re ready to champion AI at RES. Inspire your team.'
+          }
+        ]
+      }
+    };
+
+    let currentCourse = null;
+    let currentStep = 0;
+
+    function openCourse(courseId, step) {
+      currentCourse = courseId;
+      if (typeof step === 'number') {
+        currentStep = step;
+      } else {
+        currentStep = 0;
+      }
+      const course = skillCourses[courseId];
+      if (!course) return;
+
+      // Close assessment if open
+      closeAssessment();
+
+      const backdrop = document.getElementById('st-modal-backdrop');
+      backdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      backdrop.onclick = (e) => {
+        if (e.target === backdrop) closeCourse();
+      };
+
+      const stepCount = course.steps.length;
+      const stepData = course.steps[currentStep];
+
+      let progressDots = '';
+      for (let i = 0; i < stepCount; i++) {
+        const cls = i < currentStep ? 'done' : i === currentStep ? 'active' : '';
+        progressDots += `<div class="st-progress-dot ${cls}"></div>`;
+      }
+
+      const modalHtml = `
+        <div class="st-modal" onclick="event.stopPropagation()">
+          <div class="st-modal-header">
+            <div class="st-modal-title">${course.icon} ${course.title}</div>
+            <span style="font-size: 0.8rem; opacity: 0.8;">Step ${currentStep + 1} of ${stepCount}</span>
+            <button class="st-modal-close" onclick="closeCourse()">×</button>
+          </div>
+          <div class="st-modal-progress">${progressDots}</div>
+          <div class="st-modal-content">
+            <div class="st-step active">
+              <div class="st-step-heading">${stepData.heading}</div>
+              <div class="st-step-body">${stepData.body}</div>
+              ${stepData.tip ? `<div class="st-step-tip">${stepData.tip}</div>` : ''}
+            </div>
+          </div>
+          <div class="st-modal-footer">
+            ${currentStep > 0 ? `<button class="st-btn st-btn-secondary" onclick="navigateCourse(-1)">← Back</button>` : '<div></div>'}
+            ${currentStep < stepCount - 1 ? `<button class="st-btn st-btn-primary" onclick="navigateCourse(1)">Next →</button>` : `<button class="st-btn st-btn-primary" onclick="closeCourse()">Done ✓</button>`}
+          </div>
+        </div>
+      `;
+
+      backdrop.innerHTML = modalHtml;
+    }
+
+    function closeCourse() {
+      const backdrop = document.getElementById('st-modal-backdrop');
+      backdrop.classList.remove('active');
+      backdrop.innerHTML = '';
+      currentCourse = null;
+      currentStep = 0;
+      document.body.style.overflow = '';
+    }
+
+    function navigateCourse(direction) {
+      if (!currentCourse) return;
+      const course = skillCourses[currentCourse];
+      const newStep = currentStep + direction;
+      if (newStep >= 0 && newStep < course.steps.length) {
+        openCourse(currentCourse, newStep);
+      }
+    }
+
+    // ========== TOOL PANEL SWITCHING ==========
+    let dgInitialized = false;
+    let pbInitialized = false;
+
+    function switchToolPanel(toolId) {
+      closeAssessment();
+      closeCourse();
+      document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+      const cards = document.querySelectorAll('.tool-card');
+      cards.forEach(c => c.classList.remove('active'));
+
+      document.getElementById('panel-' + toolId).classList.add('active');
+
+      // Activate the correct card by index
+      const cardMap = { decision: 0, playbook: 1, skilltree: 2 };
+      if (cardMap[toolId] !== undefined) {
+        cards[cardMap[toolId]].classList.add('active');
+      }
+
+      if (toolId === 'decision' && !dgInitialized) {
+        initDecisionGuide();
+        dgInitialized = true;
+      } else if (toolId === 'playbook' && !pbInitialized) {
+        initPlaybook();
+        pbInitialized = true;
+      }
+    }
+
+    // ========== AI READINESS ASSESSMENT ==========
+    const assessQuestions = [
+      {
+        question: 'How often do you currently use AI tools at work?',
+        options: [
+          { text: "I haven't started yet", score: 0 },
+          { text: "I've tried a few times", score: 1 },
+          { text: "Several times a week", score: 2 },
+          { text: "Daily — it's part of my workflow", score: 3 }
+        ]
+      },
+      {
+        question: 'Which best describes your experience with Copilot for M365?',
+        options: [
+          { text: "I'm not sure what it does", score: 0 },
+          { text: "I know the basics but rarely use it", score: 1 },
+          { text: "I use it across Word, Outlook, or Teams", score: 2 },
+          { text: "I use it confidently across multiple M365 apps", score: 3 }
+        ]
+      },
+      {
+        question: 'When you write a prompt for an AI tool, how do you approach it?',
+        options: [
+          { text: "I type whatever comes to mind", score: 0 },
+          { text: "I try to be specific, but I'm not sure of best practices", score: 1 },
+          { text: "I use a framework like GCSE to structure my prompts", score: 2 },
+          { text: "I use advanced techniques like role assignment and iterative refinement", score: 3 }
+        ]
+      },
+      {
+        question: 'How confident are you about what data is safe to share with AI tools?',
+        options: [
+          { text: "I'm not sure, so I avoid using AI with work data", score: 0 },
+          { text: "I have a rough idea but would like more guidance", score: 1 },
+          { text: "I understand the basics — Copilot is safe, public tools are not", score: 2 },
+          { text: "I can classify data sensitivity and choose the right tool accordingly", score: 3 }
+        ]
+      },
+      {
+        question: 'Have you helped others at RES get started with AI?',
+        options: [
+          { text: "Not yet", score: 0 },
+          { text: "I've shared a few tips informally", score: 1 },
+          { text: "I've shown colleagues how to use specific tools", score: 2 },
+          { text: "I regularly mentor, run demos, or champion AI in my team", score: 3 }
+        ]
+      }
+    ];
+
+    let assessStep = 0;
+    let assessAnswers = [];
+
+    const assessResults = [
+      {
+        maxScore: 3,
+        tier: 'Tier 1',
+        label: 'Getting Started',
+        desc: "You're at the beginning of your AI journey — and that's a great place to be. The tools and training here are designed for exactly where you are.",
+        next: 'Start with the AI Skill Tree — open "What is AI?" and "AI Tools at RES" to build your foundations. Then try the Prompt Playbook to learn the GCSE framework.'
+      },
+      {
+        maxScore: 7,
+        tier: 'Tier 2',
+        label: 'Building Skills',
+        desc: "You have a solid foundation and you're starting to use AI in your work. Now it's time to sharpen your technique and build consistency.",
+        next: 'Head to the Prompt Playbook — try the Exercises tab to practise GCSE prompting with real scenarios. Then explore "Copilot in Action" and "Check the Output" in the Skill Tree.'
+      },
+      {
+        maxScore: 11,
+        tier: 'Tier 3',
+        label: 'Advanced Practitioner',
+        desc: "You're using AI tools confidently and writing effective prompts. You're ready to go deeper — advanced techniques, building agents, and critical evaluation.",
+        next: 'Explore Advanced Techniques in the Prompt Playbook, then try "Build a Copilot Agent" and "Quality Review" in the Skill Tree. The AI Tool Decision Guide can help you discover tools you haven\'t tried yet.'
+      },
+      {
+        maxScore: 15,
+        tier: 'Tier 4',
+        label: 'AI Champion',
+        desc: "You're an advanced AI user who's already helping others. You have the skills and experience to lead AI adoption in your department.",
+        next: 'Open "Become an AI Champion" in the Skill Tree to formalise your leadership role. Share your success stories via the Knowledge Centre and consider running demos or training sessions for your team.'
+      }
+    ];
+
+    function startAssessment() {
+      closeCourse(); // Close skill tree modal if open
+      assessStep = 0;
+      assessAnswers = [];
+      renderAssessQuestion();
+      document.getElementById('assess-backdrop').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAssessment() {
+      document.getElementById('assess-backdrop').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function renderAssessQuestion() {
+      const q = assessQuestions[assessStep];
+      const total = assessQuestions.length;
+      const backdrop = document.getElementById('assess-backdrop');
+
+      let progressDots = '';
+      for (let i = 0; i < total; i++) {
+        const cls = i < assessStep ? 'done' : i === assessStep ? 'current' : '';
+        progressDots += `<div class="assess-progress-dot ${cls}"></div>`;
+      }
+
+      backdrop.innerHTML = `
+        <div class="assess-modal">
+          <div class="assess-header">
+            <div class="assess-header-title">AI Readiness Assessment</div>
+            <button class="assess-close" onclick="closeAssessment()">×</button>
+          </div>
+          <div class="assess-progress">${progressDots}</div>
+          <div class="assess-body">
+            <div class="assess-question-num">Question ${assessStep + 1} of ${total}</div>
+            <div class="assess-question">${q.question}</div>
+            <div class="assess-options">
+              ${q.options.map((opt, i) => `
+                <div class="assess-option" onclick="selectAssessOption(${i}, ${opt.score})">${opt.text}</div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function selectAssessOption(optIndex, score) {
+      assessAnswers.push(score);
+      assessStep++;
+
+      if (assessStep < assessQuestions.length) {
+        renderAssessQuestion();
+      } else {
+        renderAssessResult();
+      }
+    }
+
+    function renderAssessResult() {
+      const totalScore = assessAnswers.reduce((a, b) => a + b, 0);
+      const result = assessResults.find(r => totalScore <= r.maxScore) || assessResults[assessResults.length - 1];
+      const backdrop = document.getElementById('assess-backdrop');
+
+      let progressDots = '';
+      for (let i = 0; i < assessQuestions.length; i++) {
+        progressDots += '<div class="assess-progress-dot done"></div>';
+      }
+
+      backdrop.innerHTML = `
+        <div class="assess-modal">
+          <div class="assess-header">
+            <div class="assess-header-title">Your Result</div>
+            <button class="assess-close" onclick="closeAssessment()">×</button>
+          </div>
+          <div class="assess-progress">${progressDots}</div>
+          <div class="assess-body">
+            <div class="assess-result">
+              <div class="assess-result-tier">${result.tier}</div>
+              <div class="assess-result-label">${result.label}</div>
+              <div class="assess-result-desc">${result.desc}</div>
+              <div class="assess-result-next">
+                <div class="assess-result-next-label">Recommended next step</div>
+                <div class="assess-result-next-text">${result.next}</div>
+              </div>
+              <button class="assess-done-btn" onclick="closeAssessment()">Explore the Knowledge Centre →</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Escape key closes any open modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeAssessment();
+        closeCourse();
+      }
+    });
+
+    // INIT ON LOAD
+    initDecisionGuide();
+    dgInitialized = true;
+
+  </script>
+
+</body>
+</html>
