@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Knowledge Centre – RES</title>
+    <!--
+    ════════════════════════════════════════════════════════════════════
+     AI KNOWLEDGE CENTRE  –  RES
+    ════════════════════════════════════════════════════════════════════
+     HOW TO ADD KNOWLEDGE ARTICLES
+     ─────────────────────────────
+     1. Save each article as a .docx file in the SAME folder as this
+        HTML file (in your GitHub repo or SharePoint library).
+     2. The filename must match the `file` property in the NODES array
+        below.
+     3. Commit & push (GitHub) or upload (SharePoint).
+
+     HOSTING NOTES
+     ─────────────
+     • GitHub Pages:  enable Pages on the repo branch; use the
+       resulting URL in SharePoint's "Embed" web part.
+     • SharePoint:    upload this file + .docx files to a document
+       library; use an Embed web part with an <iframe> pointing
+       to the raw SharePoint file URL.
+     • Local testing: open a terminal in this folder and run
+       `npx serve .` then visit http://localhost:3000
+
+     Articles will NOT load if you open this file directly from your
+     file system (file:// protocol) – a web server is required.
+    ════════════════════════════════════════════════════════════════════
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <style>
+        :root {
+            --orange : #E87722;
+            --dark   : #2B3A4E;
+            --bg     : #eef0f3;
+            --pw     : 430px;   /* side-panel width */
+            --hh     : 57px;    /* header height */
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ── Header ─────────────────────────────────────────────── */
+        .hdr {
+            background: #fff;
+            padding: 0 28px;
+            height: var(--hh);
+            display: flex;
+            align-items: center;
+            border-bottom: 3px solid var(--orange);
+            flex-shrink: 0;
+        }
+        .hdr-title { color: var(--orange); font-size: 1.5rem; font-weight: 700; letter-spacing: 0.2px; }
+
+        /* ── Workspace ──────────────────────────────────────────── */
+        .workspace { flex: 1; overflow: hidden; position: relative; }
+
+        /* ── Scrollable map area ────────────────────────────────── */
+        .map-scroll {
+            position: absolute;
+            inset: 0;
+            overflow: auto;
+            padding: 16px 20px 24px;
+            transition: right 0.28s ease;
+        }
+        .map-scroll.shifted { right: var(--pw); }
+
+        /* ══════════════════════════════════════════════════════════
+           MIND MAP
+        ══════════════════════════════════════════════════════════ */
+        .mm-stage {
+            position: relative;
+            width: 1060px;
+            height: 740px;
+            margin: 0 auto;
+        }
+
+        /* SVG connecting lines */
+        .mm-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+        }
+        .mm-svg line {
+            stroke: var(--orange);
+            stroke-width: 1.5;
+            opacity: 0.45;
+            transition: opacity 0.2s, stroke-width 0.2s;
+        }
+        .mm-svg line.active-line { opacity: 0.9; stroke-width: 2.5; }
+
+        /* Node positioning wrapper */
+        .mm-node {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            z-index: 2;
+            user-select: none;
+        }
+        .mm-node.hub { cursor: default; z-index: 3; }
+
+        /* Node inner box */
+        .mm-box {
+            border-radius: 8px;
+            padding: 9px 14px;
+            text-align: center;
+            line-height: 1.35;
+            transition: background 0.18s, color 0.18s, border-color 0.18s,
+                        box-shadow 0.18s, transform 0.18s;
+        }
+
+        /* Style variants — all dark navy by default */
+        .mm-node.v-dark .mm-box,
+        .mm-node.v-pill .mm-box,
+        .mm-node.v-outlined .mm-box,
+        .mm-node.v-light .mm-box {
+            background: var(--dark); color: #fff;
+            font-size: 0.78rem; font-weight: 600;
+        }
+        .mm-node.v-dark .mm-box,
+        .mm-node.v-outlined .mm-box,
+        .mm-node.v-light .mm-box    { min-width: 140px; max-width: 195px; }
+        .mm-node.v-pill .mm-box     { min-width: 110px; max-width: 175px; }
+
+        /* Orange border when knowledge article is confirmed available */
+        .mm-node.has-article .mm-box {
+            border: 2.5px solid var(--orange);
+        }
+
+        /* Hub oval */
+        .mm-node.hub .mm-box {
+            background: var(--dark); color: #fff;
+            border-radius: 50%;
+            width: 120px; height: 120px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-size: 0.97rem; font-weight: 700; line-height: 1.25;
+        }
+
+        /* Hover & active (non-hub) */
+        .mm-node:not(.hub):hover .mm-box,
+        .mm-node:not(.hub).sel .mm-box {
+            background: var(--orange) !important;
+            color: #fff !important;
+            border-color: var(--orange) !important;
+            box-shadow: 0 4px 20px rgba(232,119,34,0.4);
+            transform: scale(1.06);
+        }
+
+        .mm-sub {
+            display: block;
+            font-size: 0.63rem;
+            opacity: 0.8;
+            margin-top: 4px;
+            font-weight: 400;
+            line-height: 1.35;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           SIDE PANEL
+        ══════════════════════════════════════════════════════════ */
+        .panel {
+            position: fixed;
+            top: var(--hh);
+            right: calc(-1 * var(--pw));
+            width: var(--pw);
+            height: calc(100vh - var(--hh));
+            background: #fff;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.13);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.28s ease;
+        }
+        .panel.open { right: 0; }
+
+        .panel-head {
+            padding: 14px 18px;
+            background: var(--dark); color: #fff;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-shrink: 0;
+            gap: 10px;
+        }
+        .panel-head h2 {
+            font-size: 0.92rem; font-weight: 600;
+            line-height: 1.4; flex: 1;
+        }
+        .panel-close {
+            background: none; border: none; color: #fff;
+            font-size: 1.45rem; line-height: 1;
+            cursor: pointer; padding: 0 4px;
+            opacity: 0.7; flex-shrink: 0;
+            margin-top: -1px;
+        }
+        .panel-close:hover { opacity: 1; }
+
+        .panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            font-size: 0.88rem;
+            line-height: 1.65;
+            color: #2a2a2a;
+        }
+
+        /* Mammoth-rendered Word content styles */
+        .panel-body h1,
+        .panel-body h2  { color: var(--dark); margin: 16px 0 8px; font-size: 1.05rem; }
+        .panel-body h3  { color: var(--dark); margin: 12px 0 6px; font-size: 0.92rem; }
+        .panel-body p   { margin-bottom: 10px; }
+        .panel-body ul,
+        .panel-body ol  { padding-left: 22px; margin-bottom: 10px; }
+        .panel-body li  { margin-bottom: 4px; }
+        .panel-body table { border-collapse: collapse; width: 100%; margin-bottom: 12px; }
+        .panel-body td,
+        .panel-body th  { border: 1px solid #dde; padding: 6px 9px; font-size: 0.82rem; }
+        .panel-body th  { background: var(--dark); color: #fff; font-weight: 600; }
+        .panel-body a   { color: var(--orange); }
+        .panel-body strong { font-weight: 700; }
+
+        /* State: empty / loading */
+        .state-box {
+            text-align: center;
+            padding: 44px 22px;
+            color: #777;
+        }
+        .state-box .icon { font-size: 2.4rem; margin-bottom: 14px; }
+        .state-box p  { margin-bottom: 8px; line-height: 1.55; }
+        .state-box code {
+            background: #f0f2f4;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 0.79rem;
+            word-break: break-all;
+        }
+        .state-box strong { color: var(--dark); }
+        .loading-msg { text-align: center; padding: 44px; color: #aaa; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<!-- ─── HEADER ──────────────────────────────────────────────── -->
+<header class="hdr">
+    <h1 class="hdr-title">AI Knowledge Centre</h1>
+</header>
+
+<!-- ─── WORKSPACE ──────────────────────────────────────────── -->
+<div class="workspace">
+
+    <!-- Scrollable map area -->
+    <div class="map-scroll" id="mapScroll">
+        <div id="view-mindmap"></div>
+    </div>
+
+    <!-- Side panel -->
+    <aside class="panel" id="panel">
+        <div class="panel-head">
+            <h2 id="pTitle">Article</h2>
+            <button class="panel-close" onclick="closePanel()" title="Close">×</button>
+        </div>
+        <div class="panel-body" id="pBody"></div>
+    </aside>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   KNOWLEDGE NODES
+   ─────────────────────────────────────────────────────────────
+   id      – unique identifier (keep kebab-case)
+   style   – visual variant: v-dark | v-pill | v-outlined | v-light
+   label   – display text shown on the node
+   sub     – optional subtitle shown smaller beneath the label
+   file    – .docx filename in the same folder as this HTML file
+   mx / my – mind-map position as % of the stage (1060 × 740 px)
+═══════════════════════════════════════════════════════════════ */
+const NODES = [
+    {
+        id: 'whats-available', style: 'v-dark',
+        label: "What's Available to You",
+        sub:   'Copilot M365 · Claude · Teams Pro · Copilot Studio · Azure OpenAI · ChatGPT · Copilot for GitHub · Claude for GitHub',
+        file:  'whats-available.docx',
+        mx: 20, my: 19,
+    },
+    {
+        id: 'use-cases', style: 'v-pill',
+        label: 'Use Cases, Case Studies & Testimonials',
+        file:  'use-cases.docx',
+        mx: 43, my: 8,
+    },
+    {
+        id: 'ai-strategy', style: 'v-pill',
+        label: 'AI Strategy',
+        file:  'ai-strategy.docx',
+        mx: 62, my: 8,
+    },
+    {
+        id: 'before-you-start', style: 'v-outlined',
+        label: 'Before You Start',
+        sub:   'AUP · AI AUP · Guiderails & ethical guidelines',
+        file:  'before-you-start.docx',
+        mx: 80, my: 17,
+    },
+    {
+        id: 'getting-started', style: 'v-outlined',
+        label: 'Getting Started',
+        sub:   'How to write a good prompt · How to get a licence',
+        file:  'getting-started.docx',
+        mx: 84, my: 34,
+    },
+    {
+        id: 'governance', style: 'v-dark',
+        label: 'Governance',
+        sub:   'Roles & accountabilities · Cost ownership · Routes to access · Cyber · Privacy · Onboarding',
+        file:  'governance.docx',
+        mx: 82, my: 56,
+    },
+    {
+        id: 'guidance-leaders', style: 'v-dark',
+        label: 'Guidance for Leaders',
+        sub:   'Templates · Personas · Business case · Value & ROI · Leader champions',
+        file:  'guidance-leaders.docx',
+        mx: 15, my: 45,
+    },
+    {
+        id: 'user-communities', style: 'v-dark',
+        label: "User Communities & Live Demo's",
+        sub:   'Viva Engage · Live demos / roadshow / AMA · Weekly top-tips',
+        file:  'user-communities.docx',
+        mx: 17, my: 71,
+    },
+    {
+        id: 'ai-for-code', style: 'v-pill',
+        label: 'AI for Code',
+        file:  'ai-for-code.docx',
+        mx: 74, my: 67,
+    },
+    {
+        id: 'agentic-ai', style: 'v-dark',
+        label: 'Agentic AI',
+        sub:   'What it is & when to use · Use cases / case studies',
+        file:  'agentic-ai.docx',
+        mx: 62, my: 78,
+    },
+    {
+        id: 'prompting-playbook', style: 'v-light',
+        label: 'Prompting Playbook',
+        file:  'prompting-playbook.docx',
+        mx: 29, my: 90,
+    },
+    {
+        id: 'build-agents', style: 'v-light',
+        label: 'How to Build and Deploy Agents',
+        file:  'build-agents.docx',
+        mx: 52, my: 91,
+        parent: 'agentic-ai',
+    },
+    {
+        id: 'published-agents', style: 'v-light',
+        label: 'Register of Published Agents',
+        file:  'published-agents.docx',
+        mx: 72, my: 89,
+        parent: 'agentic-ai',
+    },
+];
+
+const HUB = { mx: 50, my: 46 };
+const SW = 1060, SH = 740;
+
+let activeId = null;
+
+/* ──────────────────────────────────────────────────────────────
+   BUILD — MIND MAP
+────────────────────────────────────────────────────────────── */
+function buildMindMap() {
+    const el = document.getElementById('view-mindmap');
+
+    const lines = NODES.map(n => {
+        // Sub-nodes connect to their parent node, not the hub
+        const origin = n.parent ? NODES.find(p => p.id === n.parent) : HUB;
+        const x1 = (origin.mx / 100 * SW).toFixed(1);
+        const y1 = (origin.my / 100 * SH).toFixed(1);
+        const x2 = (n.mx / 100 * SW).toFixed(1);
+        const y2 = (n.my / 100 * SH).toFixed(1);
+        return `<line data-id="${n.id}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+    }).join('');
+
+    const nodes = NODES.map(n => `
+        <div class="mm-node ${n.style}" id="mm-${n.id}"
+             style="left:${n.mx}%;top:${n.my}%"
+             onclick="pick('${n.id}')">
+            <div class="mm-box">
+                ${n.label}
+                ${n.sub ? `<span class="mm-sub">${n.sub}</span>` : ''}
+            </div>
+        </div>`).join('');
+
+    el.innerHTML = `
+        <div class="mm-stage">
+            <svg class="mm-svg" viewBox="0 0 ${SW} ${SH}">${lines}</svg>
+            <div class="mm-node hub" style="left:${HUB.mx}%;top:${HUB.my}%">
+                <div class="mm-box">AI<br>Knowledge<br>Centre</div>
+            </div>
+            ${nodes}
+        </div>`;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   SELECTION
+────────────────────────────────────────────────────────────── */
+function pick(id) {
+    if (activeId === id) { closePanel(); return; }
+    deactivateAll();
+    activeId = id;
+
+    const el = document.getElementById('mm-' + id);
+    if (el) el.classList.add('sel');
+
+    document.querySelectorAll('.mm-svg line').forEach(l =>
+        l.classList.toggle('active-line', l.dataset.id === id));
+
+    openPanel(NODES.find(n => n.id === id));
+}
+
+function deactivateAll() {
+    if (!activeId) return;
+    const el = document.getElementById('mm-' + activeId);
+    if (el) el.classList.remove('sel');
+    document.querySelectorAll('.mm-svg line').forEach(l =>
+        l.classList.remove('active-line'));
+}
+
+/* ──────────────────────────────────────────────────────────────
+   SIDE PANEL
+────────────────────────────────────────────────────────────── */
+function openPanel(node) {
+    document.getElementById('pTitle').textContent = node.label;
+    document.getElementById('pBody').innerHTML =
+        '<div class="loading-msg">⏳ Loading article…</div>';
+    document.getElementById('panel').classList.add('open');
+    document.getElementById('mapScroll').classList.add('shifted');
+    loadDoc(node);
+}
+
+function closePanel() {
+    deactivateAll();
+    activeId = null;
+    document.getElementById('panel').classList.remove('open');
+    document.getElementById('mapScroll').classList.remove('shifted');
+}
+
+/* ──────────────────────────────────────────────────────────────
+   WORD DOC LOADING  (mammoth.js)
+────────────────────────────────────────────────────────────── */
+async function loadDoc(node) {
+    const body = document.getElementById('pBody');
+    if (!node.file) { body.innerHTML = emptyState(node); return; }
+
+    if (location.protocol === 'file:') {
+        body.innerHTML = `
+            <div class="state-box">
+                <div class="icon">⚠️</div>
+                <p><strong>Local file system detected</strong></p>
+                <p>Articles can't be loaded when this page is opened directly
+                from your computer. Please serve it via a web server:</p>
+                <p><code>npx serve .</code></p>
+                <p>or host it on GitHub Pages / SharePoint.</p>
+            </div>`;
+        return;
+    }
+
+    try {
+        const res = await fetch(node.file);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const buf = await res.arrayBuffer();
+        const { value } = await mammoth.convertToHtml({ arrayBuffer: buf });
+        body.innerHTML = value || '<p><em>The document appears to be empty.</em></p>';
+    } catch {
+        body.innerHTML = emptyState(node);
+    }
+}
+
+function emptyState(node) {
+    return `
+        <div class="state-box">
+            <div class="icon">📄</div>
+            <p><strong>Article not yet linked</strong></p>
+            <p>Add a Word document named:<br>
+            <code>${node.file}</code><br>
+            to the same folder as this HTML file.</p>
+        </div>`;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   ARTICLE AVAILABILITY CHECK
+   Sends a HEAD request for each node's .docx file.
+   Adds an orange border to nodes whose article is confirmed present.
+────────────────────────────────────────────────────────────── */
+async function checkArticles() {
+    if (location.protocol === 'file:') return; // skip on local file open
+    await Promise.allSettled(
+        NODES.filter(n => n.file).map(async n => {
+            try {
+                const res = await fetch(n.file, { method: 'HEAD' });
+                if (res.ok) {
+                    const el = document.getElementById('mm-' + n.id);
+                    if (el) el.classList.add('has-article');
+                }
+            } catch { /* file not found – no border added */ }
+        })
+    );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   KEYBOARD: Escape closes the panel
+────────────────────────────────────────────────────────────── */
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && activeId) closePanel();
+});
+
+/* ──────────────────────────────────────────────────────────────
+   INIT
+────────────────────────────────────────────────────────────── */
+buildMindMap();
+checkArticles();
+</script>
+</body>
+</html>
