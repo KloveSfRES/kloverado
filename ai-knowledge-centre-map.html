@@ -8,29 +8,28 @@
     ════════════════════════════════════════════════════════════════════
      AI KNOWLEDGE CENTRE  –  RES
     ════════════════════════════════════════════════════════════════════
-     HOW TO ADD KNOWLEDGE ARTICLES
-     ─────────────────────────────
-     1. Save each article as a .docx file in the SAME folder as this
-        HTML file (in your GitHub repo or SharePoint library).
-     2. The filename must match the `file` property in the NODES array
-        below.
-     3. Commit & push (GitHub) or upload (SharePoint).
+     HOW TO ADD SERVICENOW ARTICLE LINKS
+     ─────────────────────────────────────
+     Each node in the NODES array below has a `links` property — an
+     array of ServiceNow articles associated with that topic.
 
-     HOSTING NOTES
-     ─────────────
-     • GitHub Pages:  enable Pages on the repo branch; use the
-       resulting URL in SharePoint's "Embed" web part.
-     • SharePoint:    upload this file + .docx files to a document
-       library; use an Embed web part with an <iframe> pointing
-       to the raw SharePoint file URL.
-     • Local testing: open a terminal in this folder and run
-       `npx serve .` then visit http://localhost:3000
+     To link a node to one or more ServiceNow articles:
+       links: [
+           { label: 'Article Title',  url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+           { label: 'Second Article', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+       ]
 
-     Articles will NOT load if you open this file directly from your
-     file system (file:// protocol) – a web server is required.
+     • Nodes with one or more links get an orange border automatically.
+     • Nodes with an empty `links: []` array show a "coming soon" state.
+     • Each `desc` field is a short description shown in the side panel.
+
+     HOSTING
+     ────────
+     • GitHub Pages: enable Pages on the repo branch; use the resulting
+       URL in SharePoint's "Embed" web part.
+     • Local preview:  npx serve .  then open http://localhost:3000
     ════════════════════════════════════════════════════════════════════
     -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <style>
         :root {
             --orange : #E87722;
@@ -121,7 +120,7 @@
                         box-shadow 0.18s, transform 0.18s;
         }
 
-        /* Style variants — all dark navy by default */
+        /* All node variants — dark navy by default */
         .mm-node.v-dark .mm-box,
         .mm-node.v-pill .mm-box,
         .mm-node.v-outlined .mm-box,
@@ -134,7 +133,7 @@
         .mm-node.v-light .mm-box    { min-width: 140px; max-width: 195px; }
         .mm-node.v-pill .mm-box     { min-width: 110px; max-width: 175px; }
 
-        /* Orange border when knowledge article is confirmed available */
+        /* Orange border = at least one ServiceNow article is linked */
         .mm-node.has-article .mm-box {
             border: 2.5px solid var(--orange);
         }
@@ -149,7 +148,7 @@
             font-size: 0.97rem; font-weight: 700; line-height: 1.25;
         }
 
-        /* Hover & active (non-hub) */
+        /* Hover & selected states */
         .mm-node:not(.hub):hover .mm-box,
         .mm-node:not(.hub).sel .mm-box {
             background: var(--orange) !important;
@@ -187,7 +186,7 @@
         .panel.open { right: 0; }
 
         .panel-head {
-            padding: 14px 18px;
+            padding: 16px 18px;
             background: var(--dark); color: #fff;
             display: flex;
             align-items: flex-start;
@@ -196,8 +195,9 @@
             gap: 10px;
         }
         .panel-head h2 {
-            font-size: 0.92rem; font-weight: 600;
+            font-size: 0.95rem; font-weight: 700;
             line-height: 1.4; flex: 1;
+            letter-spacing: 0.1px;
         }
         .panel-close {
             background: none; border: none; color: #fff;
@@ -211,28 +211,73 @@
         .panel-body {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 22px 20px 28px;
             font-size: 0.88rem;
             line-height: 1.65;
             color: #2a2a2a;
         }
 
-        /* Mammoth-rendered Word content styles */
-        .panel-body h1,
-        .panel-body h2  { color: var(--dark); margin: 16px 0 8px; font-size: 1.05rem; }
-        .panel-body h3  { color: var(--dark); margin: 12px 0 6px; font-size: 0.92rem; }
-        .panel-body p   { margin-bottom: 10px; }
-        .panel-body ul,
-        .panel-body ol  { padding-left: 22px; margin-bottom: 10px; }
-        .panel-body li  { margin-bottom: 4px; }
-        .panel-body table { border-collapse: collapse; width: 100%; margin-bottom: 12px; }
-        .panel-body td,
-        .panel-body th  { border: 1px solid #dde; padding: 6px 9px; font-size: 0.82rem; }
-        .panel-body th  { background: var(--dark); color: #fff; font-weight: 600; }
-        .panel-body a   { color: var(--orange); }
-        .panel-body strong { font-weight: 700; }
+        /* Description paragraph */
+        .panel-desc {
+            color: #3d3d3d;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            margin-bottom: 22px;
+        }
 
-        /* State: empty / loading */
+        /* Section label above buttons */
+        .links-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.9px;
+            color: var(--dark);
+            margin-bottom: 10px;
+            opacity: 0.65;
+        }
+
+        /* Button stack */
+        .panel-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* ServiceNow CTA button — RES orange */
+        .sn-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--orange);
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: 7px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            line-height: 1.35;
+            transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+            box-shadow: 0 2px 8px rgba(232,119,34,0.22);
+            gap: 10px;
+        }
+        .sn-btn:hover {
+            background: #cf6918;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(232,119,34,0.35);
+        }
+        .sn-btn:active { transform: translateY(0); }
+
+        .sn-btn .btn-label { flex: 1; }
+        .sn-btn .btn-arrow { flex-shrink: 0; font-size: 1rem; opacity: 0.9; }
+
+        /* Divider between description and links */
+        .panel-divider {
+            border: none;
+            border-top: 1px solid #e8eaed;
+            margin: 0 0 20px;
+        }
+
+        /* Coming-soon / empty state */
         .state-box {
             text-align: center;
             padding: 44px 22px;
@@ -240,15 +285,7 @@
         }
         .state-box .icon { font-size: 2.4rem; margin-bottom: 14px; }
         .state-box p  { margin-bottom: 8px; line-height: 1.55; }
-        .state-box code {
-            background: #f0f2f4;
-            padding: 2px 7px;
-            border-radius: 4px;
-            font-size: 0.79rem;
-            word-break: break-all;
-        }
         .state-box strong { color: var(--dark); }
-        .loading-msg { text-align: center; padding: 44px; color: #aaa; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -285,94 +322,141 @@
    style   – visual variant: v-dark | v-pill | v-outlined | v-light
    label   – display text shown on the node
    sub     – optional subtitle shown smaller beneath the label
-   file    – .docx filename in the same folder as this HTML file
+   desc    – short description shown in the side panel
+   links   – array of ServiceNow articles: { label, url }
+             Leave as [] until the article is published.
+             Nodes with one or more links get an orange border.
    mx / my – mind-map position as % of the stage (1060 × 740 px)
+   parent  – (optional) id of a parent node; draws spoke from that
+             node instead of the hub (used for build-agents, published-agents)
 ═══════════════════════════════════════════════════════════════ */
 const NODES = [
     {
         id: 'whats-available', style: 'v-dark',
         label: "What's Available to You",
         sub:   'Copilot M365 · Claude · Teams Pro · Copilot Studio · Azure OpenAI · ChatGPT · Copilot for GitHub · Claude for GitHub',
-        file:  'whats-available.docx',
+        desc:  'Explore the full suite of AI tools available at RES — from Microsoft Copilot and Teams Pro to Claude, Azure OpenAI, ChatGPT, and GitHub Copilot. Find out which tool is right for your role and how to access it.',
+        links: [
+            // { label: 'What\'s Available to You', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+        ],
         mx: 20, my: 19,
     },
     {
         id: 'use-cases', style: 'v-pill',
         label: 'Use Cases, Case Studies & Testimonials',
-        file:  'use-cases.docx',
+        desc:  'Real examples of AI in action at RES — from everyday productivity improvements to complex cross-functional workflows, with testimonials from colleagues across the business.',
+        links: [
+            // { label: 'Use Cases & Case Studies', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+        ],
         mx: 43, my: 8,
     },
     {
         id: 'ai-strategy', style: 'v-pill',
         label: 'AI Strategy',
-        file:  'ai-strategy.docx',
+        desc:  'RES\'s vision and roadmap for AI — our priorities, guiding principles, and the strategic direction for embedding AI capability across the organisation.',
+        links: [
+            // { label: 'AI Strategy Overview', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+        ],
         mx: 62, my: 8,
     },
     {
         id: 'before-you-start', style: 'v-outlined',
         label: 'Before You Start',
         sub:   'AUP · AI AUP · Guiderails & ethical guidelines',
-        file:  'before-you-start.docx',
+        desc:  'Essential reading before using any AI tool at RES — covering the Acceptable Use Policy, AI-specific guidelines, ethical guardrails, and your responsibilities as an AI user.',
+        links: [
+            { label: 'Guidelines for AI Tools', url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012040' },
+            // { label: 'Acceptable Use Policy', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+        ],
         mx: 80, my: 17,
     },
     {
         id: 'getting-started', style: 'v-outlined',
         label: 'Getting Started',
         sub:   'How to write a good prompt · How to get a licence',
-        file:  'getting-started.docx',
+        desc:  'Practical first steps for getting the most out of AI at RES — including how to write an effective prompt and the process for requesting a tool licence.',
+        links: [
+            { label: 'How to start using Copilot for M365',  url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012414' },
+            { label: 'How to request access to Claude AI',   url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012721' },
+            { label: 'Getting started with Claude AI',       url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012726' },
+        ],
         mx: 84, my: 34,
     },
     {
         id: 'governance', style: 'v-dark',
         label: 'Governance',
         sub:   'Roles & accountabilities · Cost ownership · Routes to access · Cyber · Privacy · Onboarding',
-        file:  'governance.docx',
+        desc:  'How AI is governed at RES — covering roles and accountabilities, cost ownership, routes to access, and compliance requirements across cyber, privacy, and onboarding.',
+        links: [
+            // { label: 'AI Governance Framework', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+        ],
         mx: 82, my: 56,
     },
     {
         id: 'guidance-leaders', style: 'v-dark',
         label: 'Guidance for Leaders',
         sub:   'Templates · Personas · Business case · Value & ROI · Leader champions',
-        file:  'guidance-leaders.docx',
+        desc:  'Resources to help leaders champion AI adoption — including templates, user personas, business case tools, value and ROI frameworks, and guidance on becoming an AI champion in your team.',
+        links: [
+            // { label: 'Guidance for Leaders', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+        ],
         mx: 15, my: 45,
     },
     {
         id: 'user-communities', style: 'v-dark',
         label: "User Communities & Live Demo's",
         sub:   'Viva Engage · Live demos / roadshow / AMA · Weekly top-tips',
-        file:  'user-communities.docx',
+        desc:  'Connect with the AI community at RES — join Viva Engage channels, attend live demos and roadshows, take part in AMAs, and get weekly top-tips to sharpen your skills.',
+        links: [
+            // { label: 'Join the AI Community on Viva Engage', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+        ],
         mx: 17, my: 71,
     },
     {
         id: 'ai-for-code', style: 'v-pill',
         label: 'AI for Code',
-        file:  'ai-for-code.docx',
+        desc:  'How developers at RES are using AI to accelerate software delivery — covering approved tools, coding practices, and guidelines for GitHub Copilot and Claude for code.',
+        links: [
+            // { label: 'AI for Code Guidelines', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+        ],
         mx: 74, my: 67,
     },
     {
         id: 'agentic-ai', style: 'v-dark',
         label: 'Agentic AI',
         sub:   'What it is & when to use · Use cases / case studies',
-        file:  'agentic-ai.docx',
+        desc:  'An introduction to agentic AI — what it is, when it\'s the right approach, and how RES is already applying it. Includes use cases, case studies, and guidance on responsible adoption.',
+        links: [
+            // { label: 'Introduction to Agentic AI', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+        ],
         mx: 62, my: 78,
     },
     {
         id: 'prompting-playbook', style: 'v-light',
         label: 'Prompting Playbook',
-        file:  'prompting-playbook.docx',
+        desc:  'A practical guide to writing better prompts — with techniques, worked examples, and reusable templates to get consistently strong outputs from any AI tool.',
+        links: [
+            // { label: 'Prompting Playbook', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+        ],
         mx: 29, my: 90,
     },
     {
         id: 'build-agents', style: 'v-light',
         label: 'How to Build and Deploy Agents',
-        file:  'build-agents.docx',
+        desc:  'Technical guidance for building and deploying AI agents within RES — covering approved tooling, architecture patterns, testing, and the governance steps required before go-live.',
+        links: [
+            // { label: 'Build & Deploy Agents – Guide', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+        ],
         mx: 52, my: 91,
         parent: 'agentic-ai',
     },
     {
         id: 'published-agents', style: 'v-light',
         label: 'Register of Published Agents',
-        file:  'published-agents.docx',
+        desc:  'A live register of AI agents that have been built, reviewed, and approved for use across RES — with details on each agent\'s purpose, owner, and how to access it.',
+        links: [
+            // { label: 'View the Published Agents Register', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+        ],
         mx: 72, my: 89,
         parent: 'agentic-ai',
     },
@@ -390,7 +474,6 @@ function buildMindMap() {
     const el = document.getElementById('view-mindmap');
 
     const lines = NODES.map(n => {
-        // Sub-nodes connect to their parent node, not the hub
         const origin = n.parent ? NODES.find(p => p.id === n.parent) : HUB;
         const x1 = (origin.mx / 100 * SW).toFixed(1);
         const y1 = (origin.my / 100 * SH).toFixed(1);
@@ -399,15 +482,18 @@ function buildMindMap() {
         return `<line data-id="${n.id}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
     }).join('');
 
-    const nodes = NODES.map(n => `
-        <div class="mm-node ${n.style}" id="mm-${n.id}"
+    const nodes = NODES.map(n => {
+        const hasArticle = n.links && n.links.length > 0 ? ' has-article' : '';
+        return `
+        <div class="mm-node ${n.style}${hasArticle}" id="mm-${n.id}"
              style="left:${n.mx}%;top:${n.my}%"
              onclick="pick('${n.id}')">
             <div class="mm-box">
                 ${n.label}
                 ${n.sub ? `<span class="mm-sub">${n.sub}</span>` : ''}
             </div>
-        </div>`).join('');
+        </div>`;
+    }).join('');
 
     el.innerHTML = `
         <div class="mm-stage">
@@ -449,11 +535,9 @@ function deactivateAll() {
 ────────────────────────────────────────────────────────────── */
 function openPanel(node) {
     document.getElementById('pTitle').textContent = node.label;
-    document.getElementById('pBody').innerHTML =
-        '<div class="loading-msg">⏳ Loading article…</div>';
+    document.getElementById('pBody').innerHTML = renderPanelContent(node);
     document.getElementById('panel').classList.add('open');
     document.getElementById('mapScroll').classList.add('shifted');
-    loadDoc(node);
 }
 
 function closePanel() {
@@ -463,66 +547,38 @@ function closePanel() {
     document.getElementById('mapScroll').classList.remove('shifted');
 }
 
-/* ──────────────────────────────────────────────────────────────
-   WORD DOC LOADING  (mammoth.js)
-────────────────────────────────────────────────────────────── */
-async function loadDoc(node) {
-    const body = document.getElementById('pBody');
-    if (!node.file) { body.innerHTML = emptyState(node); return; }
+function renderPanelContent(node) {
+    let html = '';
 
-    if (location.protocol === 'file:') {
-        body.innerHTML = `
-            <div class="state-box">
-                <div class="icon">⚠️</div>
-                <p><strong>Local file system detected</strong></p>
-                <p>Articles can't be loaded when this page is opened directly
-                from your computer. Please serve it via a web server:</p>
-                <p><code>npx serve .</code></p>
-                <p>or host it on GitHub Pages / SharePoint.</p>
-            </div>`;
-        return;
+    // Description
+    if (node.desc) {
+        html += `<p class="panel-desc">${node.desc}</p>`;
     }
 
-    try {
-        const res = await fetch(node.file);
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const buf = await res.arrayBuffer();
-        const { value } = await mammoth.convertToHtml({ arrayBuffer: buf });
-        body.innerHTML = value || '<p><em>The document appears to be empty.</em></p>';
-    } catch {
-        body.innerHTML = emptyState(node);
-    }
-}
-
-function emptyState(node) {
-    return `
+    // Links / buttons
+    if (node.links && node.links.length > 0) {
+        html += `<hr class="panel-divider">`;
+        html += `<p class="links-label">Knowledge Articles</p>`;
+        html += `<div class="panel-links">`;
+        node.links.forEach(link => {
+            html += `
+            <a class="sn-btn" href="${link.url}" target="_blank" rel="noopener noreferrer">
+                <span class="btn-label">${link.label}</span>
+                <span class="btn-arrow">→</span>
+            </a>`;
+        });
+        html += `</div>`;
+    } else {
+        if (node.desc) html += `<hr class="panel-divider">`;
+        html += `
         <div class="state-box">
-            <div class="icon">📄</div>
-            <p><strong>Article not yet linked</strong></p>
-            <p>Add a Word document named:<br>
-            <code>${node.file}</code><br>
-            to the same folder as this HTML file.</p>
+            <div class="icon">🔗</div>
+            <p><strong>Coming soon</strong></p>
+            <p>Knowledge articles for this topic are being prepared and will be linked here shortly.</p>
         </div>`;
-}
+    }
 
-/* ──────────────────────────────────────────────────────────────
-   ARTICLE AVAILABILITY CHECK
-   Sends a HEAD request for each node's .docx file.
-   Adds an orange border to nodes whose article is confirmed present.
-────────────────────────────────────────────────────────────── */
-async function checkArticles() {
-    if (location.protocol === 'file:') return; // skip on local file open
-    await Promise.allSettled(
-        NODES.filter(n => n.file).map(async n => {
-            try {
-                const res = await fetch(n.file, { method: 'HEAD' });
-                if (res.ok) {
-                    const el = document.getElementById('mm-' + n.id);
-                    if (el) el.classList.add('has-article');
-                }
-            } catch { /* file not found – no border added */ }
-        })
-    );
+    return html;
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -536,7 +592,6 @@ document.addEventListener('keydown', e => {
    INIT
 ────────────────────────────────────────────────────────────── */
 buildMindMap();
-checkArticles();
 </script>
 </body>
 </html>
