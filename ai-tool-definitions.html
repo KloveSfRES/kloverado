@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Tool Definitions — RES AI Knowledge Centre</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #F07E26;
+      --orange-light: #F9B122;
+      --slate: #323A45;
+      --granite: #817D8B;
+      --pebble: #EAE1E4;
+      --polar: #F8F6F6;
+      --ocean: #5C80A8;
+      --sky: #6AB1CD;
+      --moss: #76AA75;
+      --berry: #BF4E4D;
+      --pollen: #E1B94B;
+      --white: #FFFFFF;
+      --gradient-burst: linear-gradient(135deg, #F07E26, #F9B122);
+      --ms-blue: #0078D4;
+      --anthropic-orange: #D97706;
+      --openai-green: #10A37F;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      color: var(--slate);
+      background: var(--polar);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ───────────────────────────────────────────────── */
+    .header {
+      background: var(--gradient-burst);
+      color: var(--white);
+      padding: 28px 40px 24px;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 6px;
+    }
+
+    .header h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .header-sub {
+      font-size: 1rem;
+      opacity: 0.9;
+      line-height: 1.55;
+      max-width: 640px;
+    }
+
+    /* ── MAIN ─────────────────────────────────────────────────── */
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 36px 40px 60px;
+    }
+
+    /* ── TIER SECTION ─────────────────────────────────────────── */
+    .tier-section {
+      margin-bottom: 44px;
+    }
+
+    .tier-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--pebble);
+    }
+
+    .tier-heading h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--slate);
+    }
+
+    .tier-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .tier-badge.primary  { background: #D4EDDA; color: #155724; }
+    .tier-badge.extended { background: #FFF3CD; color: #856404; }
+    .tier-badge.caution  { background: #F8D7DA; color: #721C24; }
+
+    .tier-desc {
+      font-size: 0.9rem;
+      color: var(--granite);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    /* ── TOOL GRID ────────────────────────────────────────────── */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── TOOL CARD ────────────────────────────────────────────── */
+    .tool-card {
+      background: var(--white);
+      border: 2px solid var(--pebble);
+      border-radius: 8px;
+      padding: 24px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .tool-card:hover {
+      border-color: var(--orange);
+      box-shadow: 0 4px 16px rgba(240,126,38,0.1);
+    }
+
+    .tool-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .tool-icon {
+      font-size: 1.8rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .tool-header-text { flex: 1; }
+
+    .tool-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--slate);
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .tool-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .vendor-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 3px;
+      letter-spacing: 0.2px;
+    }
+
+    .vendor-badge.microsoft { background: #EBF3FB; color: var(--ms-blue); }
+    .vendor-badge.anthropic { background: #FEF3C7; color: var(--anthropic-orange); }
+    .vendor-badge.openai    { background: #D1FAE5; color: var(--openai-green); }
+
+    .access-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--granite);
+      background: var(--polar);
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+
+    .tool-desc {
+      font-size: 0.88rem;
+      color: var(--slate);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .tool-section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--granite);
+      margin-bottom: 6px;
+    }
+
+    .tool-best-for {
+      font-size: 0.82rem;
+      color: var(--slate);
+      line-height: 1.55;
+      background: var(--polar);
+      padding: 10px 12px;
+      border-radius: 4px;
+      border-left: 3px solid var(--orange);
+    }
+
+    .tool-card.caution-card {
+      border-color: #F8D7DA;
+      background: #FFFAFA;
+    }
+
+    .tool-card.caution-card:hover {
+      border-color: var(--berry);
+    }
+
+    .caution-banner {
+      background: #F8D7DA;
+      color: #721C24;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ─────────────────────────────────────────────── -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-eyebrow">AI Knowledge Centre — RES</div>
+    <h1>🛠️ AI Tool Definitions</h1>
+    <p class="header-sub">A complete reference for every AI tool available at RES — what each one does, when to use it, and how to get access.</p>
+  </div>
+</div>
+
+<!-- ── MAIN ───────────────────────────────────────────────── -->
+<div class="main" id="main"></div>
+
+<script>
+  const tools = [
+    { id: 'copilot365',    name: 'Copilot for M365',    vendor: 'Microsoft',         vendorClass: 'microsoft', icon: '🟦', desc: 'Your gateway AI tool at RES. Embedded across Word, Excel, PowerPoint, Outlook, and Teams, Copilot searches your emails, chats, SharePoint, and OneDrive to deliver context-aware answers. Includes built-in Agents (Researcher, Designer, Facilitator, and more) for specialised tasks, plus Agent Builder for creating lightweight Q&A bots with no code.', bestFor: 'Summarising emails and meetings, drafting documents, querying internal data, creating presentations, using built-in Agents (Researcher, Designer, etc.), building simple Q&A agents (Agent Builder)', access: 'Copilot license (department funded)', tier: 'primary' },
+    { id: 'teams-pro',     name: 'Teams Premium',        vendor: 'Microsoft',         vendorClass: 'microsoft', icon: '🟦', desc: 'Enhanced Teams features including intelligent meeting recap, live translations, auto-generated chapters, and AI-powered notes. Does not require a Copilot license.', bestFor: 'Meeting summaries and recaps, live captions and translations, catching up on meetings you missed', access: 'Teams Premium license', tier: 'primary' },
+    { id: 'copilot-studio',name: 'Copilot Studio',       vendor: 'Microsoft',         vendorClass: 'microsoft', icon: '🟦', desc: 'Platform for building advanced custom AI agents and chatbots that can be shared across the organisation. Supports multi-step workflows, custom integrations, and external-facing agents. A step up from Agent Builder for more complex automation needs.', bestFor: 'Advanced Q&A bots, multi-step workflow automations, deploying internal self-service agents, connecting to business systems, external-facing agents', access: 'Copilot Studio license', tier: 'primary' },
+    { id: 'azure-openai',  name: 'Azure OpenAI',         vendor: 'Microsoft / OpenAI',vendorClass: 'microsoft', icon: '🟦', desc: 'Enterprise-grade API access to OpenAI models (GPT-4, DALL-E) hosted within the RES Azure environment. For building custom AI solutions with full data governance.', bestFor: 'Custom application development, API integrations, building bespoke AI features into internal tools, bulk processing', access: 'Via IT / development teams', tier: 'primary' },
+    { id: 'copilot-github',name: 'Copilot for GitHub',   vendor: 'Microsoft / GitHub',vendorClass: 'microsoft', icon: '🟦', desc: 'AI pair programmer that suggests code completions, generates functions, writes tests, and explains code directly in your IDE (VS Code, JetBrains, etc.).', bestFor: 'Code autocompletion, generating boilerplate code, writing unit tests, explaining unfamiliar code, refactoring', access: 'GitHub Copilot license', tier: 'primary' },
+    { id: 'claude-chat',   name: 'Claude (chat)',         vendor: 'Anthropic',         vendorClass: 'anthropic', icon: '🟧', desc: 'Advanced conversational AI for deep research, complex analysis, and nuanced reasoning. Use Claude where you need capabilities beyond what Copilot offers — such as long-form strategic thinking, detailed financial analysis, or working through multi-layered problems.', bestFor: 'Complex financial analysis, deep research and synthesis, strategic reasoning, nuanced policy analysis, long-form content where depth matters', access: 'Limited access — requires Exec approval', tier: 'extended' },
+    { id: 'claude-cowork', name: 'Claude Cowork',         vendor: 'Anthropic',         vendorClass: 'anthropic', icon: '🟧', desc: "Desktop companion that works directly with your files. Can create and edit documents, spreadsheets, presentations, and automate file management tasks on your computer. The unique Projects feature lets you create dedicated workspaces with custom instructions, reference files, and persistent context across sessions — ideal for sustained initiatives.", bestFor: 'Ongoing projects with persistent context (Projects), creating polished documents and presentations, batch file processing, complex data transformation across formats', access: 'Limited access — requires Exec approval (desktop app)', tier: 'extended' },
+    { id: 'claude-browser',name: 'Claude in Chrome',      vendor: 'Anthropic',         vendorClass: 'anthropic', icon: '🟧', desc: "Browser-based AI agent that can navigate, read, and interact with web pages. Works in Chrome and Edge. Useful for research, form filling, and web-based workflows that go beyond Copilot's web search.", bestFor: 'Complex web research, navigating internal tools, extracting information from web pages, automating browser-based tasks', access: 'Limited access — requires Exec approval (browser extension)', tier: 'extended' },
+    { id: 'claude-excel',  name: 'Claude for Excel',      vendor: 'Anthropic',         vendorClass: 'anthropic', icon: '🟧', desc: 'Excel plugin that brings advanced AI directly into your spreadsheets. Particularly strong for financial analysis, complex formula creation, pattern recognition, and generating insights from tabular data.', bestFor: 'Financial modelling and analysis, complex formulas, data pattern detection, advanced pivot table work, interpreting financial data', access: 'Limited access — requires Exec approval (Excel plugin)', tier: 'extended' },
+    { id: 'claude-pptx',   name: 'Claude for PowerPoint', vendor: 'Anthropic',         vendorClass: 'anthropic', icon: '🟧', desc: 'PowerPoint plugin for creating, improving, and restructuring slide decks with AI assistance. Best used when you need more sophisticated content generation or narrative structuring than Copilot in PowerPoint provides.', bestFor: 'Restructuring deck narratives, generating detailed slide content, adding speaker notes, improving presentation flow', access: 'Limited access — requires Exec approval (PowerPoint plugin)', tier: 'extended' },
+    { id: 'claude-code',   name: 'Claude Code',           vendor: 'Anthropic',         vendorClass: 'anthropic', icon: '🟧', desc: 'Command-line AI coding agent for complex, multi-file tasks. Goes beyond Copilot for GitHub when you need autonomous implementation, architectural planning, and end-to-end development work.', bestFor: 'Full feature implementation, debugging complex issues, codebase refactoring, writing and running tests, architectural planning', access: 'Limited access — requires Exec approval (CLI tool)', tier: 'extended' },
+    { id: 'claude-github', name: 'Claude for GitHub',     vendor: 'Anthropic',         vendorClass: 'anthropic', icon: '🟧', desc: 'AI-powered code review and pull request assistance integrated directly into GitHub. Reviews changes, suggests improvements, and helps maintain code quality.', bestFor: 'Automated code review, PR summaries, identifying bugs and security issues, enforcing coding standards', access: 'Limited access — requires Exec approval (GitHub integration)', tier: 'extended' },
+    { id: 'chatgpt',       name: 'ChatGPT',               vendor: 'OpenAI',            vendorClass: 'openai',    icon: '🟩', desc: 'General-purpose conversational AI for brainstorming, drafting, learning, and quick queries. Important: do not share RES intellectual property or sensitive data. For RES-related work, use Copilot or Claude instead.', bestFor: 'Quick general questions, personal learning, brainstorming ideas (non-confidential only)', access: 'Free / personal accounts', tier: 'caution' },
+  ];
+
+  const tiers = [
+    {
+      id: 'primary',
+      label: '⭐ Primary Tools',
+      badge: 'primary',
+      desc: 'Available to all RES staff with the relevant license. These are your default tools for day-to-day AI-assisted work.',
+    },
+    {
+      id: 'extended',
+      label: '✨ Extended Access Tools',
+      badge: 'extended',
+      desc: 'Advanced tools requiring Executive approval. Evaluated and approved for use at RES — contact IT or your line manager to request access.',
+    },
+    {
+      id: 'caution',
+      label: '⚠️ Use with Caution',
+      badge: 'caution',
+      desc: 'These tools are available but must never be used with RES intellectual property, confidential data, or commercially sensitive information.',
+    },
+  ];
+
+  function render() {
+    const main = document.getElementById('main');
+    let html = '';
+
+    tiers.forEach(tier => {
+      const tierTools = tools.filter(t => t.tier === tier.id);
+      html += `
+        <div class="tier-section">
+          <div class="tier-heading">
+            <h2>${tier.label}</h2>
+            <span class="tier-badge ${tier.badge}">${tier.badge.toUpperCase()}</span>
+          </div>
+          <p class="tier-desc">${tier.desc}</p>
+          <div class="tool-grid">`;
+
+      tierTools.forEach(tool => {
+        const isCaution = tool.tier === 'caution';
+        html += `
+          <div class="tool-card${isCaution ? ' caution-card' : ''}">
+            ${isCaution ? '<div class="caution-banner">⚠️ Do NOT share RES data or intellectual property with this tool</div>' : ''}
+            <div class="tool-card-header">
+              <div class="tool-icon">${tool.icon}</div>
+              <div class="tool-header-text">
+                <div class="tool-name">${tool.name}</div>
+                <div class="tool-meta">
+                  <span class="vendor-badge ${tool.vendorClass}">${tool.vendor}</span>
+                  <span class="access-badge">${tool.access}</span>
+                </div>
+              </div>
+            </div>
+            <p class="tool-desc">${tool.desc}</p>
+            <div class="tool-section-label">Best for</div>
+            <div class="tool-best-for">${tool.bestFor}</div>
+          </div>`;
+      });
+
+      html += `</div></div>`;
+    });
+
+    main.innerHTML = html;
+  }
+
+  render();
+</script>
+</body>
+</html>
