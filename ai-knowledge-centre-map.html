@@ -36,10 +36,10 @@
             --dark   : #2B3A4E;
             --bg     : #eef0f3;
             --pw     : 430px;   /* side-panel width */
-            --hh     : 57px;    /* header height */
+            --hh     : 0px;     /* no header */
         }
 
-        html { font-size: 110%; }
+        html { font-size: 125%; }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -72,7 +72,7 @@
             position: absolute;
             inset: 0;
             overflow: auto;
-            padding: 16px 20px 24px;
+            padding: 6px 16px 6px;
             transition: right 0.28s ease;
         }
         .map-scroll.shifted { right: var(--pw); }
@@ -83,7 +83,7 @@
         .mm-stage {
             position: relative;
             width: 1060px;
-            height: 740px;
+            height: 580px;
             margin: 0 auto;
         }
 
@@ -374,11 +374,6 @@
 </head>
 <body>
 
-<!-- ─── HEADER ──────────────────────────────────────────────── -->
-<header class="hdr">
-    <h1 class="hdr-title">AI Knowledge Centre</h1>
-</header>
-
 <!-- ─── WORKSPACE ──────────────────────────────────────────── -->
 <div class="workspace">
 
@@ -421,7 +416,7 @@
    links   – array of ServiceNow articles: { label, url }
              Leave as [] until the article is published.
              Nodes with one or more links get an orange border.
-   mx / my – mind-map position as % of the stage (1060 × 740 px)
+   mx / my – mind-map position as % of the stage (1060 × 580 px)
    parent  – (optional) id of a parent node; draws spoke from that
              node instead of the hub (used for build-agents, published-agents)
 ═══════════════════════════════════════════════════════════════ */
@@ -435,7 +430,7 @@ const NODES = [
             { label: 'Guidelines for AI Tools',          url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012040' },
             { label: 'Claude Enterprise vs Team Plan',   url: 'https://support.claude.com/en/collections/18901829-plan-overviews' },
         ],
-        mx: 20, my: 19,
+        mx: 15, my: 18,
     },
     {
         id: 'use-cases', style: 'v-pill',
@@ -444,7 +439,7 @@ const NODES = [
         links: [
             // { label: 'Use Cases & Case Studies', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
         ],
-        mx: 43, my: 8,
+        mx: 38, my: 8,
     },
     {
         id: 'ai-strategy', style: 'v-pill',
@@ -464,7 +459,7 @@ const NODES = [
             { label: 'RES IT Acceptable Use Policy',     url: 'https://reshive.sharepoint.com/:b:/s/Mind_IMS10/IQDKxbVRpG9cRafblYH9RN3lAfXj4rp24NIzrxJxvajw9Pw?e=q84cLX' },
             { label: 'What is Generative AI?',           url: 'https://reshive.sharepoint.com/:u:/r/sites/News/SitePages/What-is-generative-AI-and-how-do-we-use-it-responsibly-.aspx?csf=1&web=1&e=36ebFQ' },
         ],
-        mx: 80, my: 17,
+        mx: 82, my: 12,
     },
     {
         id: 'getting-started', style: 'v-outlined',
@@ -476,7 +471,7 @@ const NODES = [
             { label: 'How to request access to Claude AI',   url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012721' },
             { label: 'Getting started with Claude AI',       url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012726' },
         ],
-        mx: 84, my: 34,
+        mx: 89, my: 31,
     },
     {
         id: 'governance', style: 'v-dark',
@@ -486,7 +481,7 @@ const NODES = [
         links: [
             // { label: 'AI Governance Framework', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
         ],
-        mx: 82, my: 56,
+        mx: 85, my: 52,
     },
     {
         id: 'guidance-leaders', style: 'v-dark',
@@ -496,7 +491,7 @@ const NODES = [
         links: [
             // { label: 'Guidance for Leaders', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
         ],
-        mx: 15, my: 45,
+        mx: 11, my: 47,
     },
     {
         id: 'user-communities', style: 'v-dark',
@@ -510,7 +505,7 @@ const NODES = [
             { label: 'Copilot for RES – Viva Engage Community', url: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMTM2MzIxMzEwNzIifQ/all' },
             { label: 'AI Knowledge Centre Team', url: 'PLACEHOLDER_URL' }, // ← add URL when available
         ],
-        mx: 17, my: 71,
+        mx: 11, my: 70,
     },
     {
         id: 'ai-for-code', style: 'v-pill',
@@ -520,7 +515,7 @@ const NODES = [
             { label: 'GitHub Copilot in VS Code',   url: 'https://code.visualstudio.com/docs/copilot/overview' },
             { label: 'Claude Code Overview',         url: 'https://code.claude.com/docs/en/overview' },
         ],
-        mx: 74, my: 67,
+        mx: 79, my: 67,
     },
     {
         id: 'agentic-ai', style: 'v-dark',
@@ -532,7 +527,7 @@ const NODES = [
             { label: 'AI Agent types and uses',                         url: 'https://www.microsoft.com/en-us/microsoft-copilot/copilot-101/ai-agents-types-and-uses' },
             { label: 'Agent Factory: The new era of agentic AI',        url: 'https://azure.microsoft.com/en-us/blog/agent-factory-the-new-era-of-agentic-ai-common-use-cases-and-design-patterns/' },
         ],
-        mx: 62, my: 78,
+        mx: 60, my: 78,
     },
     {
         id: 'prompting-playbook', style: 'v-light',
@@ -540,7 +535,7 @@ const NODES = [
         desc:  'A practical guide to writing better prompts — with techniques, worked examples, and reusable templates to get consistently strong outputs from any AI tool.',
         links: [],
         playbook: 'prompting-playbook.html',   // opens as full-screen overlay
-        mx: 29, my: 90,
+        mx: 28, my: 88,
     },
     {
         id: 'build-agents', style: 'v-light',
@@ -550,7 +545,7 @@ const NODES = [
             { label: 'Quickstart: Create and deploy an agent',   url: 'https://learn.microsoft.com/en-us/microsoft-copilot-studio/fundamentals-get-started' },
             { label: 'Build Agents using Agent Builder',          url: 'https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/agent-builder-build-agents' },
         ],
-        mx: 52, my: 91,
+        mx: 49, my: 92,
         parent: 'agentic-ai',
     },
     {
@@ -560,13 +555,13 @@ const NODES = [
         links: [
             { label: 'Copilot Agent Preview', url: 'https://resproduction.service-now.com/sp?id=sc_cat_item&sys_id=07929b4593193a1473b6396d6cba103f' },
         ],
-        mx: 72, my: 89,
+        mx: 70, my: 92,
         parent: 'agentic-ai',
     },
 ];
 
-const HUB = { mx: 50, my: 46 };
-const SW = 1060, SH = 740;
+const HUB = { mx: 50, my: 44 };
+const SW = 1060, SH = 580;
 
 let activeId = null;
 
