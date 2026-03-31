@@ -138,6 +138,16 @@
             border: 2.5px solid var(--orange);
         }
 
+        /* Faded state — no articles or community links yet */
+        .mm-node.no-article {
+            opacity: 0.38;
+            transition: opacity 0.2s;
+        }
+        .mm-node.no-article:hover,
+        .mm-node.no-article.sel {
+            opacity: 1;
+        }
+
         /* Hub oval */
         .mm-node.hub .mm-box {
             background: var(--dark); color: #fff;
@@ -286,6 +296,78 @@
         .state-box .icon { font-size: 2.4rem; margin-bottom: 14px; }
         .state-box p  { margin-bottom: 8px; line-height: 1.55; }
         .state-box strong { color: var(--dark); }
+
+        /* ══════════════════════════════════════════════════════════
+           PLAYBOOK MODAL (full-screen iframe overlay)
+        ══════════════════════════════════════════════════════════ */
+        .playbook-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            background: rgba(43, 58, 78, 0.6);
+            backdrop-filter: blur(3px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        .playbook-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .playbook-modal {
+            position: absolute;
+            inset: 32px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: translateY(24px) scale(0.98);
+            transition: transform 0.28s ease, opacity 0.25s ease;
+            opacity: 0;
+        }
+        .playbook-overlay.open .playbook-modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .playbook-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--dark);
+            color: #fff;
+            padding: 12px 20px;
+            flex-shrink: 0;
+            gap: 12px;
+        }
+        .playbook-bar-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 0.1px;
+        }
+        .playbook-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            opacity: 0.7;
+            padding: 0 4px;
+            transition: opacity 0.15s;
+        }
+        .playbook-close:hover { opacity: 1; }
+
+        .playbook-frame {
+            flex: 1;
+            border: none;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -301,6 +383,17 @@
     <!-- Scrollable map area -->
     <div class="map-scroll" id="mapScroll">
         <div id="view-mindmap"></div>
+    </div>
+
+    <!-- Playbook full-screen overlay -->
+    <div class="playbook-overlay" id="playbookOverlay" onclick="closePlaybook(event)">
+        <div class="playbook-modal" id="playbookModal">
+            <div class="playbook-bar">
+                <span class="playbook-bar-title">Prompting Playbook</span>
+                <button class="playbook-close" onclick="closePlaybook()" title="Close">×</button>
+            </div>
+            <iframe class="playbook-frame" id="playbookFrame" src="" title="Prompting Playbook"></iframe>
+        </div>
     </div>
 
     <!-- Side panel -->
@@ -337,7 +430,8 @@ const NODES = [
         sub:   'Copilot M365 · Claude · Teams Pro · Copilot Studio · Azure OpenAI · ChatGPT · Copilot for GitHub · Claude for GitHub',
         desc:  'Explore the full suite of AI tools available at RES — from Microsoft Copilot and Teams Pro to Claude, Azure OpenAI, ChatGPT, and GitHub Copilot. Find out which tool is right for your role and how to access it.',
         links: [
-            // { label: 'What\'s Available to You', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+            { label: 'Guidelines for AI Tools',          url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012040' },
+            { label: 'Claude Enterprise vs Team Plan',   url: 'https://support.claude.com/en/collections/18901829-plan-overviews' },
         ],
         mx: 20, my: 19,
     },
@@ -365,8 +459,8 @@ const NODES = [
         sub:   'AUP · AI AUP · Guiderails & ethical guidelines',
         desc:  'Essential reading before using any AI tool at RES — covering the Acceptable Use Policy, AI-specific guidelines, ethical guardrails, and your responsibilities as an AI user.',
         links: [
-            { label: 'Guidelines for AI Tools', url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012040' },
-            // { label: 'Acceptable Use Policy', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+            { label: 'RES IT Acceptable Use Policy',     url: 'https://reshive.sharepoint.com/:b:/s/Mind_IMS10/IQDKxbVRpG9cRafblYH9RN3lAfXj4rp24NIzrxJxvajw9Pw?e=q84cLX' },
+            { label: 'What is Generative AI?',           url: 'https://reshive.sharepoint.com/:u:/r/sites/News/SitePages/What-is-generative-AI-and-how-do-we-use-it-responsibly-.aspx?csf=1&web=1&e=36ebFQ' },
         ],
         mx: 80, my: 17,
     },
@@ -410,6 +504,10 @@ const NODES = [
         links: [
             // { label: 'Join the AI Community on Viva Engage', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
         ],
+        communityLinks: [
+            { label: 'Copilot for RES – Viva Engage Community', url: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMTM2MzIxMzEwNzIifQ/all' },
+            { label: 'AI Knowledge Centre Team', url: 'PLACEHOLDER_URL' }, // ← add URL when available
+        ],
         mx: 17, my: 71,
     },
     {
@@ -427,7 +525,9 @@ const NODES = [
         sub:   'What it is & when to use · Use cases / case studies',
         desc:  'An introduction to agentic AI — what it is, when it\'s the right approach, and how RES is already applying it. Includes use cases, case studies, and guidance on responsible adoption.',
         links: [
-            // { label: 'Introduction to Agentic AI', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+            { label: 'What is a copilot and what are agents?',          url: 'https://www.microsoft.com/en-us/microsoft-copilot/copilot-101/copilot-ai-agents' },
+            { label: 'AI Agent types and uses',                         url: 'https://www.microsoft.com/en-us/microsoft-copilot/copilot-101/ai-agents-types-and-uses' },
+            { label: 'Agent Factory: The new era of agentic AI',        url: 'https://azure.microsoft.com/en-us/blog/agent-factory-the-new-era-of-agentic-ai-common-use-cases-and-design-patterns/' },
         ],
         mx: 62, my: 78,
     },
@@ -435,9 +535,8 @@ const NODES = [
         id: 'prompting-playbook', style: 'v-light',
         label: 'Prompting Playbook',
         desc:  'A practical guide to writing better prompts — with techniques, worked examples, and reusable templates to get consistently strong outputs from any AI tool.',
-        links: [
-            // { label: 'Prompting Playbook', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
-        ],
+        links: [],
+        playbook: 'prompting-playbook.html',   // opens as full-screen overlay
         mx: 29, my: 90,
     },
     {
@@ -445,7 +544,8 @@ const NODES = [
         label: 'How to Build and Deploy Agents',
         desc:  'Technical guidance for building and deploying AI agents within RES — covering approved tooling, architecture patterns, testing, and the governance steps required before go-live.',
         links: [
-            // { label: 'Build & Deploy Agents – Guide', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+            { label: 'Quickstart: Create and deploy an agent',   url: 'https://learn.microsoft.com/en-us/microsoft-copilot-studio/fundamentals-get-started' },
+            { label: 'Build Agents using Agent Builder',          url: 'https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/agent-builder-build-agents' },
         ],
         mx: 52, my: 91,
         parent: 'agentic-ai',
@@ -455,7 +555,7 @@ const NODES = [
         label: 'Register of Published Agents',
         desc:  'A live register of AI agents that have been built, reviewed, and approved for use across RES — with details on each agent\'s purpose, owner, and how to access it.',
         links: [
-            // { label: 'View the Published Agents Register', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
+            { label: 'Copilot Agent Preview', url: 'https://resproduction.service-now.com/sp?id=sc_cat_item&sys_id=07929b4593193a1473b6396d6cba103f' },
         ],
         mx: 72, my: 89,
         parent: 'agentic-ai',
@@ -483,7 +583,8 @@ function buildMindMap() {
     }).join('');
 
     const nodes = NODES.map(n => {
-        const hasArticle = n.links && n.links.length > 0 ? ' has-article' : '';
+        const hasLinks = (n.links && n.links.length > 0) || (n.communityLinks && n.communityLinks.length > 0) || !!n.playbook;
+        const hasArticle = hasLinks ? ' has-article' : ' no-article';
         return `
         <div class="mm-node ${n.style}${hasArticle}" id="mm-${n.id}"
              style="left:${n.mx}%;top:${n.my}%"
@@ -509,6 +610,14 @@ function buildMindMap() {
    SELECTION
 ────────────────────────────────────────────────────────────── */
 function pick(id) {
+    const node = NODES.find(n => n.id === id);
+
+    // Playbook nodes open as full-screen overlay instead of side panel
+    if (node && node.playbook) {
+        openPlaybook(node);
+        return;
+    }
+
     if (activeId === id) { closePanel(); return; }
     deactivateAll();
     activeId = id;
@@ -519,7 +628,7 @@ function pick(id) {
     document.querySelectorAll('.mm-svg line').forEach(l =>
         l.classList.toggle('active-line', l.dataset.id === id));
 
-    openPanel(NODES.find(n => n.id === id));
+    openPanel(node);
 }
 
 function deactivateAll() {
@@ -555,19 +664,40 @@ function renderPanelContent(node) {
         html += `<p class="panel-desc">${node.desc}</p>`;
     }
 
-    // Links / buttons
-    if (node.links && node.links.length > 0) {
+    const hasLinks          = node.links && node.links.length > 0;
+    const hasCommunityLinks = node.communityLinks && node.communityLinks.length > 0;
+
+    if (hasLinks || hasCommunityLinks) {
         html += `<hr class="panel-divider">`;
-        html += `<p class="links-label">Knowledge Articles</p>`;
-        html += `<div class="panel-links">`;
-        node.links.forEach(link => {
-            html += `
-            <a class="sn-btn" href="${link.url}" target="_blank" rel="noopener noreferrer">
-                <span class="btn-label">${link.label}</span>
-                <span class="btn-arrow">→</span>
-            </a>`;
-        });
-        html += `</div>`;
+
+        // Community links section
+        if (hasCommunityLinks) {
+            html += `<p class="links-label">Communities</p>`;
+            html += `<div class="panel-links">`;
+            node.communityLinks.forEach(link => {
+                html += `
+                <a class="sn-btn" href="${link.url}" target="_blank" rel="noopener noreferrer">
+                    <span class="btn-label">${link.label}</span>
+                    <span class="btn-arrow">→</span>
+                </a>`;
+            });
+            html += `</div>`;
+            if (hasLinks) html += `<br>`;
+        }
+
+        // Knowledge articles section
+        if (hasLinks) {
+            html += `<p class="links-label">Knowledge Articles</p>`;
+            html += `<div class="panel-links">`;
+            node.links.forEach(link => {
+                html += `
+                <a class="sn-btn" href="${link.url}" target="_blank" rel="noopener noreferrer">
+                    <span class="btn-label">${link.label}</span>
+                    <span class="btn-arrow">→</span>
+                </a>`;
+            });
+            html += `</div>`;
+        }
     } else {
         if (node.desc) html += `<hr class="panel-divider">`;
         html += `
@@ -582,10 +712,32 @@ function renderPanelContent(node) {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   KEYBOARD: Escape closes the panel
+   PLAYBOOK OVERLAY
+────────────────────────────────────────────────────────────── */
+function openPlaybook(node) {
+    document.getElementById('playbookFrame').src = node.playbook;
+    document.getElementById('playbookOverlay').classList.add('open');
+}
+
+function closePlaybook(e) {
+    // If triggered by clicking the backdrop (not the modal itself), close
+    if (e && e.target !== document.getElementById('playbookOverlay')) return;
+    document.getElementById('playbookOverlay').classList.remove('open');
+    // Clear src after transition so iframe doesn't linger in memory
+    setTimeout(() => { document.getElementById('playbookFrame').src = ''; }, 300);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   KEYBOARD: Escape closes panel or playbook overlay
 ────────────────────────────────────────────────────────────── */
 document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && activeId) closePanel();
+    if (e.key !== 'Escape') return;
+    if (document.getElementById('playbookOverlay').classList.contains('open')) {
+        document.getElementById('playbookOverlay').classList.remove('open');
+        setTimeout(() => { document.getElementById('playbookFrame').src = ''; }, 300);
+    } else if (activeId) {
+        closePanel();
+    }
 });
 
 /* ──────────────────────────────────────────────────────────────
