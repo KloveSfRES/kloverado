@@ -83,7 +83,7 @@
         .mm-stage {
             position: relative;
             width: 1060px;
-            height: 580px;
+            height: 638px;
             margin: 0 auto;
         }
 
@@ -429,6 +429,7 @@ const NODES = [
         links: [
             { label: 'Guidelines for AI Tools',          url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012040' },
             { label: 'Claude Enterprise vs Team Plan',   url: 'https://support.claude.com/en/collections/18901829-plan-overviews' },
+            { label: 'AI Tool Definitions',              url: 'ai-tool-definitions.html' },
         ],
         mx: 15, my: 18,
     },
@@ -464,7 +465,7 @@ const NODES = [
     {
         id: 'getting-started', style: 'v-outlined',
         label: 'Getting Started',
-        sub:   'How to write a good prompt · How to get a licence',
+        sub:   'How to get access · Prompting',
         desc:  'Practical first steps for getting the most out of AI at RES — including how to write an effective prompt and the process for requesting a tool licence.',
         links: [
             { label: 'How to start using Copilot for M365',  url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012414' },
@@ -476,7 +477,7 @@ const NODES = [
     {
         id: 'governance', style: 'v-dark',
         label: 'Governance',
-        sub:   'Roles & accountabilities · Cost ownership · Routes to access · Cyber · Privacy · Onboarding',
+        sub:   'Roles & accountabilities · Cost ownership · Cyber · Privacy · Onboarding',
         desc:  'How AI is governed at RES — covering roles and accountabilities, cost ownership, routes to access, and compliance requirements across cyber, privacy, and onboarding.',
         links: [
             // { label: 'AI Governance Framework', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
@@ -515,7 +516,7 @@ const NODES = [
             { label: 'GitHub Copilot in VS Code',   url: 'https://code.visualstudio.com/docs/copilot/overview' },
             { label: 'Claude Code Overview',         url: 'https://code.claude.com/docs/en/overview' },
         ],
-        mx: 79, my: 67,
+        mx: 80, my: 71,
     },
     {
         id: 'agentic-ai', style: 'v-dark',
@@ -561,7 +562,7 @@ const NODES = [
 ];
 
 const HUB = { mx: 50, my: 44 };
-const SW = 1060, SH = 580;
+const SW = 1060, SH = 638;
 
 let activeId = null;
 
