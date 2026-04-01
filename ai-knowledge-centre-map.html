@@ -552,7 +552,7 @@ const NODES = [
         communityLinks: [
             { label: 'Copilot for RES - Engage Community', url: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMTM2MzIxMzEwNzIifQ/all' },
         ],
-        deck: { label: 'Session 01 – Introduction to Claude AI', file: 'https://reshive.sharepoint.com/:p:/s/Mind_Teams662/IQDc9gYvcImSTbFkTotFUX3ZAU73LQm_fCrafmybbZIrIqw?e=aOhmUK&action=embedview' },
+        deck: { label: 'Session 01 – Introduction to Claude AI', url: 'https://reshive.sharepoint.com/:p:/s/Mind_Teams662/IQDc9gYvcImSTbFkTotFUX3ZAU73LQm_fCrafmybbZIrIqw?e=gctc2U' },
         mx: 90, my: 32,
     },
     {
@@ -738,10 +738,11 @@ function renderPanelContent(node) {
         if (hasDeck) {
             html += `<p class="links-label">Presentation</p>`;
             html += `<div class="panel-links">`;
-            html += `<button class="deck-btn" onclick="openPlaybook({playbook:'${node.deck.file}'})">
-                <span class="btn-icon">▶</span>
-                <span class="btn-label">${node.deck.label}</span>
-            </button>`;
+            const deckHref = node.deck.url || node.deck.file;
+            html += `<a class="sn-btn" href="${deckHref}" target="_blank" rel="noopener noreferrer">
+                <span class="btn-label">▶&nbsp;&nbsp;${node.deck.label}</span>
+                <span class="btn-arrow">→</span>
+            </a>`;
             html += `</div>`;
             if (hasLinks || hasCommunityLinks) html += `<br>`;
         }
