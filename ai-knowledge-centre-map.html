@@ -150,6 +150,24 @@
             opacity: 1;
         }
 
+        /* "Start here" pulse on What's Available */
+        .start-badge {
+            display: block;
+            font-size: 0.52rem;
+            font-weight: 700;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 3px;
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+        .mm-node.sel .start-badge,
+        .mm-node:hover .start-badge { color: rgba(255,255,255,0.9); animation: none; }
+        @keyframes pulse-badge {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.45; }
+        }
+
         /* Hub oval */
         .mm-node.hub .mm-box {
             background: var(--dark); color: #fff;
@@ -254,6 +272,34 @@
             flex-direction: column;
             gap: 10px;
         }
+
+        /* Deck / presentation button */
+        .deck-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--dark);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 7px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            line-height: 1.35;
+            cursor: pointer;
+            transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+            box-shadow: 0 2px 8px rgba(43,58,78,0.18);
+            gap: 10px;
+            text-align: left;
+        }
+        .deck-btn:hover {
+            background: #1a2840;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(43,58,78,0.28);
+        }
+        .deck-btn .btn-icon { flex-shrink: 0; font-size: 1.1rem; }
+        .deck-btn .btn-label { flex: 1; }
 
         /* ServiceNow CTA button — RES orange */
         .sn-btn {
@@ -386,7 +432,7 @@
     <div class="playbook-overlay" id="playbookOverlay" onclick="closePlaybook(event)">
         <div class="playbook-modal" id="playbookModal">
             <div class="playbook-bar">
-                <span class="playbook-bar-title">Prompting Playbook</span>
+                <span class="playbook-bar-title" id="playbookBarTitle">Prompting Playbook</span>
                 <button class="playbook-close" onclick="closePlaybook()" title="Close">×</button>
             </div>
             <iframe class="playbook-frame" id="playbookFrame" src="" title="Prompting Playbook"></iframe>
@@ -424,14 +470,15 @@ const NODES = [
     {
         id: 'whats-available', style: 'v-dark',
         label: "What's Available to You",
-        sub:   'Copilot M365 · Claude · Teams Pro · Copilot Studio · Azure OpenAI · ChatGPT · Copilot for GitHub · Claude for GitHub',
+        startHere: true,
+        sub:   'Teams Pro · Copilot M365 · Agent Builder · Copilot Studio · GitHub Copilot · Claude Chat · Claude Cowork · Claude Code',
         desc:  'Explore the full suite of AI tools available at RES — from Microsoft Copilot and Teams Pro to Claude, Azure OpenAI, ChatGPT, and GitHub Copilot. Find out which tool is right for your role and how to access it.',
         links: [
             { label: 'Guidelines for AI Tools',          url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012040' },
             { label: 'Claude Enterprise vs Team Plan',   url: 'https://support.claude.com/en/collections/18901829-plan-overviews' },
             { label: 'AI Tool Definitions',              url: 'ai-tool-definitions.html' },
         ],
-        mx: 15, my: 18,
+        mx: 15, my: 20,
     },
     {
         id: 'use-cases', style: 'v-pill',
@@ -440,7 +487,7 @@ const NODES = [
         links: [
             // { label: 'Use Cases & Case Studies', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
         ],
-        mx: 38, my: 8,
+        mx: 43, my: 74,
     },
     {
         id: 'ai-strategy', style: 'v-pill',
@@ -449,30 +496,30 @@ const NODES = [
         links: [
             // { label: 'AI Strategy Overview', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
         ],
-        mx: 62, my: 8,
+        mx: 90, my: 52,
     },
     {
         id: 'before-you-start', style: 'v-outlined',
         label: 'Before You Start',
-        sub:   'AUP · AI AUP · Guiderails & ethical guidelines',
+        sub:   'AUP · Gen AI · Guiderails',
         desc:  'Essential reading before using any AI tool at RES — covering the Acceptable Use Policy, AI-specific guidelines, ethical guardrails, and your responsibilities as an AI user.',
         links: [
             { label: 'RES IT Acceptable Use Policy',     url: 'https://reshive.sharepoint.com/:b:/s/Mind_IMS10/IQDKxbVRpG9cRafblYH9RN3lAfXj4rp24NIzrxJxvajw9Pw?e=q84cLX' },
             { label: 'What is Generative AI?',           url: 'https://reshive.sharepoint.com/:u:/r/sites/News/SitePages/What-is-generative-AI-and-how-do-we-use-it-responsibly-.aspx?csf=1&web=1&e=36ebFQ' },
         ],
-        mx: 82, my: 12,
+        mx: 37, my: 7,
     },
     {
         id: 'getting-started', style: 'v-outlined',
         label: 'Getting Started',
-        sub:   'How to get access · Prompting',
+        sub:   'How to get access · Installing apps',
         desc:  'Practical first steps for getting the most out of AI at RES — including how to write an effective prompt and the process for requesting a tool licence.',
         links: [
             { label: 'How to start using Copilot for M365',  url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012414' },
             { label: 'How to request access to Claude AI',   url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012721' },
             { label: 'Getting started with Claude AI',       url: 'https://resproduction.service-now.com/sp?id=kb_article_view&sysparm_article=KB0012726' },
         ],
-        mx: 89, my: 31,
+        mx: 61, my: 7,
     },
     {
         id: 'governance', style: 'v-dark',
@@ -482,31 +529,31 @@ const NODES = [
         links: [
             // { label: 'AI Governance Framework', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
         ],
-        mx: 85, my: 52,
+        mx: 86, my: 70,
     },
     {
         id: 'guidance-leaders', style: 'v-dark',
         label: 'Guidance for Leaders',
-        sub:   'Templates · Personas · Business case · Value & ROI · Leader champions',
+        sub:   'Templates · Skills · Value & ROI · Champions',
         desc:  'Resources to help leaders champion AI adoption — including templates, user personas, business case tools, value and ROI frameworks, and guidance on becoming an AI champion in your team.',
         links: [
             // { label: 'Guidance for Leaders', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
         ],
-        mx: 11, my: 47,
+        mx: 64, my: 85,
     },
     {
         id: 'user-communities', style: 'v-dark',
-        label: "User Communities & Live Demo's",
-        sub:   'Viva Engage · Live demos / roadshow / AMA · Weekly top-tips',
+        label: 'User Communities & Demos',
+        sub:   'Viva Engage · Live/Recorded Demos · Top-Tips',
         desc:  'Connect with the AI community at RES — join Viva Engage channels, attend live demos and roadshows, take part in AMAs, and get weekly top-tips to sharpen your skills.',
         links: [
             // { label: 'Join the AI Community on Viva Engage', url: 'https://resgroup.service-now.com/kb?id=kb_article_view&sysparm_article=KBxxxxxxx' },
         ],
         communityLinks: [
-            { label: 'Copilot for RES – Viva Engage Community', url: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMTM2MzIxMzEwNzIifQ/all' },
-            { label: 'AI Knowledge Centre Team', url: 'PLACEHOLDER_URL' }, // ← add URL when available
+            { label: 'Copilot for RES - Engage Community', url: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMTM2MzIxMzEwNzIifQ/all' },
         ],
-        mx: 11, my: 70,
+        deck: { label: 'Session 01 – Introduction to Claude AI', file: 'https://reshive.sharepoint.com/:p:/s/Mind_Teams662/IQDc9gYvcImSTbFkTotFUX3ZAU73LQm_fCrafmybbZIrIqw?e=aOhmUK&action=embedview' },
+        mx: 90, my: 32,
     },
     {
         id: 'ai-for-code', style: 'v-pill',
@@ -516,7 +563,7 @@ const NODES = [
             { label: 'GitHub Copilot in VS Code',   url: 'https://code.visualstudio.com/docs/copilot/overview' },
             { label: 'Claude Code Overview',         url: 'https://code.claude.com/docs/en/overview' },
         ],
-        mx: 80, my: 71,
+        mx: 9, my: 56,
     },
     {
         id: 'agentic-ai', style: 'v-dark',
@@ -528,15 +575,16 @@ const NODES = [
             { label: 'AI Agent types and uses',                         url: 'https://www.microsoft.com/en-us/microsoft-copilot/copilot-101/ai-agents-types-and-uses' },
             { label: 'Agent Factory: The new era of agentic AI',        url: 'https://azure.microsoft.com/en-us/blog/agent-factory-the-new-era-of-agentic-ai-common-use-cases-and-design-patterns/' },
         ],
-        mx: 60, my: 78,
+        mx: 22, my: 76,
     },
     {
         id: 'prompting-playbook', style: 'v-light',
         label: 'Prompting Playbook',
+        sub:   'GCSE Framework',
         desc:  'A practical guide to writing better prompts — with techniques, worked examples, and reusable templates to get consistently strong outputs from any AI tool.',
         links: [],
         playbook: 'prompting-playbook.html',   // opens as full-screen overlay
-        mx: 28, my: 88,
+        mx: 82, my: 14,
     },
     {
         id: 'build-agents', style: 'v-light',
@@ -546,7 +594,7 @@ const NODES = [
             { label: 'Quickstart: Create and deploy an agent',   url: 'https://learn.microsoft.com/en-us/microsoft-copilot-studio/fundamentals-get-started' },
             { label: 'Build Agents using Agent Builder',          url: 'https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/agent-builder-build-agents' },
         ],
-        mx: 49, my: 92,
+        mx: 11, my: 91,
         parent: 'agentic-ai',
     },
     {
@@ -556,7 +604,7 @@ const NODES = [
         links: [
             { label: 'Copilot Agent Preview', url: 'https://resproduction.service-now.com/sp?id=sc_cat_item&sys_id=07929b4593193a1473b6396d6cba103f' },
         ],
-        mx: 70, my: 92,
+        mx: 31, my: 91,
         parent: 'agentic-ai',
     },
 ];
@@ -582,14 +630,15 @@ function buildMindMap() {
     }).join('');
 
     const nodes = NODES.map(n => {
-        const hasLinks = (n.links && n.links.length > 0) || (n.communityLinks && n.communityLinks.length > 0) || !!n.playbook;
+        const hasLinks = (n.links && n.links.length > 0) || (n.communityLinks && n.communityLinks.length > 0) || !!n.playbook || !!n.deck;
         const hasArticle = hasLinks ? ' has-article' : ' no-article';
+        const badge = n.startHere ? `<span class="start-badge">① Begin here</span>` : '';
         return `
         <div class="mm-node ${n.style}${hasArticle}" id="mm-${n.id}"
              style="left:${n.mx}%;top:${n.my}%"
              onclick="pick('${n.id}')">
             <div class="mm-box">
-                ${n.label}
+                ${badge}${n.label}
                 ${n.sub ? `<span class="mm-sub">${n.sub}</span>` : ''}
             </div>
         </div>`;
@@ -665,8 +714,9 @@ function renderPanelContent(node) {
 
     const hasLinks          = node.links && node.links.length > 0;
     const hasCommunityLinks = node.communityLinks && node.communityLinks.length > 0;
+    const hasDeck           = !!node.deck;
 
-    if (hasLinks || hasCommunityLinks) {
+    if (hasLinks || hasCommunityLinks || hasDeck) {
         html += `<hr class="panel-divider">`;
 
         // Community links section
@@ -682,6 +732,18 @@ function renderPanelContent(node) {
             });
             html += `</div>`;
             if (hasLinks) html += `<br>`;
+        }
+
+        // Presentation / deck section
+        if (hasDeck) {
+            html += `<p class="links-label">Presentation</p>`;
+            html += `<div class="panel-links">`;
+            html += `<button class="deck-btn" onclick="openPlaybook({playbook:'${node.deck.file}'})">
+                <span class="btn-icon">▶</span>
+                <span class="btn-label">${node.deck.label}</span>
+            </button>`;
+            html += `</div>`;
+            if (hasLinks || hasCommunityLinks) html += `<br>`;
         }
 
         // Knowledge articles section
@@ -714,7 +776,10 @@ function renderPanelContent(node) {
    PLAYBOOK OVERLAY
 ────────────────────────────────────────────────────────────── */
 function openPlaybook(node) {
-    document.getElementById('playbookFrame').src = node.playbook;
+    const src = node.playbook || node.file || '';
+    const title = node.deckTitle || (src.includes('prompting') ? 'Prompting Playbook' : 'Presentation');
+    document.getElementById('playbookFrame').src = src;
+    document.getElementById('playbookBarTitle').textContent = title;
     document.getElementById('playbookOverlay').classList.add('open');
 }
 
